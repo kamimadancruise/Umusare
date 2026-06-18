@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact | Umusare</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="navbar">
+      <a class="site-logo nav-logo" href="index.html" aria-label="Umusare home">
+        <span class="brand-badge"><img src="assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
+        <span class="brand-name">Umusare</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" data-nav-toggle>
+        <span>Menu</span>
+      </button>
+      <div class="nav-panel" id="primary-nav" data-nav-panel>
+        <div class="nav-links" aria-label="Main navigation">
+          <a class="nav-link nav-home" href="index.html">Home</a>
+          <a class="nav-link nav-find" href="find-driver.html">Find a Driver</a>
+          <a class="nav-link nav-quick" href="quick-book.html">Quick Book</a>
+          <a class="nav-link nav-plan" href="plan-ahead.html">Plan Ahead</a>
+          <a class="nav-link nav-driver" href="become-driver.html">Become a Driver</a>
+        </div>
+        <div class="nav-actions">
+          <a class="nav-login" href="login.html">Login</a>
+          <a class="nav-cta" href="quick-book.html">Get a Driver</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page-main">
+    <section class="page-intro">
+      <div>
+        <p class="eyebrow">Contact</p>
+        <h1>Contact Umusare.</h1>
+      </div>
+      <p class="intro">
+        Reach Umusare support for booking help, safety follow-up, driver questions, or account assistance.
+      </p>
+    </section>
+    <section class="form-panel">
+      <h2>Support</h2>
+      <div class="contact-actions" data-contact-actions>
+        <a class="contact-btn" href="tel:+250788000222">Call Support</a>
+        <a class="contact-btn whatsapp-btn" href="https://wa.me/250788000222?text=Hello%20Umusare%20Support%2C%20I%20need%20help%20with%20my%20booking.">WhatsApp Support</a>
+        <a class="contact-btn" href="mailto:support@umusare.rw">Email Support</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact-footer">
+    <div class="footer-brand">
+      <a class="site-logo footer-logo" href="index.html" aria-label="Umusare home">
+        <span class="brand-badge"><img src="assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
+        <span class="brand-name">Umusare</span>
+      </a>
+      <p>Umusare connects clients with verified independent drivers who drive the client's own vehicle.</p>
+    </div>
+    <div class="footer-links-grid">
+      <section class="footer-section">
+        <h2>Main links</h2>
+        <a href="index.html">Home</a>
+        <a href="find-driver.html">Find a Driver</a>
+        <a href="quick-book.html">Quick Book</a>
+        <a href="plan-ahead.html">Plan Ahead</a>
+      </section>
+      <section class="footer-section">
+        <h2>Safety links</h2>
+        <a href="safety.html">Safety</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="contact.html">Contact</a>
+      </section>
+      <section class="footer-section">
+        <h2>Driver links</h2>
+        <a href="become-driver.html">Become a Driver</a>
+        <a href="driver-agreement.html">Driver Agreement</a>
+        <a href="driver-dashboard.html">Driver Dashboard</a>
+      </section>
+      <section class="footer-section demo-access">
+        <h2>Demo Access</h2>
+        <!-- Temporary demo links until real authentication and role-based routing are built. -->
+        <a href="client-dashboard.html">Client Dashboard</a>
+        <a href="driver-dashboard.html">Driver Dashboard</a>
+        <!-- Admin portal access is separated and will be protected by admin authentication later. -->
+      </section>
+    </div>
+    <p class="footer-meta">&copy; 2026 Umusare Rwanda. All rights reserved.</p>
+  </footer>
+
+  <div class="mobile-quick-book" data-mobile-quick-book>
+    <a class="mobile-quick-book-link" href="quick-book.html" aria-label="Quick book an Umusare driver">
+      <span>Quick Book Driver</span>
+      <small>Get a verified driver fast</small>
+    </a>
+    <button class="mobile-quick-book-close" type="button" aria-label="Hide quick book button" data-mobile-quick-book-close>&times;</button>
+  </div>
+  <script src="site.js"></script>
+  <script src="api.js"></script>
+  <script>
+    async function loadContactActions() {
+      const container = document.querySelector("[data-contact-actions]");
+      if (!container) return;
+      try {
+        const payload = await window.UmusareApi.request("/support/contact");
+        const actions = payload.data.contactActions || {};
+        const links = [
+          actions.callSupport ? '<a class="contact-btn" href="' + actions.callSupport.href + '">' + (actions.callSupport.label || "Call Support") + '</a>' : "",
+          actions.whatsappSupport ? '<a class="contact-btn whatsapp-btn" href="' + actions.whatsappSupport.href + '">' + (actions.whatsappSupport.label || "WhatsApp Support") + '</a>' : "",
+          actions.emailSupport ? '<a class="contact-btn" href="' + actions.emailSupport.href + '">' + (actions.emailSupport.label || "Email Support") + '</a>' : ""
+        ].filter(Boolean).join("");
+        if (links) container.innerHTML = links;
+      } catch (error) {
+        // Keep safe public support fallbacks if the local API is not running.
+      }
+    }
+    loadContactActions();
+  </script>
+</body>
+</html>

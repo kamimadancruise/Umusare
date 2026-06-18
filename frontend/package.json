@@ -1,0 +1,14 @@
+{
+  "name": "umusare-web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Public Umusare website.",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 5173",
+    "build": "vite build --outDir dist",
+    "preview": "vite preview --host 0.0.0.0 --port 4173"
+  },
+  "devDependencies": {
+    "vite": "^5.4.11"
+  }
+}

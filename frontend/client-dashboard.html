@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Dashboard | Umusare</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+<body class="admin-body">
+  <div class="admin-layout client-layout">
+    <aside class="admin-sidebar client-sidebar">
+      <a class="site-logo nav-logo admin-logo" href="index.html" aria-label="Umusare home">
+        <span class="brand-badge"><img src="assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
+        <span class="brand-name">Umusare Client</span>
+      </a>
+      <nav class="admin-menu" aria-label="Client dashboard navigation">
+        <a href="#client-overview">Dashboard Overview</a>
+        <a href="#my-bookings">My Bookings</a>
+        <a href="#saved-drivers">Saved Drivers</a>
+        <a href="#plan-ahead-trips">Plan Ahead Trips</a>
+        <a href="#client-reviews">Reviews</a>
+        <a href="#safety-reports">Safety &amp; Reports</a>
+        <a href="#profile-settings">Profile Settings</a>
+      </nav>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <div>
+          <p class="eyebrow">Client dashboard</p>
+          <h1>My Umusare</h1>
+        </div>
+        <div class="client-top-actions">
+          <a class="btn btn-urgent" href="quick-book.html">Quick Book</a>
+          <a class="btn btn-primary" href="plan-ahead.html">Plan Ahead</a>
+          <button class="btn btn-secondary" id="clientLogoutButton" type="button">Logout</button>
+        </div>
+      </header>
+
+      <section class="admin-section" id="client-overview">
+        <div class="admin-section-heading">
+          <h2>Dashboard Overview</h2>
+          <p>Manage upcoming trips, trusted drivers, reviews, and safety reports from one place.</p>
+        </div>
+        <div class="summary-grid client-summary-grid">
+          <article class="summary-card">
+            <span>Loading dashboard</span>
+            <strong>...</strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="admin-section" id="my-bookings">
+        <div class="admin-section-heading">
+          <h2>My Bookings</h2>
+          <p>Review current, scheduled, completed, and cancelled Umusare trips.</p>
+        </div>
+        <p class="contact-safety-note dashboard-contact-note">Before starting the trip, confirm that the driver's face matches the profile photo.</p>
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Booking ID</th>
+                <th>Driver name</th>
+                <th>Driver availability</th>
+                <th>Pickup location</th>
+                <th>Destination</th>
+                <th>Date and time</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="9">Loading bookings...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <aside class="application-detail-panel client-booking-detail" id="bookingDetail" hidden>
+          <div class="panel-header">
+            <h3>Booking Details</h3>
+            <button class="close-panel" id="closeBookingPanel" type="button">Close</button>
+          </div>
+          <p>Select a booking to view details.</p>
+        </aside>
+      </section>
+
+      <section class="admin-section" id="saved-drivers">
+        <div class="admin-section-heading">
+          <h2>Saved Drivers</h2>
+          <p>Book trusted drivers you have saved from previous trips.</p>
+        </div>
+        <div class="saved-driver-grid" id="savedDriversGrid">
+          <article class="saved-driver-card">
+            <p>No saved drivers yet.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="admin-section" id="plan-ahead-trips">
+        <div class="admin-section-heading">
+          <h2>Plan Ahead Trips</h2>
+          <p>Scheduled future trips that can still be edited before driver assignment.</p>
+        </div>
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Pickup location</th>
+                <th>Destination</th>
+                <th>Preferred driver type</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="7">Loading scheduled trips...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-section" id="client-reviews">
+        <div class="admin-section-heading">
+          <h2>Reviews</h2>
+          <p>Review completed trips to help keep Umusare trustworthy.</p>
+        </div>
+        <div class="review-form-grid completed-review-grid">
+          <article class="review-submit-card completed-trip-card">
+            <p>Loading completed trips...</p>
+          </article>
+        </div>
+        <form class="review-write-panel" id="clientReviewForm" hidden>
+          <h3>Leave Review</h3>
+          <p><strong id="reviewDriverName">Driver name</strong></p>
+          <p id="reviewTripSummary">Trip summary</p>
+          <label>
+            Star rating
+            <select name="review-rating" required>
+              <option value="">Select rating</option>
+              <option>5</option>
+              <option>4</option>
+              <option>3</option>
+              <option>2</option>
+              <option>1</option>
+            </select>
+          </label>
+          <label>
+            Written review
+            <textarea name="review-text" rows="4" placeholder="Share a short, helpful review." required></textarea>
+          </label>
+          <label class="agreement">
+            <input type="checkbox" name="safety-review">
+            <span>I want Umusare to review this trip for a safety or service issue.</span>
+          </label>
+          <button class="btn btn-primary submit-btn" type="submit">Submit Review</button>
+        </form>
+        <div class="confirmation-message compact-confirmation" id="reviewConfirmation" hidden>
+          <h2>Thank you. Your review has been submitted.</h2>
+          <p>The completed booking status is updated to Reviewed after the review is accepted by the API.</p>
+        </div>
+        <div class="reviews-list" id="clientPastReviews">
+          <article class="review-card"><p>Loading your reviews...</p></article>
+        </div>
+      </section>
+
+      <section class="admin-section" id="safety-reports">
+        <div class="admin-section-heading">
+          <h2>Safety &amp; Reports</h2>
+          <p>Report safety issues, accidents, misconduct, theft, wrong driver arrival, or other trip problems.</p>
+        </div>
+        <p class="safety-notice">
+          If there is immediate danger, contact emergency services first. Umusare reports are for
+          platform safety review and follow-up.
+        </p>
+        <div class="section-links">
+          <a class="btn btn-secondary" href="support.html">Support &amp; Emergency Help</a>
+          <a class="btn btn-secondary" href="safety-policy.html">Safety Policy</a>
+          <a class="btn btn-secondary" href="incident-reporting-policy.html">Incident Reporting Policy</a>
+        </div>
+        <div class="report-context-card" id="clientReportContext">
+          <h3>Report context</h3>
+          <dl class="admin-detail-grid">
+            <div><dt>Booking ID</dt><dd id="reportContextBooking">Not sure</dd></div>
+            <div><dt>Driver</dt><dd id="reportContextDriver">Select from a booking or enter below</dd></div>
+            <div><dt>Pickup</dt><dd id="reportContextPickup">Not selected</dd></div>
+            <div><dt>Destination</dt><dd id="reportContextDestination">Not selected</dd></div>
+            <div><dt>Trip date</dt><dd id="reportContextDate">Not selected</dd></div>
+          </dl>
+        </div>
+        <form class="application-form client-report-form" id="clientReportForm">
+          <div class="form-grid">
+            <label>
+              Booking ID
+              <input type="text" name="booking-id" id="clientReportBooking" placeholder="Booking ID or Not sure">
+            </label>
+            <label>
+              Driver name
+              <input type="text" name="driver-name" id="clientReportDriver" placeholder="Driver name or Not sure">
+            </label>
+            <label>
+              Report type
+              <select name="report-type">
+                <option>Safety concern</option>
+                <option>Accident</option>
+                <option>Misconduct</option>
+                <option>Theft or missing property</option>
+                <option>Wrong driver arrived</option>
+                <option>Vehicle issue</option>
+                <option>Payment dispute</option>
+                <option>Client misconduct</option>
+                <option>Driver misconduct</option>
+                <option>Other</option>
+              </select>
+            </label>
+            <label>
+              Date of incident
+              <input type="date" name="incident-date">
+            </label>
+            <label>
+              Urgency level
+              <select name="urgency">
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+                <option>Emergency</option>
+              </select>
+            </label>
+            <label>
+              Upload evidence/photo
+              <input type="file" name="evidence" accept="image/*">
+            </label>
+          </div>
+          <label>
+            Description of what happened
+            <textarea name="description" rows="4" placeholder="Describe what happened, who was involved, and what follow-up is needed."></textarea>
+          </label>
+          <button class="btn btn-primary submit-btn" type="submit">Submit Report</button>
+        </form>
+        <div class="confirmation-message compact-confirmation" id="clientReportConfirmation" hidden>
+          <h2>Your report has been submitted. Umusare will review it and follow up where necessary.</h2>
+        </div>
+        <div class="table-wrap report-status-table">
+          <h3>Submitted Reports</h3>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Report ID</th>
+                <th>Report type</th>
+                <th>Date submitted</th>
+                <th>Status</th>
+                <th>Last updated</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="6">Loading reports...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-section" id="profile-settings">
+        <div class="admin-section-heading">
+          <h2>Profile Settings</h2>
+          <p>Keep your contact and emergency information up to date.</p>
+        </div>
+        <form class="application-form">
+          <div class="form-grid">
+            <label>
+              Full name
+              <input type="text" id="clientProfileFullName" value="" placeholder="Loading...">
+            </label>
+            <label>
+              Phone number
+              <input type="tel" id="clientProfilePhone" value="" placeholder="Loading...">
+            </label>
+            <label>
+              Email
+              <input type="email" id="clientProfileEmail" value="" placeholder="Loading...">
+            </label>
+            <label>
+              City
+              <input type="text" id="clientProfileCity" value="" placeholder="Loading...">
+            </label>
+            <label>
+              Emergency contact name
+              <input type="text" value="" placeholder="Not set yet">
+            </label>
+            <label>
+              Emergency contact phone
+              <input type="tel" value="" placeholder="Not set yet">
+            </label>
+          </div>
+          <button class="btn btn-primary submit-btn" type="button">Save Profile Settings</button>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script src="site.js"></script>
+  <script src="api.js"></script>
+  <script>
+    const bookingDetail = document.getElementById("bookingDetail");
+    const closeBookingPanel = document.getElementById("closeBookingPanel");
+    const viewBookingButtons = document.querySelectorAll(".view-booking");
+    const leaveReviewButtons = document.querySelectorAll(".leave-review-btn");
+    const clientReviewForm = document.getElementById("clientReviewForm");
+    const reviewDriverName = document.getElementById("reviewDriverName");
+    const reviewTripSummary = document.getElementById("reviewTripSummary");
+    const reviewConfirmation = document.getElementById("reviewConfirmation");
+    const clientPastReviews = document.getElementById("clientPastReviews");
+    const reportLinks = document.querySelectorAll(".report-issue-link");
+    const clientReportForm = document.getElementById("clientReportForm");
+    const clientReportConfirmation = document.getElementById("clientReportConfirmation");
+    const clientReportBooking = document.getElementById("clientReportBooking");
+    const clientReportDriver = document.getElementById("clientReportDriver");
+    const reportContextBooking = document.getElementById("reportContextBooking");
+    const reportContextDriver = document.getElementById("reportContextDriver");
+    const reportContextPickup = document.getElementById("reportContextPickup");
+    const reportContextDestination = document.getElementById("reportContextDestination");
+    const reportContextDate = document.getElementById("reportContextDate");
+    const clientBookingsBody = document.querySelector("#my-bookings tbody");
+    const completedReviewGrid = document.querySelector(".completed-review-grid");
+    const clientReportBody = document.querySelector("#safety-reports .report-status-table tbody");
+    const clientSummaryGrid = document.querySelector("#client-overview .client-summary-grid");
+    const planAheadTripsBody = document.querySelector("#plan-ahead-trips tbody");
+    const clientLogoutButton = document.getElementById("clientLogoutButton");
+    const clientProfileFullName = document.getElementById("clientProfileFullName");
+    const clientProfilePhone = document.getElementById("clientProfilePhone");
+    const clientProfileEmail = document.getElementById("clientProfileEmail");
+    const clientProfileCity = document.getElementById("clientProfileCity");
+
+    function bookingStatusClass(status) {
+      return "status-" + String(status || "Pending").toLowerCase().replaceAll(" ", "-");
+    }
+
+    function formatBookingDate(booking) {
+      if (booking.bookingType === "Quick Book") return booking.neededTime || "ASAP";
+      return booking.dateTime ? new Date(booking.dateTime).toLocaleString() : "Pending";
+    }
+
+    function escapeHtml(value) {
+      return String(value === undefined || value === null ? "" : value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function actionFromContact(action, label, className) {
+      if (!action || !action.href) return "";
+      return '<a class="' + (className || "action-btn") + '" href="' + escapeHtml(action.href) + '">' + escapeHtml(action.label || label) + '</a>';
+    }
+
+    function renderClientSummary(bookings, reports) {
+      if (!clientSummaryGrid) return;
+      const upcoming = bookings.find(function (booking) {
+        return ["Pending", "Accepted", "Driver on the way", "Trip started"].includes(booking.status);
+      });
+      const completedCount = bookings.filter(function (booking) {
+        return ["Completed", "Reviewed"].includes(booking.status);
+      }).length;
+      const pendingReviewCount = bookings.filter(function (booking) {
+        return booking.status === "Completed";
+      }).length;
+      const openReportCount = reports.filter(function (report) {
+        return !["Resolved", "Closed"].includes(report.status);
+      }).length;
+      clientSummaryGrid.innerHTML = [
+        ["Upcoming booking", upcoming ? formatBookingDate(upcoming) : "None"],
+        ["Completed trips", completedCount],
+        ["Saved drivers", "Not connected"],
+        ["Pending reviews", pendingReviewCount, "warning-card"],
+        ["Open reports", openReportCount, "danger-card"]
+      ].map(function (card) {
+        return '<article class="summary-card ' + (card[2] || "") + '"><span>' + escapeHtml(card[0]) + '</span><strong>' + escapeHtml(card[1]) + '</strong></article>';
+      }).join("");
+    }
+
+    function renderPlanAheadTrips(bookings) {
+      if (!planAheadTripsBody) return;
+      const planned = bookings.filter(function (booking) {
+        return booking.bookingType === "Plan Ahead" && !["Completed", "Cancelled", "Reviewed"].includes(booking.status);
+      });
+      if (!planned.length) {
+        planAheadTripsBody.innerHTML = '<tr><td colspan="7">No scheduled trips yet.</td></tr>';
+        return;
+      }
+      planAheadTripsBody.innerHTML = planned.map(function (booking) {
+        const date = booking.dateTime ? new Date(booking.dateTime) : null;
+        return '<tr>'
+          + '<td>' + escapeHtml(date ? date.toLocaleDateString() : "Pending") + '</td>'
+          + '<td>' + escapeHtml(date ? date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "Pending") + '</td>'
+          + '<td>' + escapeHtml(booking.pickupLocation) + '</td>'
+          + '<td>' + escapeHtml(booking.destination) + '</td>'
+          + '<td>' + escapeHtml([booking.preferredDriverGender, booking.preferredMinExperience && booking.preferredMinExperience + "+ years", booking.preferredRating && booking.preferredRating + "+ stars"].filter(Boolean).join(", ") || "Any verified driver") + '</td>'
+          + '<td><span class="admin-status pending">' + escapeHtml(booking.status) + '</span></td>'
+          + '<td><button class="action-btn view-booking" type="button" data-booking-id="' + escapeHtml(booking.bookingId) + '">View Details</button></td>'
+          + '</tr>';
+      }).join("");
+    }
+
+    async function loadCurrentClient() {
+      if (!window.UmusareApi.getToken()) {
+        window.location.href = "login.html";
+        return null;
+      }
+      try {
+        const payload = await window.UmusareApi.auth.me();
+        const user = payload.data.user;
+        if (!user || user.role !== "client") {
+          window.location.href = "login.html";
+          return null;
+        }
+        document.querySelector(".admin-topbar h1").textContent = "My Umusare";
+        if (clientProfileFullName) clientProfileFullName.value = user.fullName || "";
+        if (clientProfilePhone) clientProfilePhone.value = user.phone || "";
+        if (clientProfileEmail) clientProfileEmail.value = user.email || "";
+        if (clientProfileCity) clientProfileCity.value = user.city || "";
+        return user;
+      } catch (error) {
+        window.location.href = "login.html";
+        return null;
+      }
+    }
+
+    function renderClientBookingActions(booking) {
+      const actions = booking.contactActions || {};
+      const support = actionFromContact(actions.callSupport, "Contact Support", "action-btn");
+      const callDriver = actionFromContact(actions.callDriver, "Call Driver", "action-btn priority-contact");
+      const whatsappDriver = actionFromContact(actions.whatsappDriver, "WhatsApp Driver", "action-btn priority-contact whatsapp-btn");
+      const cancel = '<button class="action-btn reject cancel-client-booking" type="button" data-booking-id="' + booking.bookingId + '">Cancel</button>';
+      const view = '<button class="action-btn view-booking" type="button" data-booking-id="' + booking.bookingId + '">View Details</button>';
+      const report = '<a class="action-btn reject report-issue-link" href="#safety-reports" data-booking-id="' + booking.bookingId + '" data-driver-name="' + (booking.driverName || "Pending assignment") + '" data-pickup="' + booking.pickupLocation + '" data-destination="' + booking.destination + '" data-trip-date="' + formatBookingDate(booking) + '">Report Issue</a>';
+      const bookAgain = '<a class="action-btn" href="' + (booking.bookingType === "Plan Ahead" ? "plan-ahead.html" : "quick-book.html") + '">Book Again</a>';
+      const map = {
+        Pending: view + cancel + support,
+        Accepted: view + callDriver + whatsappDriver + cancel + report,
+        "Driver on the way": view + callDriver + whatsappDriver + report,
+        "Trip started": view + report + support,
+        Completed: view + '<a class="action-btn approve" href="#client-reviews">Leave Review</a>' + bookAgain,
+        Cancelled: view + bookAgain,
+        Reported: view + '<a class="action-btn reject" href="#safety-reports">View Report Status</a>',
+        Reviewed: view + '<a class="action-btn approve" href="#client-reviews">View Review</a>' + bookAgain
+      };
+      return map[booking.status] || view;
+    }
+
+    function renderClientBookingDetail(booking) {
+      const actions = booking.contactActions || {};
+      const contactHtml = [
+        actionFromContact(actions.callDriver, "Call Driver", "btn btn-primary"),
+        actionFromContact(actions.whatsappDriver, "WhatsApp Driver", "btn btn-primary whatsapp-btn"),
+        actionFromContact(actions.callSupport, "Call Support", "btn btn-secondary"),
+        actionFromContact(actions.whatsappSupport, "WhatsApp Support", "btn btn-secondary whatsapp-btn")
+      ].filter(Boolean).join("");
+      bookingDetail.innerHTML = '<div class="panel-header">'
+        + '<h3>Booking Details</h3>'
+        + '<button class="close-panel" id="closeBookingPanelDynamic" type="button">Close</button>'
+        + '</div>'
+        + '<div class="booking-driver-summary"><div class="profile-photo admin-photo" aria-hidden="true">'
+        + escapeHtml((booking.driverName || "PD").slice(0, 2).toUpperCase())
+        + '</div><div><h4>' + escapeHtml(booking.driverName || "Pending assignment") + '</h4>'
+        + '<span class="verified-badge badge">Verified Driver</span> '
+        + '<span class="availability-badge availability-now">' + escapeHtml(booking.driverAvailability || "Pending") + '</span></div></div>'
+        + '<dl class="admin-detail-grid">'
+        + '<div><dt>Booking ID</dt><dd>' + escapeHtml(booking.bookingId) + '</dd></div>'
+        + '<div><dt>Pickup location</dt><dd>' + escapeHtml(booking.pickupLocation) + '</dd></div>'
+        + '<div><dt>Destination</dt><dd>' + escapeHtml(booking.destination) + '</dd></div>'
+        + '<div><dt>Date and time</dt><dd>' + escapeHtml(formatBookingDate(booking)) + '</dd></div>'
+        + '<div><dt>Car type</dt><dd>' + escapeHtml(booking.carType) + '</dd></div>'
+        + '<div><dt>Client notes</dt><dd>' + escapeHtml(booking.clientNotes || "None") + '</dd></div>'
+        + '<div><dt>Booking status</dt><dd><span class="booking-status-badge ' + bookingStatusClass(booking.status) + '">' + escapeHtml(booking.status) + '</span></dd></div>'
+        + '</dl>'
+        + '<p class="safety-notice">Before starting the trip, confirm that the driver\'s face matches the profile photo and that the driver understands the destination.</p>'
+        + '<div class="panel-actions">' + contactHtml + '<a class="btn reject-panel-btn report-issue-link" href="#safety-reports" data-booking-id="' + escapeHtml(booking.bookingId) + '" data-driver-name="' + escapeHtml(booking.driverName || "Pending assignment") + '" data-pickup="' + escapeHtml(booking.pickupLocation) + '" data-destination="' + escapeHtml(booking.destination) + '" data-trip-date="' + escapeHtml(formatBookingDate(booking)) + '">Report Issue</a></div>';
+      document.getElementById("closeBookingPanelDynamic").addEventListener("click", function () {
+        bookingDetail.hidden = true;
+      });
+    }
+
+    async function openClientBookingDetail(bookingId) {
+      bookingDetail.hidden = false;
+      bookingDetail.innerHTML = '<p>Loading booking detail...</p>';
+      bookingDetail.scrollIntoView({ behavior: "smooth", block: "start" });
+      try {
+        const payload = await window.UmusareApi.request("/bookings/" + bookingId);
+        renderClientBookingDetail(payload.data.booking);
+      } catch (error) {
+        bookingDetail.innerHTML = '<p>Unable to load booking detail.</p>';
+      }
+    }
+
+    function renderClientBookings(bookings) {
+      if (!clientBookingsBody) return;
+      if (!bookings.length) {
+        clientBookingsBody.innerHTML = '<tr><td colspan="9">No bookings found yet.</td></tr>';
+        return;
+      }
+      clientBookingsBody.innerHTML = bookings.map(function (booking) {
+        return '<tr data-booking-id="' + escapeHtml(booking.bookingId) + '">'
+          + '<td>' + escapeHtml(booking.bookingId) + '</td>'
+          + '<td>' + escapeHtml(booking.driverName || "Pending assignment") + '</td>'
+          + '<td>' + (booking.driverAvailability ? '<span class="availability-badge availability-now">' + escapeHtml(booking.driverAvailability) + '</span>' : 'Pending') + '</td>'
+          + '<td>' + escapeHtml(booking.pickupLocation) + '</td>'
+          + '<td>' + escapeHtml(booking.destination) + '</td>'
+          + '<td>' + escapeHtml(formatBookingDate(booking)) + '</td>'
+          + '<td>' + escapeHtml(booking.bookingType) + '</td>'
+          + '<td><span class="booking-status-badge ' + bookingStatusClass(booking.status) + '">' + escapeHtml(booking.status) + '</span></td>'
+          + '<td class="table-actions">' + renderClientBookingActions(booking) + '</td>'
+          + '</tr>';
+      }).join("");
+      renderReviewableBookings(bookings);
+      renderPlanAheadTrips(bookings);
+    }
+
+    function renderReviewableBookings(bookings) {
+      if (!completedReviewGrid) return;
+      const reviewable = bookings.filter(function (booking) { return booking.status === "Completed"; });
+      if (!reviewable.length) {
+        completedReviewGrid.innerHTML = '<article class="review-submit-card completed-trip-card"><p>No completed trips are waiting for review.</p></article>';
+        return;
+      }
+      completedReviewGrid.innerHTML = reviewable.map(function (booking) {
+        return '<article class="review-submit-card completed-trip-card" data-review-booking="' + escapeHtml(booking.bookingId) + '">'
+          + '<div class="driver-photo" aria-hidden="true">' + escapeHtml((booking.driverName || "UD").slice(0, 2).toUpperCase()) + '</div>'
+          + '<h3>' + escapeHtml(booking.driverName || "Umusare driver") + '</h3>'
+          + '<p><strong>Booking ID:</strong> ' + escapeHtml(booking.bookingId) + '</p>'
+          + '<p><strong>Trip date:</strong> ' + escapeHtml(formatBookingDate(booking)) + '</p>'
+          + '<p><strong>Pickup:</strong> ' + escapeHtml(booking.pickupLocation) + '</p>'
+          + '<p><strong>Destination:</strong> ' + escapeHtml(booking.destination) + '</p>'
+          + '<button class="btn btn-primary leave-review-btn" type="button" data-driver-name="' + escapeHtml(booking.driverName || "Umusare driver") + '" data-booking-id="' + escapeHtml(booking.bookingId) + '" data-trip-summary="' + escapeHtml(booking.pickupLocation + " to " + booking.destination + " on " + formatBookingDate(booking)) + '">Leave Review</button>'
+          + '</article>';
+      }).join("");
+    }
+
+    async function loadClientBookings() {
+      if (!window.UmusareApi.getToken()) {
+        if (clientBookingsBody) clientBookingsBody.innerHTML = '<tr><td colspan="9">Please log in as a client to load your bookings.</td></tr>';
+        renderReviewableBookings([]);
+        return;
+      }
+      try {
+        const payload = await window.UmusareApi.request("/bookings/me");
+        renderClientBookings(payload.data.bookings || []);
+        return payload.data.bookings || [];
+      } catch (error) {
+        clientBookingsBody.innerHTML = '<tr><td colspan="9">Unable to load bookings. Please log in as a client.</td></tr>';
+        renderPlanAheadTrips([]);
+        return [];
+      }
+    }
+
+    function renderUserReports(reports) {
+      if (!clientReportBody) return;
+      if (!reports.length) {
+        clientReportBody.innerHTML = '<tr><td colspan="6">No incident reports submitted yet.</td></tr>';
+        return;
+      }
+      clientReportBody.innerHTML = reports.map(function (report) {
+        return '<tr><td>' + escapeHtml(report.reportId) + '</td><td>' + escapeHtml(report.reportType) + '</td><td>' + (report.createdAt ? new Date(report.createdAt).toLocaleDateString() : "Pending") + '</td><td><span class="report-status-badge report-status-' + report.status.toLowerCase().replaceAll(" ", "-") + '">' + escapeHtml(report.status) + '</span></td><td>' + (report.lastUpdated ? new Date(report.lastUpdated).toLocaleDateString() : "Pending") + '</td><td><button class="action-btn" type="button">View Status</button></td></tr>';
+      }).join("");
+    }
+
+    async function loadClientReports() {
+      if (!window.UmusareApi.getToken()) {
+        renderUserReports([]);
+        return;
+      }
+      try {
+        const payload = await window.UmusareApi.request("/reports/me");
+        renderUserReports(payload.data.reports || []);
+        return payload.data.reports || [];
+      } catch (error) {
+        if (clientReportBody) clientReportBody.innerHTML = '<tr><td colspan="6">Unable to load reports. Please try again.</td></tr>';
+        return [];
+      }
+    }
+
+    function renderClientReviews(reviews) {
+      if (!clientPastReviews) return;
+      if (!reviews.length) {
+        clientPastReviews.innerHTML = '<article class="review-card"><p>No reviews submitted yet.</p></article>';
+        return;
+      }
+      clientPastReviews.innerHTML = reviews.map(function (review) {
+        return '<article class="review-card">'
+          + '<div><h3>' + escapeHtml(review.driverName || "Umusare driver") + '</h3><p class="rating">' + escapeHtml(review.rating) + ' stars</p></div>'
+          + '<p>' + escapeHtml(review.reviewText || "") + '</p>'
+          + '<p><strong>Booking ID:</strong> ' + escapeHtml(review.bookingId || "Booking") + '</p>'
+          + '<time>' + escapeHtml(review.createdAt ? new Date(review.createdAt).toLocaleDateString() : "Pending") + '</time>'
+          + '</article>';
+      }).join("");
+    }
+
+    async function loadClientReviews() {
+      if (!window.UmusareApi.getToken()) {
+        renderClientReviews([]);
+        return [];
+      }
+      try {
+        const payload = await window.UmusareApi.request("/reviews/me");
+        const reviews = payload.data.reviews || [];
+        renderClientReviews(reviews);
+        return reviews;
+      } catch (error) {
+        if (clientPastReviews) clientPastReviews.innerHTML = '<article class="review-card"><p>Unable to load reviews.</p></article>';
+        return [];
+      }
+    }
+
+    async function loadClientDashboardData() {
+      const user = await loadCurrentClient();
+      if (!user) return;
+      const results = await Promise.all([loadClientBookings(), loadClientReports(), loadClientReviews()]);
+      renderClientSummary(results[0] || [], results[1] || []);
+    }
+
+    loadClientDashboardData();
+
+    if (clientLogoutButton) {
+      clientLogoutButton.addEventListener("click", function () {
+        window.localStorage.removeItem("umusareUserToken");
+        window.localStorage.removeItem("umusareDriverToken");
+        window.localStorage.removeItem("umusareUser");
+        window.location.href = "login.html";
+      });
+    }
+
+    viewBookingButtons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        bookingDetail.hidden = false;
+        bookingDetail.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    closeBookingPanel.addEventListener("click", function () {
+      bookingDetail.hidden = true;
+    });
+
+    if (clientBookingsBody) {
+      clientBookingsBody.addEventListener("click", async function (event) {
+        const viewButton = event.target.closest(".view-booking");
+        const cancelButton = event.target.closest(".cancel-client-booking");
+        const reportLink = event.target.closest(".report-issue-link");
+        if (viewButton) {
+          if (viewButton.dataset.bookingId) {
+            openClientBookingDetail(viewButton.dataset.bookingId);
+          } else {
+            bookingDetail.hidden = false;
+            bookingDetail.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }
+        if (cancelButton) {
+          const reason = window.prompt("Why are you cancelling this booking?");
+          if (!reason) return;
+          try {
+            await window.UmusareApi.request("/bookings/" + cancelButton.dataset.bookingId + "/cancel", {
+              method: "PATCH",
+              body: JSON.stringify({ cancellationReason: reason })
+            });
+            await loadClientBookings();
+          } catch (error) {
+            window.alert(error.message || "Unable to cancel booking.");
+          }
+        }
+        if (reportLink) {
+          setReportContext(reportLink.dataset);
+        }
+      });
+    }
+
+    function openReviewForm(button) {
+        reviewDriverName.textContent = button.dataset.driverName;
+        reviewTripSummary.textContent = button.dataset.tripSummary;
+        clientReviewForm.dataset.bookingId = button.dataset.bookingId;
+        clientReviewForm.hidden = false;
+        reviewConfirmation.hidden = true;
+        clientReviewForm.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    leaveReviewButtons.forEach(function (button) {
+      button.addEventListener("click", function () { openReviewForm(button); });
+    });
+
+    if (completedReviewGrid) {
+      completedReviewGrid.addEventListener("click", function (event) {
+        const button = event.target.closest(".leave-review-btn");
+        if (button) openReviewForm(button);
+      });
+    }
+
+    clientReviewForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const reviewedBookingId = clientReviewForm.dataset.bookingId;
+      try {
+        await window.UmusareApi.request("/reviews", {
+          method: "POST",
+          body: JSON.stringify({
+            bookingId: reviewedBookingId,
+            rating: clientReviewForm.elements["review-rating"].value,
+            reviewText: clientReviewForm.elements["review-text"].value,
+            safetyConcern: clientReviewForm.elements["safety-review"].checked
+          })
+        });
+        await loadClientBookings();
+        await loadClientReviews();
+      } catch (error) {
+        reviewConfirmation.querySelector("h2").textContent = error.message || "Unable to submit review.";
+        reviewConfirmation.querySelector("p").textContent = "The review was not saved. Please try again.";
+        clientReviewForm.hidden = true;
+        reviewConfirmation.hidden = false;
+        reviewConfirmation.scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
+      reviewConfirmation.querySelector("h2").textContent = "Thank you. Your review has been submitted.";
+      reviewConfirmation.querySelector("p").textContent = "The completed booking status is updated to Reviewed after the review is accepted by the API.";
+      clientReviewForm.hidden = true;
+      reviewConfirmation.hidden = false;
+      reviewConfirmation.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+
+    function setReportContext(details) {
+      const bookingId = details.bookingId || "Not sure";
+      const driverName = details.driverName || "Not sure";
+      clientReportBooking.value = bookingId;
+      clientReportDriver.value = driverName;
+      reportContextBooking.textContent = bookingId;
+      reportContextDriver.textContent = driverName;
+      reportContextPickup.textContent = details.pickup || "Not selected";
+      reportContextDestination.textContent = details.destination || "Not selected";
+      reportContextDate.textContent = details.tripDate || "Not selected";
+    }
+
+    reportLinks.forEach(function (link) {
+      link.addEventListener("click", function () {
+        setReportContext(link.dataset);
+        clientReportConfirmation.hidden = true;
+      });
+    });
+
+    if (window.location.hash.includes("safety-reports?")) {
+      const reportParams = new URLSearchParams(window.location.hash.split("?")[1]);
+      setReportContext({
+        bookingId: reportParams.get("booking") === "not-sure" ? "Not sure" : reportParams.get("booking"),
+        driverName: reportParams.get("driver") ? "Selected driver" : "Not sure"
+      });
+    }
+
+    clientReportForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const formData = new FormData(clientReportForm);
+      const bookingId = formData.get("booking-id");
+      try {
+        const payload = await window.UmusareApi.request("/reports", {
+          method: "POST",
+          body: JSON.stringify({
+            bookingId: bookingId && bookingId !== "Not sure" ? bookingId : undefined,
+            reportType: formData.get("report-type"),
+            urgency: formData.get("urgency"),
+            description: formData.get("description")
+          })
+        });
+        const evidence = formData.get("evidence");
+        if (evidence && evidence.name) {
+          const uploadData = new FormData();
+          uploadData.append("evidence", evidence);
+          await fetch(window.UmusareApi.API_BASE_URL + "/reports/" + payload.data.report.reportId + "/evidence", {
+            method: "POST",
+            headers: { Authorization: "Bearer " + window.UmusareApi.getToken() },
+            body: uploadData
+          });
+        }
+        await loadClientReports();
+        await loadClientBookings();
+      } catch (error) {
+        clientReportConfirmation.querySelector("h2").textContent = error.message || "Unable to submit report.";
+      }
+      clientReportConfirmation.hidden = false;
+      clientReportConfirmation.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  </script>
+</body>
+</html>

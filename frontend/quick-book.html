@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Book | Umusare</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+<body data-page="quick">
+    <header class="site-header">
+    <nav class="navbar">
+      <a class="site-logo nav-logo" href="index.html" aria-label="Umusare home">
+        <span class="brand-badge"><img src="assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
+        <span class="brand-name">Umusare</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" data-nav-toggle>
+        <span>Menu</span>
+      </button>
+      <div class="nav-panel" id="primary-nav" data-nav-panel>
+        <div class="nav-links" aria-label="Main navigation">
+          <a class="nav-link nav-home" href="index.html">Home</a>
+          <a class="nav-link nav-find" href="find-driver.html">Find a Driver</a>
+          <a class="nav-link nav-quick" href="quick-book.html">Quick Book</a>
+          <a class="nav-link nav-plan" href="plan-ahead.html">Plan Ahead</a>
+          <a class="nav-link nav-driver" href="become-driver.html">Become a Driver</a>
+        </div>
+        <div class="nav-actions">
+          <a class="nav-login" href="login.html">Login</a>
+          <a class="nav-cta" href="quick-book.html">Get a Driver</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="quick-book-main">
+    <section class="quick-book-shell">
+      <div class="quick-book-intro">
+        <p class="eyebrow">Fast driver request</p>
+        <h1>Quick Book</h1>
+        <p>
+          Need a designated driver now? Send the essentials and Umusare will notify
+          available drivers near you. Quick Book prioritizes drivers marked Available Now.
+        </p>
+      </div>
+
+      <form class="quick-book-form quick-step-flow" id="quickBookForm" novalidate>
+        <div class="quick-progress" aria-live="polite">
+          <span id="quickStepLabel">Step 1 of 4</span>
+          <div class="quick-progress-track" aria-hidden="true">
+            <span id="quickProgressBar"></span>
+          </div>
+        </div>
+
+        <section class="quick-step-card is-active" data-quick-step="0" aria-labelledby="quickStepContact">
+          <div class="quick-sticker" aria-hidden="true">☎</div>
+          <p class="eyebrow">Contact</p>
+          <h2 id="quickStepContact">Who should the driver call?</h2>
+          <p class="quick-helper">Just enough to reach you fast.</p>
+          <div class="quick-field-grid">
+            <label>
+              First name
+              <input type="text" name="first-name" autocomplete="given-name" data-required-message="Add your first name so the driver knows who to ask for.">
+            </label>
+            <label>
+              Phone number
+              <input type="tel" name="phone-number" autocomplete="tel" data-required-message="Add your phone number so the driver can call you.">
+            </label>
+          </div>
+          <p class="quick-error" data-step-error hidden></p>
+          <button class="btn btn-urgent quick-next" type="button" data-next-step>Continue</button>
+        </section>
+
+        <section class="quick-step-card" data-quick-step="1" aria-labelledby="quickStepPickup" hidden>
+          <div class="quick-sticker" aria-hidden="true">⌖</div>
+          <p class="eyebrow">Pickup</p>
+          <h2 id="quickStepPickup">Where should we come?</h2>
+          <p class="quick-helper">Type the place, road, building, or nearby landmark.</p>
+          <label>
+            Pickup location
+            <input type="text" name="pickup-location" data-required-message="Add your pickup spot so the driver knows where to come.">
+          </label>
+          <button class="quick-location-btn" type="button" id="useLocationButton">Use my current location</button>
+          <p class="quick-placeholder-note" id="locationPlaceholderMessage" hidden>Location sharing is not connected yet. Type your pickup spot for now.</p>
+          <p class="quick-error" data-step-error hidden></p>
+          <div class="quick-step-actions">
+            <button class="btn btn-secondary" type="button" data-prev-step>Back</button>
+            <button class="btn btn-urgent quick-next" type="button" data-next-step>Continue</button>
+          </div>
+        </section>
+
+        <section class="quick-step-card" data-quick-step="2" aria-labelledby="quickStepTiming" hidden>
+          <div class="quick-sticker" aria-hidden="true">◷</div>
+          <p class="eyebrow">Destination and timing</p>
+          <h2 id="quickStepTiming">Where are you going, and how soon?</h2>
+          <label>
+            Destination
+            <input type="text" name="destination" data-required-message="Add your destination so the driver understands the trip.">
+          </label>
+          <fieldset class="quick-choice-group" data-choice-group="needed-time">
+            <legend>Needed time</legend>
+            <button type="button" class="quick-choice" data-choice-value="ASAP">ASAP</button>
+            <button type="button" class="quick-choice" data-choice-value="In 15 minutes">In 15 minutes</button>
+            <button type="button" class="quick-choice" data-choice-value="In 30 minutes">In 30 minutes</button>
+            <button type="button" class="quick-choice" data-choice-value="Choose time">Choose time</button>
+          </fieldset>
+          <input type="hidden" name="needed-time" data-required-message="Choose when you need the driver.">
+          <label class="quick-custom-time" id="quickCustomTimeWrap" hidden>
+            Choose time
+            <input type="time" name="custom-time">
+          </label>
+          <p class="quick-error" data-step-error hidden></p>
+          <div class="quick-step-actions">
+            <button class="btn btn-secondary" type="button" data-prev-step>Back</button>
+            <button class="btn btn-urgent quick-next" type="button" data-next-step>Continue</button>
+          </div>
+        </section>
+
+        <section class="quick-step-card" data-quick-step="3" aria-labelledby="quickStepCar" hidden>
+          <div class="quick-sticker" aria-hidden="true">▣</div>
+          <p class="eyebrow">Car type and safety</p>
+          <h2 id="quickStepCar">What kind of car is it?</h2>
+          <fieldset class="quick-choice-group" data-choice-group="car-type">
+            <legend>Car type</legend>
+            <button type="button" class="quick-choice" data-choice-value="Automatic">Automatic</button>
+            <button type="button" class="quick-choice" data-choice-value="Manual">Manual</button>
+            <button type="button" class="quick-choice" data-choice-value="SUV">SUV</button>
+            <button type="button" class="quick-choice" data-choice-value="Pickup">Pickup</button>
+            <button type="button" class="quick-choice" data-choice-value="Luxury car">Luxury car</button>
+            <button type="button" class="quick-choice" data-choice-value="Not sure">Not sure</button>
+          </fieldset>
+          <input type="hidden" name="car-type" data-required-message="Choose the car type, or select Not sure.">
+          <p class="safety-notice">
+            Umusare connects you with an independent verified driver who will drive your own vehicle.
+            Before starting the trip, confirm that the driver's face matches the profile photo.
+          </p>
+          <label class="agreement">
+            <input type="checkbox" name="platform-understanding" data-required-message="Confirm the safety check before we find your driver.">
+            <span>I understand. Find me a driver.</span>
+          </label>
+          <p class="quick-error" data-step-error hidden></p>
+          <div class="quick-step-actions">
+            <button class="btn btn-secondary" type="button" data-prev-step>Back</button>
+            <button class="btn btn-urgent submit-btn" type="submit">Find Me a Driver</button>
+          </div>
+        </section>
+      </form>
+
+      <div class="confirmation-message" id="quickBookConfirmation" hidden>
+        <h2>We're finding your driver.</h2>
+        <p id="quickAvailabilityMessage">Your request has been sent to available drivers near you.</p>
+        <p class="booking-status-helper">Your request has been sent to available drivers. You will receive confirmation once a driver accepts.</p>
+        <p class="availability-warning" id="quickOfflineWarning" hidden>
+          This driver is currently offline. You can still Plan Ahead or choose an available driver.
+        </p>
+        <dl class="booking-summary">
+          <div>
+            <dt>Booking ID</dt>
+            <dd id="quickSummaryBookingId">Pending</dd>
+          </div>
+          <div>
+            <dt>Name</dt>
+            <dd id="quickSummaryName">Pending</dd>
+          </div>
+          <div>
+            <dt>Phone number</dt>
+            <dd id="quickSummaryPhone">Pending</dd>
+          </div>
+          <div>
+            <dt>Pickup location</dt>
+            <dd id="quickSummaryPickup">Pending</dd>
+          </div>
+          <div>
+            <dt>Destination</dt>
+            <dd id="quickSummaryDestination">Pending</dd>
+          </div>
+          <div>
+            <dt>Needed time</dt>
+            <dd id="quickSummaryNeededTime">Pending</dd>
+          </div>
+          <div>
+            <dt>Selected driver</dt>
+            <dd id="quickSummaryDriver">Nearest verified driver</dd>
+          </div>
+          <div>
+            <dt>Car type</dt>
+            <dd id="quickSummaryCarType">Pending</dd>
+          </div>
+          <div>
+            <dt>Booking type</dt>
+            <dd>Quick Book</dd>
+          </div>
+          <div>
+            <dt>Status</dt>
+            <dd><span class="booking-status-badge status-pending">Pending</span></dd>
+          </div>
+          <div>
+            <dt>Driver availability</dt>
+            <dd id="quickSummaryAvailability">Available Now prioritized</dd>
+          </div>
+        </dl>
+        <p class="contact-safety-note">Before starting the trip, confirm that the driver's face matches the profile photo.</p>
+        <div class="contact-actions urgent-contact-actions" id="quickContactActions" aria-label="Quick booking contact options">
+          <a class="contact-btn" href="client-dashboard.html#my-bookings">Go to Client Dashboard</a>
+          <a class="contact-btn" href="support.html">Support &amp; Emergency Help</a>
+          <a class="contact-btn" href="index.html">Return Home</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+    <footer class="site-footer" id="contact">
+    <div class="footer-brand">
+      <a class="site-logo footer-logo" href="index.html" aria-label="Umusare home">
+        <span class="brand-badge"><img src="assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
+        <span class="brand-name">Umusare</span>
+      </a>
+      <p>Umusare connects clients with verified independent drivers who drive the client's own vehicle.</p>
+    </div>
+    <div class="footer-links-grid">
+      <section class="footer-section">
+        <h2>Main links</h2>
+        <a href="index.html">Home</a>
+        <a href="find-driver.html">Find a Driver</a>
+        <a href="quick-book.html">Quick Book</a>
+        <a href="plan-ahead.html">Plan Ahead</a>
+      </section>
+      <section class="footer-section">
+        <h2>Safety links</h2>
+        <a href="safety.html">Safety</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="contact.html">Contact</a>
+      </section>
+      <section class="footer-section">
+        <h2>Driver links</h2>
+        <a href="become-driver.html">Become a Driver</a>
+        <a href="driver-agreement.html">Driver Agreement</a>
+        <a href="driver-dashboard.html">Driver Dashboard</a>
+      </section>
+      <section class="footer-section demo-access">
+        <h2>Demo Access</h2>
+        <!-- Temporary demo links until real authentication and role-based routing are built. -->
+        <a href="client-dashboard.html">Client Dashboard</a>
+        <a href="driver-dashboard.html">Driver Dashboard</a>
+        <!-- Admin portal access is separated and will be protected by admin authentication later. -->
+      </section>
+    </div>
+    <p class="footer-meta">&copy; 2026 Umusare Rwanda. All rights reserved.</p>
+  </footer>
+
+  <div class="mobile-quick-book" data-mobile-quick-book>
+    <a class="mobile-quick-book-link" href="quick-book.html" aria-label="Quick book an Umusare driver">
+      <span>Quick Book Driver</span>
+      <small>Get a verified driver fast</small>
+    </a>
+    <button class="mobile-quick-book-close" type="button" aria-label="Hide quick book button" data-mobile-quick-book-close>&times;</button>
+  </div>
+  <script src="site.js"></script>
+  <script src="api.js"></script>
+  <script>
+    const quickBookForm = document.getElementById("quickBookForm");
+    const quickBookConfirmation = document.getElementById("quickBookConfirmation");
+    const quickStepCards = Array.from(document.querySelectorAll("[data-quick-step]"));
+    const quickStepLabel = document.getElementById("quickStepLabel");
+    const quickProgressBar = document.getElementById("quickProgressBar");
+    const quickCustomTimeWrap = document.getElementById("quickCustomTimeWrap");
+    const useLocationButton = document.getElementById("useLocationButton");
+    const locationPlaceholderMessage = document.getElementById("locationPlaceholderMessage");
+    const quickSummaryName = document.getElementById("quickSummaryName");
+    const quickSummaryBookingId = document.getElementById("quickSummaryBookingId");
+    const quickSummaryPhone = document.getElementById("quickSummaryPhone");
+    const quickSummaryPickup = document.getElementById("quickSummaryPickup");
+    const quickSummaryDestination = document.getElementById("quickSummaryDestination");
+    const quickSummaryNeededTime = document.getElementById("quickSummaryNeededTime");
+    const quickSummaryDriver = document.getElementById("quickSummaryDriver");
+    const quickSummaryCarType = document.getElementById("quickSummaryCarType");
+    const quickSummaryAvailability = document.getElementById("quickSummaryAvailability");
+    const quickOfflineWarning = document.getElementById("quickOfflineWarning");
+    const quickAvailabilityMessage = document.getElementById("quickAvailabilityMessage");
+    const quickContactActions = document.getElementById("quickContactActions");
+    let selectedDriverProfile = null;
+    let currentQuickStep = 0;
+
+    function formatSelectedDriver(slug) {
+      if (!slug) return "Nearest verified driver";
+      return selectedDriverProfile ? (selectedDriverProfile.fullName || selectedDriverProfile.displayName || "Selected verified driver") : "Selected verified driver";
+    }
+
+    function getSelectedDriverAvailability(slug) {
+      if (!slug) return "Available Now prioritized";
+      return selectedDriverProfile ? selectedDriverProfile.availability : "Availability will be checked";
+    }
+
+    async function loadSelectedQuickDriver() {
+      const selectedDriver = new URLSearchParams(window.location.search).get("driver");
+      if (!selectedDriver) return;
+      try {
+        const payload = await window.UmusareApi.drivers.profile(selectedDriver);
+        selectedDriverProfile = payload.data.driver;
+      } catch (error) {
+        quickOfflineWarning.hidden = false;
+        quickOfflineWarning.textContent = "Selected driver is not available. Umusare will look for another verified driver.";
+      }
+    }
+
+    function contactButton(action, fallbackLabel) {
+      if (!action || !action.href) return "";
+      const whatsappClass = action.href.includes("wa.me") ? " whatsapp-btn" : "";
+      return '<a class="contact-btn' + whatsappClass + '" href="' + action.href + '">' + (action.label || fallbackLabel) + '</a>';
+    }
+
+    function renderQuickContactActions(actions) {
+      const contactHtml = [
+        contactButton(actions && actions.callSupport, "Call Support"),
+        contactButton(actions && actions.whatsappSupport, "WhatsApp Support")
+      ].filter(Boolean).join("");
+      quickContactActions.innerHTML =
+        '<a class="contact-btn" href="client-dashboard.html#my-bookings">Go to Client Dashboard</a>'
+        + contactHtml
+        + '<a class="contact-btn" href="support.html">Support &amp; Emergency Help</a>'
+        + '<a class="contact-btn" href="index.html">Return Home</a>';
+    }
+
+    function setQuickStep(index) {
+      currentQuickStep = Math.max(0, Math.min(index, quickStepCards.length - 1));
+      quickStepCards.forEach(function (card, cardIndex) {
+        const isActive = cardIndex === currentQuickStep;
+        card.hidden = !isActive;
+        card.classList.toggle("is-active", isActive);
+      });
+      quickStepLabel.textContent = "Step " + (currentQuickStep + 1) + " of " + quickStepCards.length;
+      quickProgressBar.style.width = (((currentQuickStep + 1) / quickStepCards.length) * 100) + "%";
+    }
+
+    function showStepError(step, message) {
+      const error = step.querySelector("[data-step-error]");
+      if (!error) {
+        return;
+      }
+      error.textContent = message;
+      error.hidden = false;
+    }
+
+    function clearStepError(step) {
+      const error = step.querySelector("[data-step-error]");
+      if (error) {
+        error.hidden = true;
+        error.textContent = "";
+      }
+    }
+
+    function validateQuickStep(step) {
+      clearStepError(step);
+      const requiredFields = Array.from(step.querySelectorAll("[data-required-message]"));
+      const missingField = requiredFields.find(function (field) {
+        if (field.type === "checkbox") {
+          return !field.checked;
+        }
+        return !field.value.trim();
+      });
+
+      if (missingField) {
+        showStepError(step, missingField.dataset.requiredMessage);
+        if (missingField.type === "hidden") {
+          const visibleChoice = step.querySelector("[data-choice-value]");
+          if (visibleChoice) {
+            visibleChoice.focus({ preventScroll: true });
+          }
+        } else {
+          missingField.focus({ preventScroll: true });
+        }
+        return false;
+      }
+
+      const neededTime = quickBookForm.elements["needed-time"];
+      const customTime = quickBookForm.elements["custom-time"];
+      if (step.contains(neededTime) && neededTime.value === "Choose time" && !customTime.value.trim()) {
+        showStepError(step, "Choose the time you want the driver to arrive.");
+        customTime.focus({ preventScroll: true });
+        return false;
+      }
+
+      return true;
+    }
+
+    document.querySelectorAll("[data-next-step]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        const step = quickStepCards[currentQuickStep];
+        if (validateQuickStep(step)) {
+          setQuickStep(currentQuickStep + 1);
+        }
+      });
+    });
+
+    document.querySelectorAll("[data-prev-step]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        setQuickStep(currentQuickStep - 1);
+      });
+    });
+
+    document.querySelectorAll("[data-choice-group]").forEach(function (group) {
+      const fieldName = group.dataset.choiceGroup;
+      const hiddenInput = quickBookForm.elements[fieldName];
+      group.querySelectorAll("[data-choice-value]").forEach(function (button) {
+        button.addEventListener("click", function () {
+          group.querySelectorAll("[data-choice-value]").forEach(function (choice) {
+            choice.classList.remove("is-selected");
+          });
+          button.classList.add("is-selected");
+          hiddenInput.value = button.dataset.choiceValue;
+          if (fieldName === "needed-time") {
+            const usesCustomTime = button.dataset.choiceValue === "Choose time";
+            quickCustomTimeWrap.hidden = !usesCustomTime;
+            if (!usesCustomTime) {
+              quickBookForm.elements["custom-time"].value = "";
+            }
+          }
+          clearStepError(group.closest("[data-quick-step]"));
+        });
+      });
+    });
+
+    useLocationButton.addEventListener("click", function () {
+      locationPlaceholderMessage.hidden = false;
+    });
+
+    quickBookForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const finalStep = quickStepCards[currentQuickStep];
+      if (!validateQuickStep(finalStep)) {
+        return;
+      }
+      const submitButton = quickBookForm.querySelector("button[type='submit']");
+      const originalButtonText = submitButton ? submitButton.textContent : "";
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = "Sending your booking request...";
+      }
+      const formData = new FormData(quickBookForm);
+      const selectedDriver = new URLSearchParams(window.location.search).get("driver");
+      const availability = selectedDriver ? getSelectedDriverAvailability(selectedDriver) : "Available Now prioritized";
+      const selectedTime = formData.get("needed-time") === "Choose time" && formData.get("custom-time")
+        ? formData.get("custom-time")
+        : formData.get("needed-time");
+      try {
+        const payload = await window.UmusareApi.request("/bookings/quick-book", {
+          method: "POST",
+          body: JSON.stringify({
+            firstName: formData.get("first-name"),
+            phone: formData.get("phone-number"),
+            pickupLocation: formData.get("pickup-location"),
+            destination: formData.get("destination"),
+            neededTime: formData.get("needed-time"),
+            customTime: formData.get("custom-time") || undefined,
+            carType: formData.get("car-type"),
+            selectedDriverId: selectedDriver || undefined
+          })
+        });
+        const booking = payload.data.booking;
+        const suggestedDrivers = payload.data.suggestedDrivers || [];
+        const suggestedDriver = suggestedDrivers[0];
+        quickSummaryBookingId.textContent = booking.bookingId;
+        quickSummaryName.textContent = booking.clientName || formData.get("first-name") || "Pending";
+        quickSummaryPhone.textContent = formData.get("phone-number") || "Pending";
+        quickSummaryPickup.textContent = booking.pickupLocation;
+        quickSummaryDestination.textContent = booking.destination;
+        quickSummaryNeededTime.textContent = booking.neededTime === "Custom" ? selectedTime : booking.neededTime;
+        quickSummaryDriver.textContent = booking.driverName !== "Pending assignment" ? booking.driverName : suggestedDriver ? suggestedDriver.fullName : formatSelectedDriver(selectedDriver);
+        quickSummaryCarType.textContent = booking.carType;
+        quickSummaryAvailability.textContent = booking.driverAvailability || availability;
+        const isOffline = availability === "Offline";
+        quickOfflineWarning.hidden = !isOffline;
+        quickAvailabilityMessage.textContent = suggestedDrivers.length
+          ? "Your Quick Book request has been sent. Suggested available drivers were found near you."
+          : "Your request has been created. Umusare will look for an available driver.";
+        renderQuickContactActions(booking.contactActions);
+        quickBookForm.hidden = true;
+        quickBookConfirmation.hidden = false;
+        quickBookConfirmation.scrollIntoView({ behavior: "smooth", block: "center" });
+      } catch (error) {
+        showStepError(finalStep, "We couldn't send your booking request. Please try again or contact support.");
+      } finally {
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.textContent = originalButtonText;
+        }
+      }
+    });
+
+    quickBookForm.addEventListener("input", function () {
+      clearStepError(quickStepCards[currentQuickStep]);
+    });
+
+    setQuickStep(0);
+    loadSelectedQuickDriver();
+  </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+.env
+.env.local
+.env.production
+.env.staging
+node_modules
+dist
+build
+coverage
+uploads
+server/uploads
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Driver Dashboard | Umusare</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+<body class="admin-body">
+  <div class="admin-layout driver-layout">
+    <aside class="admin-sidebar driver-sidebar">
+      <a class="site-logo nav-logo admin-logo" href="index.html" aria-label="Umusare home">
+        <span class="brand-badge"><img src="assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
+        <span class="brand-name">Umusare Driver</span>
+      </a>
+      <nav class="admin-menu" aria-label="Driver dashboard navigation">
+        <a href="#driver-overview">Dashboard Overview</a>
+        <a href="#driver-bookings">My Bookings</a>
+        <a href="#driver-availability">Availability</a>
+        <a href="#driver-profile">My Profile</a>
+        <a href="#driver-subscription">Subscription</a>
+        <a href="#driver-reviews">Reviews</a>
+        <a href="#driver-reports">Safety &amp; Reports</a>
+        <a href="#driver-settings">Settings</a>
+      </nav>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <div>
+          <p class="eyebrow">Approved driver workspace</p>
+          <h1>Driver Dashboard</h1>
+        </div>
+        <div class="client-top-actions">
+          <a class="btn btn-secondary" href="driver-profile.html">View Public Profile</a>
+          <button class="btn btn-secondary" id="driverLogoutButton" type="button">Logout</button>
+        </div>
+      </header>
+
+      <section class="admin-section" id="driver-overview">
+        <div class="admin-section-heading">
+          <h2>Dashboard Overview</h2>
+          <p>Track booking demand, trip status, subscription standing, and your current availability.</p>
+        </div>
+        <p class="analytics-note" id="driverBackendStatus">Driver profile data will load from the Umusare backend when a driver session is available.</p>
+        <div class="summary-grid">
+          <article class="summary-card"><span>Loading driver dashboard</span><strong>...</strong></article>
+        </div>
+      </section>
+
+      <section class="admin-section" id="driver-bookings">
+        <div class="admin-section-heading">
+          <h2>My Bookings</h2>
+          <p>Accept, manage, and communicate with clients for active Umusare booking requests.</p>
+        </div>
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Booking ID</th>
+                <th>Client</th>
+                <th>Pickup location</th>
+                <th>Destination</th>
+                <th>Date and time</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="8">Loading bookings...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <aside class="application-detail-panel driver-booking-detail" id="driverBookingDetail" hidden>
+          <div class="panel-header">
+            <h3>Booking Details</h3>
+            <button class="close-panel" id="closeDriverBookingPanel" type="button">Close</button>
+          </div>
+          <p>Select a booking to view details.</p>
+        </aside>
+      </section>
+
+      <section class="admin-section" id="driver-availability">
+        <div class="admin-section-heading">
+          <h2>Availability</h2>
+          <p>Your availability affects whether clients can find or quickly book you.</p>
+        </div>
+        <form class="application-form availability-form">
+          <fieldset class="availability-options">
+            <legend>Set availability</legend>
+            <label><input type="radio" name="availability" value="Available Now" checked> Available Now</label>
+            <label><input type="radio" name="availability" value="Available Later"> Available Later</label>
+            <label><input type="radio" name="availability" value="Offline"> Offline</label>
+          </fieldset>
+          <div class="form-grid" id="availableLaterFields" hidden>
+            <label>Available date<input type="date" name="availableDate"></label>
+            <label>Start time<input type="time" name="startTime"></label>
+            <label>End time<input type="time" name="endTime"></label>
+          </div>
+          <p class="safety-notice">Your availability affects whether clients can find or quickly book you.</p>
+          <button class="btn btn-primary submit-btn" type="submit">Update Availability</button>
+          <p class="availability-confirmation" id="availabilityConfirmation" hidden>Your availability has been updated.</p>
+        </form>
+      </section>
+
+      <section class="admin-section" id="driver-profile">
+        <div class="admin-section-heading">
+          <h2>My Profile</h2>
+          <p>Manage the public details clients see before choosing you as their designated driver.</p>
+        </div>
+        <div class="driver-profile-editor">
+          <div class="profile-photo admin-photo" id="driverProfileInitials" aria-hidden="true">DR</div>
+          <form class="application-form" id="driverProfileForm">
+            <div class="form-grid">
+              <label>Full name<input type="text" name="fullName" value="" placeholder="Loading..." readonly></label>
+              <label>City<input type="text" name="city" value="" placeholder="Not set yet"></label>
+              <label>Location<input type="text" name="location" value="" placeholder="Not set yet"></label>
+              <label>Years of driving experience<input type="number" name="experienceYears" value="0"></label>
+              <label>Languages spoken<input type="text" name="languages" value="" placeholder="Not set yet"></label>
+              <label>Gender<select name="gender"><option>Female</option><option>Male</option><option selected>Prefer not to say</option></select></label>
+            </div>
+            <fieldset class="checkbox-group">
+              <legend>Vehicle types they can drive</legend>
+              <label><input type="checkbox" name="vehicleTypes" value="Automatic" checked> Automatic</label>
+              <label><input type="checkbox" name="vehicleTypes" value="Manual" checked> Manual</label>
+              <label><input type="checkbox" name="vehicleTypes" value="SUV" checked> SUV</label>
+              <label><input type="checkbox" name="vehicleTypes" value="Pickup"> Pickup</label>
+              <label><input type="checkbox" name="vehicleTypes" value="Luxury car" checked> Luxury car</label>
+            </fieldset>
+            <label>Profile photo placeholder URL<input type="text" name="profilePhoto" placeholder="assets/images/profile-placeholder.png"></label>
+            <label>Short bio<textarea rows="4" name="shortBio" placeholder="Your public bio appears after driver approval."></textarea></label>
+            <div class="verification-grid">
+              <span class="verification-badge">ID verified</span>
+              <span class="verification-badge">Driver's licence verified</span>
+              <span class="verification-badge">Education proof verified</span>
+              <span class="verification-badge">Profile photo verified</span>
+              <span class="verification-badge">Criminal record certificate verified</span>
+            </div>
+            <p class="contact-safety-note">Private document images are not displayed publicly. Only verification status is shown.</p>
+            <button class="btn btn-primary submit-btn" type="submit">Save Public Profile</button>
+            <p class="availability-confirmation" id="driverProfileConfirmation" hidden>Public profile updated.</p>
+          </form>
+        </div>
+      </section>
+
+      <section class="admin-section" id="driver-subscription">
+        <div class="admin-section-heading">
+          <h2>Subscription</h2>
+          <p>Keep your driver profile active and manage your Umusare membership plan.</p>
+        </div>
+        <div class="subscription-admin-grid">
+          <article class="subscription-admin-card featured-plan current-subscription-card">
+            <h3>Current Plan</h3>
+            <p><span class="subscription-badge" id="driverCurrentPlan">Loading...</span></p>
+            <p>Monthly fee: <strong id="driverMonthlyFee">Loading...</strong></p>
+            <p>Payment status: <span class="subscription-status-badge status-pending" id="driverPaymentStatus">Loading...</span></p>
+            <p>Renewal date: <strong id="driverRenewalDate">Loading...</strong></p>
+            <p>Bookings used this month: <strong id="driverBookingsUsed">Loading...</strong></p>
+            <div class="table-actions">
+              <button class="action-btn approve" type="button" id="upgradeToProButton">Upgrade to Pro</button>
+              <button class="action-btn" type="button" id="manageSubscriptionButton">Manage Subscription</button>
+              <button class="action-btn reject" type="button">Cancel Subscription</button>
+            </div>
+          </article>
+          <article class="subscription-admin-card">
+            <h3>Basic</h3>
+            <p>2,500 RWF/month</p>
+            <p>Profile listing, verified badge, up to 10 bookings/month.</p>
+            <span class="subscription-status-badge plan-basic">Basic</span>
+          </article>
+          <article class="subscription-admin-card">
+            <h3>Pro</h3>
+            <p>5,000 RWF/month</p>
+            <p>Priority listing, unlimited bookings, featured placement, analytics, Top Driver badge.</p>
+            <span class="subscription-status-badge plan-pro">Pro</span>
+          </article>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table subscription-admin-table" id="driverPaymentHistoryTable">
+            <thead>
+              <tr>
+                <th>Payment ID</th>
+                <th>Method</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="5">Loading payment history...</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <aside class="application-detail-panel subscription-upgrade-panel" id="upgradePanel" hidden>
+          <div class="panel-header">
+            <h3>Upgrade to Pro</h3>
+            <button class="close-panel" id="closeUpgradePanel" type="button">Close</button>
+          </div>
+          <dl class="admin-detail-grid">
+            <div><dt>Current plan</dt><dd>Basic</dd></div>
+            <div><dt>New plan</dt><dd>Pro</dd></div>
+            <div><dt>Price</dt><dd>5,000 RWF/month</dd></div>
+          </dl>
+          <ul class="subscription-benefit-list">
+            <li>Priority listing</li>
+            <li>Unlimited bookings</li>
+            <li>Featured placement</li>
+            <li>Analytics</li>
+            <li>Top Driver badge</li>
+          </ul>
+          <button class="btn btn-primary" type="button" id="confirmUpgradeButton">Confirm Upgrade</button>
+        </aside>
+        <aside class="application-detail-panel subscription-payment-panel" id="paymentPanel" hidden>
+          <div class="panel-header">
+            <h3>Subscription Payment</h3>
+            <button class="close-panel" id="closePaymentPanel" type="button">Close</button>
+          </div>
+          <dl class="admin-detail-grid">
+            <div><dt>Selected plan</dt><dd id="paymentSelectedPlan">Pro</dd></div>
+            <div><dt>Amount due</dt><dd id="paymentAmountDue">5,000 RWF</dd></div>
+            <div><dt>Driver name</dt><dd id="paymentDriverName">Loading...</dd></div>
+          </dl>
+          <fieldset class="checkbox-group payment-methods">
+            <legend>Payment method</legend>
+            <label id="dummyPaymentOption"><input type="radio" name="payment-method" value="dummy" checked> Dummy Mobile Money</label>
+            <label id="realPaymentOption"><input type="radio" name="payment-method" value="mobile-money"> Mobile Money</label>
+            <label>Payment phone number<input type="tel" id="dummyPaymentPhone" placeholder="Enter Mobile Money phone number"></label>
+            <label id="dummyPaymentStatusLabel">Simulate status<select id="dummyPaymentStatus"><option>Success</option><option>Failed</option><option>Pending</option></select></label>
+          </fieldset>
+          <p class="contact-safety-note" id="paymentModeNote">Real Mobile Money payments are not active yet.</p>
+          <div class="table-actions">
+            <button class="btn btn-primary" type="button" id="confirmPaymentButton">Confirm Payment</button>
+            <button class="btn btn-secondary" type="button" id="cancelPaymentButton">Cancel</button>
+          </div>
+        </aside>
+        <div class="confirmation-message compact-confirmation" id="subscriptionConfirmation" hidden>
+          <h2>Your plan has been updated to Pro. Payment processing will be connected later.</h2>
+        </div>
+        <div class="confirmation-message compact-confirmation" id="paymentConfirmation" hidden>
+          <h2>Dummy payment confirmed. Your subscription status is now Active.</h2>
+        </div>
+      </section>
+
+      <section class="admin-section" id="driver-reviews">
+        <div class="admin-section-heading">
+          <h2>Reviews</h2>
+          <p>Recent client feedback from completed Umusare trips.</p>
+        </div>
+        <div class="summary-grid compact-summary rating-summary-grid">
+          <article class="summary-card"><span>Average rating</span><strong>...</strong></article>
+          <article class="summary-card"><span>Number of reviews</span><strong>...</strong></article>
+          <article class="summary-card"><span>Completed trips</span><strong>...</strong></article>
+        </div>
+        <div class="reviews-list">
+          <article class="review-card"><p>Loading reviews...</p></article>
+        </div>
+      </section>
+
+      <section class="admin-section" id="driver-reports">
+        <div class="admin-section-heading">
+          <h2>Safety &amp; Reports</h2>
+          <p>Report client safety issues, vehicle concerns, disputes, or incorrect booking details.</p>
+        </div>
+        <div class="section-links">
+          <a class="btn btn-secondary" href="support.html">Support &amp; Emergency Help</a>
+          <a class="btn btn-secondary" href="safety-policy.html">Safety Policy</a>
+          <a class="btn btn-secondary" href="incident-reporting-policy.html">Incident Reporting Policy</a>
+        </div>
+        <form class="application-form driver-report-form" id="driverReportForm">
+          <div class="form-grid">
+            <label>Booking ID<input type="text" name="booking-id" placeholder="Booking ID if applicable"></label>
+            <label>Client first name<input type="text" name="client-first-name" placeholder="Client first name if applicable"></label>
+            <label>Issue type<select name="issue-type"><option>Client safety concern</option><option>Vehicle issue</option><option>Accident</option><option>Payment dispute</option><option>Wrong booking details</option><option>Client misconduct</option><option>Emergency concern</option><option>Other</option></select></label>
+            <label>Upload evidence/photo<input type="file" accept="image/*"></label>
+          </div>
+          <label>Description<textarea rows="4" placeholder="Describe the issue clearly for the Umusare safety team."></textarea></label>
+          <button class="btn btn-primary submit-btn" type="submit">Submit Report</button>
+        </form>
+        <div class="confirmation-message compact-confirmation" id="driverReportConfirmation" hidden>
+          <h2>Your report has been submitted to Umusare.</h2>
+        </div>
+        <div class="table-wrap report-status-table">
+          <h3>Submitted Reports</h3>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Report ID</th>
+                <th>Report type</th>
+                <th>Date submitted</th>
+                <th>Status</th>
+                <th>Last updated</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="6">Loading reports...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-section" id="driver-settings">
+        <div class="admin-section-heading">
+          <h2>Settings</h2>
+          <p>Update account access details and choose how Umusare sends booking alerts.</p>
+        </div>
+        <form class="application-form">
+          <div class="form-grid">
+            <label>Phone number<input type="tel" id="driverSettingsPhone" value="" placeholder="Loading..."></label>
+            <label>Email address<input type="email" id="driverSettingsEmail" value="" placeholder="Loading..."></label>
+          </div>
+          <section class="form-panel password-placeholder">
+            <h2>Password</h2>
+            <p class="intro">Password changes will be connected when login and account security are added.</p>
+            <button class="btn btn-secondary" type="button">Change Password</button>
+          </section>
+          <fieldset class="checkbox-group notification-options">
+            <legend>Notification preferences</legend>
+            <label><input type="checkbox" checked> SMS booking alerts</label>
+            <label><input type="checkbox" checked> WhatsApp booking alerts</label>
+            <label><input type="checkbox"> Email updates</label>
+          </fieldset>
+          <button class="btn btn-primary submit-btn" type="button">Save Settings</button>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script src="site.js"></script>
+  <script src="api.js"></script>
+  <script>
+    const driverBookingDetail = document.getElementById("driverBookingDetail");
+    const closeDriverBookingPanel = document.getElementById("closeDriverBookingPanel");
+    const viewDriverBookingButtons = document.querySelectorAll(".view-driver-booking");
+    const driverBookingRows = document.querySelectorAll("#driver-bookings tbody tr[data-booking-status]");
+    const availabilityInputs = document.querySelectorAll("input[name='availability']");
+    const availableLaterFields = document.getElementById("availableLaterFields");
+    const availabilityForm = document.querySelector(".availability-form");
+    const availabilityConfirmation = document.getElementById("availabilityConfirmation");
+    const driverReportForm = document.getElementById("driverReportForm");
+    const driverReportConfirmation = document.getElementById("driverReportConfirmation");
+    const upgradeToProButton = document.getElementById("upgradeToProButton");
+    const manageSubscriptionButton = document.getElementById("manageSubscriptionButton");
+    const upgradePanel = document.getElementById("upgradePanel");
+    const paymentPanel = document.getElementById("paymentPanel");
+    const closeUpgradePanel = document.getElementById("closeUpgradePanel");
+    const closePaymentPanel = document.getElementById("closePaymentPanel");
+    const confirmUpgradeButton = document.getElementById("confirmUpgradeButton");
+    const confirmPaymentButton = document.getElementById("confirmPaymentButton");
+    const cancelPaymentButton = document.getElementById("cancelPaymentButton");
+    const paymentSelectedPlan = document.getElementById("paymentSelectedPlan");
+    const paymentAmountDue = document.getElementById("paymentAmountDue");
+    const paymentDriverName = document.getElementById("paymentDriverName");
+    const driverCurrentPlan = document.getElementById("driverCurrentPlan");
+    const driverMonthlyFee = document.getElementById("driverMonthlyFee");
+    const driverBookingsUsed = document.getElementById("driverBookingsUsed");
+    const driverPaymentStatus = document.getElementById("driverPaymentStatus");
+    const driverRenewalDate = document.getElementById("driverRenewalDate");
+    const subscriptionConfirmation = document.getElementById("subscriptionConfirmation");
+    const paymentConfirmation = document.getElementById("paymentConfirmation");
+    const driverBackendStatus = document.getElementById("driverBackendStatus");
+    const driverProfileForm = document.getElementById("driverProfileForm");
+    const driverProfileConfirmation = document.getElementById("driverProfileConfirmation");
+    const dummyPaymentsEnabled = !window.UmusareApi || window.UmusareApi.DUMMY_PAYMENTS_ENABLED;
+    const realPaymentsEnabled = Boolean(window.UmusareApi && window.UmusareApi.REAL_PAYMENTS_ENABLED);
+    const dummyPaymentOption = document.getElementById("dummyPaymentOption");
+    const realPaymentOption = document.getElementById("realPaymentOption");
+    const dummyPaymentStatusLabel = document.getElementById("dummyPaymentStatusLabel");
+    const paymentModeNote = document.getElementById("paymentModeNote");
+    let backendDriverProfile = null;
+    let currentSubscriptionId = "";
+    const driverBookingsBody = document.querySelector("#driver-bookings tbody");
+    const driverReportBody = document.querySelector("#driver-reports .report-status-table tbody");
+    const driverPaymentHistoryBody = document.querySelector("#driverPaymentHistoryTable tbody");
+    const driverSummaryGrid = document.querySelector("#driver-overview .summary-grid");
+    const driverProfileInitials = document.getElementById("driverProfileInitials");
+    const driverLogoutButton = document.getElementById("driverLogoutButton");
+    const driverSettingsPhone = document.getElementById("driverSettingsPhone");
+    const driverSettingsEmail = document.getElementById("driverSettingsEmail");
+
+    function escapeHtml(value) {
+      return String(value === undefined || value === null ? "" : value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function setDriverBackendStatus(message, isError) {
+      driverBackendStatus.textContent = message;
+      driverBackendStatus.classList.toggle("form-error", Boolean(isError));
+    }
+
+    function renderDriverSummary(profileData, bookings, subscription) {
+      if (!driverSummaryGrid) return;
+      const profile = profileData && profileData.profile ? profileData.profile : {};
+      const rating = profile.ratingAverage || 0;
+      const completedTrips = profile.completedTrips || bookings.filter(function (booking) {
+        return ["Completed", "Reviewed"].includes(booking.status);
+      }).length;
+      const newRequests = bookings.filter(function (booking) { return booking.status === "Pending"; }).length;
+      const confirmed = bookings.filter(function (booking) {
+        return ["Accepted", "Driver on the way", "Trip started"].includes(booking.status);
+      }).length;
+      driverSummaryGrid.innerHTML = [
+        ["New booking requests", newRequests],
+        ["Confirmed bookings", confirmed],
+        ["Completed trips", completedTrips],
+        ["Current rating", Number(rating || 0).toFixed(1)],
+        ["Subscription status", subscription && subscription.status ? subscription.status : "No active subscription"],
+        ["Availability status", profile.availability || "Offline", "warning-card"]
+      ].map(function (card) {
+        return '<article class="summary-card ' + (card[2] || "") + '"><span>' + escapeHtml(card[0]) + '</span><strong>' + escapeHtml(card[1]) + '</strong></article>';
+      }).join("");
+    }
+
+    async function loadCurrentDriver() {
+      if (!window.UmusareApi.getToken()) {
+        window.location.href = "login.html";
+        return null;
+      }
+      try {
+        const payload = await window.UmusareApi.auth.me();
+        const user = payload.data.user;
+        if (!user || user.role !== "driver") {
+          window.location.href = "login.html";
+          return null;
+        }
+        driverProfileForm.elements.fullName.value = user.fullName || "";
+        if (paymentDriverName) paymentDriverName.textContent = user.fullName || "Umusare driver";
+        if (driverSettingsPhone) driverSettingsPhone.value = user.phone || "";
+        if (driverSettingsEmail) driverSettingsEmail.value = user.email || "";
+        if (driverProfileInitials) {
+          driverProfileInitials.textContent = String(user.fullName || "DR").slice(0, 2).toUpperCase();
+        }
+        return user;
+      } catch (error) {
+        window.location.href = "login.html";
+        return null;
+      }
+    }
+
+    function showDummyPaymentDisabledMessage() {
+      subscriptionConfirmation.querySelector("h2").textContent = "Payment simulation is not available in this environment.";
+      subscriptionConfirmation.hidden = false;
+      subscriptionConfirmation.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    function selectedPaymentMethod() {
+      const checked = document.querySelector("input[name='payment-method']:checked");
+      return checked ? checked.value : "dummy";
+    }
+
+    function setAvailabilityRadio(value) {
+      const input = document.querySelector("input[name='availability'][value='" + value + "']");
+      if (input) input.checked = true;
+      availableLaterFields.hidden = value !== "Available Later";
+    }
+
+    function populateDriverProfile(data) {
+      backendDriverProfile = data;
+      const profile = data.profile || {};
+      const user = data.user || {};
+      const subscription = data.subscription || {};
+      setAvailabilityRadio(profile.availability || "Offline");
+      if (profile.availableLater) {
+        availabilityForm.elements.availableDate.value = profile.availableLater.date ? String(profile.availableLater.date).slice(0, 10) : "";
+        availabilityForm.elements.startTime.value = profile.availableLater.startTime || "";
+        availabilityForm.elements.endTime.value = profile.availableLater.endTime || "";
+      }
+      driverProfileForm.elements.fullName.value = user.fullName || "";
+      driverProfileForm.elements.city.value = profile.city || "";
+      driverProfileForm.elements.location.value = profile.location || "";
+      driverProfileForm.elements.experienceYears.value = profile.experienceYears || 0;
+      driverProfileForm.elements.languages.value = (profile.languages || []).join(", ");
+      driverProfileForm.elements.gender.value = profile.gender || "Prefer not to say";
+      driverProfileForm.elements.profilePhoto.value = user.profilePhoto || "";
+      driverProfileForm.elements.shortBio.value = profile.shortBio || "";
+      if (paymentDriverName) paymentDriverName.textContent = user.fullName || "Umusare driver";
+      if (driverSettingsPhone) driverSettingsPhone.value = user.phone || "";
+      if (driverSettingsEmail) driverSettingsEmail.value = user.email || "";
+      if (driverProfileInitials) driverProfileInitials.textContent = String(user.fullName || "DR").slice(0, 2).toUpperCase();
+      document.querySelectorAll("input[name='vehicleTypes']").forEach(function (checkbox) {
+        checkbox.checked = (profile.vehicleTypes || []).includes(checkbox.value);
+      });
+      driverCurrentPlan.textContent = subscription.plan ? subscription.plan + " Driver" : profile.driverBadge || "Driver";
+      currentSubscriptionId = subscription.subscriptionId || subscription.id || "";
+      driverMonthlyFee.textContent = subscription.monthlyFee ? subscription.monthlyFee + " RWF/month" : "Pending";
+      driverPaymentStatus.textContent = subscription.status || "Pending";
+      driverPaymentStatus.className = "subscription-status-badge status-" + String(subscription.status || "pending").toLowerCase();
+      driverRenewalDate.textContent = subscription.renewalDate ? new Date(subscription.renewalDate).toLocaleDateString() : "Not active yet";
+      driverBookingsUsed.textContent = subscription.bookingsUsedThisMonth || 0;
+
+      if (profile.isSuspended) {
+        setDriverBackendStatus("Your driver profile is currently suspended.", true);
+      } else if (!profile.isApproved) {
+        setDriverBackendStatus("Your application is still under review.", false);
+      } else if (!data.canAppearPublicly) {
+        setDriverBackendStatus("Your profile is approved but not publicly visible until your subscription is active.", false);
+      } else {
+        setDriverBackendStatus("Your public driver profile is active and visible.", false);
+      }
+    }
+
+    async function loadBackendDriverProfile() {
+      if (!window.UmusareApi.getToken()) {
+        setDriverBackendStatus("Please log in as a driver to load your profile.", true);
+        return;
+      }
+      try {
+        const payload = await window.UmusareApi.request("/drivers/me");
+        populateDriverProfile(payload.data);
+      } catch (error) {
+        setDriverBackendStatus(error.message || "Driver profile data is unavailable. Log in as an approved driver to manage your backend profile.", true);
+        return null;
+      }
+      return backendDriverProfile;
+    }
+
+    function populateSubscription(subscription) {
+      if (!subscription) {
+        currentSubscriptionId = "";
+        driverCurrentPlan.textContent = "No plan selected";
+        driverMonthlyFee.textContent = "Pending";
+        driverPaymentStatus.textContent = "Pending";
+        driverPaymentStatus.className = "subscription-status-badge status-pending";
+        driverRenewalDate.textContent = "Not active yet";
+        driverBookingsUsed.textContent = "0";
+        return;
+      }
+      currentSubscriptionId = subscription.subscriptionId || subscription.id || "";
+      driverCurrentPlan.textContent = subscription.plan + " Driver";
+      driverMonthlyFee.textContent = subscription.monthlyFee + " " + subscription.currency + "/month";
+      driverPaymentStatus.textContent = subscription.status + " / " + subscription.paymentStatus;
+      driverPaymentStatus.className = "subscription-status-badge status-" + String(subscription.status || "pending").toLowerCase();
+      driverRenewalDate.textContent = subscription.renewalDate ? new Date(subscription.renewalDate).toLocaleDateString() : "Not active yet";
+      driverBookingsUsed.textContent = subscription.plan === "Basic" ? (subscription.bookingsUsedThisMonth || 0) + " of 10" : "Unlimited";
+    }
+
+    async function loadDriverSubscription() {
+      if (!window.UmusareApi.getToken()) {
+        populateSubscription(null);
+        return;
+      }
+      try {
+        const payload = await window.UmusareApi.request("/subscriptions/me");
+        populateSubscription(payload.data.subscription);
+        return payload.data.subscription || null;
+      } catch (error) {
+        populateSubscription(null);
+        return null;
+      }
+    }
+
+    function renderDriverPaymentHistory(payments) {
+      if (!driverPaymentHistoryBody) return;
+      if (!payments.length) {
+        driverPaymentHistoryBody.innerHTML = '<tr><td colspan="5">No payments found.</td></tr>';
+        return;
+      }
+      driverPaymentHistoryBody.innerHTML = payments.map(function (payment) {
+        const createdAt = payment.createdAt ? new Date(payment.createdAt).toLocaleDateString() : "Pending";
+        return '<tr>'
+          + '<td>' + escapeHtml(payment.paymentId || payment.id || "Payment") + '</td>'
+          + '<td>' + escapeHtml(payment.paymentMethod || "Dummy Mobile Money") + '</td>'
+          + '<td>' + escapeHtml(payment.amount || 0) + ' ' + escapeHtml(payment.currency || "RWF") + '</td>'
+          + '<td><span class="subscription-status-badge status-' + escapeHtml(String(payment.status || "pending").toLowerCase()) + '">' + escapeHtml(payment.status || "Pending") + '</span></td>'
+          + '<td>' + escapeHtml(createdAt) + '</td>'
+          + '</tr>';
+      }).join("");
+    }
+
+    async function loadDriverPayments() {
+      if (!window.UmusareApi.getToken()) {
+        renderDriverPaymentHistory([]);
+        return [];
+      }
+      try {
+        const payload = await window.UmusareApi.request("/payments/me");
+        const payments = payload.data.payments || [];
+        renderDriverPaymentHistory(payments);
+        return payments;
+      } catch (error) {
+        if (driverPaymentHistoryBody) {
+          driverPaymentHistoryBody.innerHTML = '<tr><td colspan="5">Unable to load payment history.</td></tr>';
+        }
+        return [];
+      }
+    }
+
+    function renderBackendDriverActions(booking) {
+      const viewButton = '<button class="action-btn view-driver-booking" type="button" data-booking-id="' + booking.bookingId + '">View Details</button>';
+      const actions = booking.contactActions || {};
+      const callClient = actions.callClient && actions.callClient.href ? '<a class="action-btn priority-contact" href="' + actions.callClient.href + '">Call Client</a>' : "";
+      const whatsappClient = actions.whatsappClient && actions.whatsappClient.href ? '<a class="action-btn priority-contact whatsapp-btn" href="' + actions.whatsappClient.href + '">WhatsApp Client</a>' : "";
+      const support = actions.callSupport && actions.callSupport.href ? '<a class="action-btn" href="' + actions.callSupport.href + '">Contact Support</a>' : "";
+      const contact = callClient + whatsappClient + support;
+      const report = '<a class="action-btn reject" href="#driver-reports">Report Issue</a>';
+      const actionMap = {
+        Pending: viewButton + '<button class="action-btn approve driver-booking-action" type="button" data-booking-id="' + booking.bookingId + '" data-action="accept">Accept Booking</button><button class="action-btn reject driver-booking-action" type="button" data-booking-id="' + booking.bookingId + '" data-action="reject">Reject Booking</button>',
+        Accepted: viewButton + '<button class="action-btn approve driver-booking-action" type="button" data-booking-id="' + booking.bookingId + '" data-action="on-the-way">Mark as Driver on the way</button>' + contact,
+        "Driver on the way": viewButton + '<button class="action-btn approve driver-booking-action" type="button" data-booking-id="' + booking.bookingId + '" data-action="start-trip">Mark as Trip started</button>' + contact,
+        "Trip started": viewButton + '<button class="action-btn approve driver-booking-action" type="button" data-booking-id="' + booking.bookingId + '" data-action="complete">Mark as Completed</button>' + report,
+        Completed: viewButton,
+        Cancelled: viewButton,
+        Reported: '<button class="action-btn view-driver-booking" type="button">View Report</button>',
+        Reviewed: '<button class="action-btn view-driver-booking" type="button">View Review</button>'
+      };
+      return actionMap[booking.status] || viewButton;
+    }
+
+    function renderDriverBackendDetail(booking) {
+      const actions = booking.contactActions || {};
+      const callClient = actions.callClient && actions.callClient.href ? '<a class="btn btn-primary" href="' + actions.callClient.href + '">Call Client</a>' : "";
+      const whatsappClient = actions.whatsappClient && actions.whatsappClient.href ? '<a class="btn btn-primary whatsapp-btn" href="' + actions.whatsappClient.href + '">WhatsApp Client</a>' : "";
+      const callSupport = actions.callSupport && actions.callSupport.href ? '<a class="btn btn-secondary" href="' + actions.callSupport.href + '">Contact Support</a>' : "";
+      driverBookingDetail.innerHTML = '<div class="panel-header">'
+        + '<h3>Booking Details</h3>'
+        + '<button class="close-panel" id="closeDriverBookingPanelDynamic" type="button">Close</button>'
+        + '</div>'
+        + '<dl class="admin-detail-grid">'
+        + '<div><dt>Client name</dt><dd>' + (booking.clientName || "Client") + '</dd></div>'
+        + '<div><dt>Pickup location</dt><dd>' + booking.pickupLocation + '</dd></div>'
+        + '<div><dt>Destination</dt><dd>' + booking.destination + '</dd></div>'
+        + '<div><dt>Date and time</dt><dd>' + (booking.bookingType === "Quick Book" ? booking.neededTime : new Date(booking.dateTime).toLocaleString()) + '</dd></div>'
+        + '<div><dt>Car type</dt><dd>' + booking.carType + '</dd></div>'
+        + '<div><dt>Special instructions</dt><dd>' + (booking.clientNotes || "None") + '</dd></div>'
+        + '<div><dt>Booking type</dt><dd>' + booking.bookingType + '</dd></div>'
+        + '<div><dt>Status</dt><dd><span class="booking-status-badge ' + statusClass(booking.status) + '">' + booking.status + '</span></dd></div>'
+        + '</dl>'
+        + '<div class="panel-actions">' + callClient + whatsappClient + callSupport + '<a class="btn reject-panel-btn" href="#driver-reports">Report Issue</a></div>';
+      document.getElementById("closeDriverBookingPanelDynamic").addEventListener("click", function () {
+        driverBookingDetail.hidden = true;
+      });
+    }
+
+    async function openDriverBackendBookingDetail(bookingId) {
+      driverBookingDetail.hidden = false;
+      driverBookingDetail.innerHTML = '<p>Loading booking detail...</p>';
+      driverBookingDetail.scrollIntoView({ behavior: "smooth", block: "start" });
+      try {
+        const payload = await window.UmusareApi.request("/bookings/" + bookingId);
+        renderDriverBackendDetail(payload.data.booking);
+      } catch (error) {
+        driverBookingDetail.innerHTML = '<p>Unable to load booking detail.</p>';
+      }
+    }
+
+    function renderBackendDriverBookings(bookings) {
+      if (!driverBookingsBody) return;
+      if (!bookings.length) {
+        driverBookingsBody.innerHTML = '<tr><td colspan="8">No bookings yet.</td></tr>';
+        return;
+      }
+      driverBookingsBody.innerHTML = bookings.map(function (booking) {
+        return '<tr data-booking-status="' + escapeHtml(booking.status) + '">'
+          + '<td>' + escapeHtml(booking.bookingId) + '</td>'
+          + '<td>' + escapeHtml(booking.clientName || "Client") + '</td>'
+          + '<td>' + escapeHtml(booking.pickupLocation) + '</td>'
+          + '<td>' + escapeHtml(booking.destination) + '</td>'
+          + '<td>' + escapeHtml(booking.bookingType === "Quick Book" ? booking.neededTime : new Date(booking.dateTime).toLocaleString()) + '</td>'
+          + '<td>' + escapeHtml(booking.bookingType + (booking.requestLabel ? ' / ' + booking.requestLabel : '')) + '</td>'
+          + '<td><span class="booking-status-badge ' + statusClass(booking.status) + '">' + escapeHtml(booking.status) + '</span></td>'
+          + '<td class="table-actions driver-status-actions">' + renderBackendDriverActions(booking) + '</td>'
+          + '</tr>';
+      }).join("");
+    }
+
+    async function loadBackendDriverBookings() {
+      if (!window.UmusareApi.getToken()) {
+        if (driverBookingsBody) driverBookingsBody.innerHTML = '<tr><td colspan="8">Please log in as a driver to load assigned bookings.</td></tr>';
+        return;
+      }
+      try {
+        const payload = await window.UmusareApi.request("/bookings/me");
+        renderBackendDriverBookings(payload.data.bookings || []);
+        return payload.data.bookings || [];
+      } catch (error) {
+        if (driverBookingsBody) driverBookingsBody.innerHTML = '<tr><td colspan="8">Unable to load bookings. Please log in as a driver.</td></tr>';
+        return [];
+      }
+    }
+
+    function renderDriverReports(reports) {
+      if (!driverReportBody) return;
+      if (!reports.length) {
+        driverReportBody.innerHTML = '<tr><td colspan="6">No driver reports submitted yet.</td></tr>';
+        return;
+      }
+      driverReportBody.innerHTML = reports.map(function (report) {
+        return '<tr><td>' + report.reportId + '</td><td>' + report.reportType + '</td><td>' + (report.createdAt ? new Date(report.createdAt).toLocaleDateString() : "Pending") + '</td><td><span class="report-status-badge report-status-' + report.status.toLowerCase().replaceAll(" ", "-") + '">' + report.status + '</span></td><td>' + (report.lastUpdated ? new Date(report.lastUpdated).toLocaleDateString() : "Pending") + '</td><td><button class="action-btn" type="button">View Status</button></td></tr>';
+      }).join("");
+    }
+
+    async function loadDriverReports() {
+      if (!window.UmusareApi.getToken()) {
+        renderDriverReports([]);
+        return;
+      }
+      try {
+        const payload = await window.UmusareApi.request("/reports/me");
+        renderDriverReports(payload.data.reports || []);
+        return payload.data.reports || [];
+      } catch (error) {
+        if (driverReportBody) driverReportBody.innerHTML = '<tr><td colspan="6">Unable to load reports. Please try again.</td></tr>';
+        return [];
+      }
+    }
+
+    async function loadBackendDriverReviews() {
+      if (!window.UmusareApi.getToken()) {
+        const reviewList = document.querySelector("#driver-reviews .reviews-list");
+        if (reviewList) reviewList.innerHTML = '<article class="review-card"><p>Please log in as a driver to load reviews.</p></article>';
+        return;
+      }
+      try {
+        const payload = await window.UmusareApi.request("/drivers/me/reviews");
+        const summary = payload.data.ratingSummary || {};
+        const reviews = payload.data.reviews || [];
+        const cards = document.querySelectorAll("#driver-reviews .rating-summary-grid .summary-card strong");
+        if (cards[0]) cards[0].textContent = Number(summary.ratingAverage || 0).toFixed(1);
+        if (cards[1]) cards[1].textContent = summary.reviewCount || 0;
+        if (cards[2]) cards[2].textContent = summary.completedTrips || 0;
+        const reviewList = document.querySelector("#driver-reviews .reviews-list");
+        reviewList.innerHTML = reviews.length ? reviews.map(function (review) {
+          return '<article class="review-card"><div><h3>' + escapeHtml(review.clientFirstName) + '</h3><p class="rating">' + escapeHtml(review.rating) + ' stars</p></div><p>' + escapeHtml(review.reviewText) + '</p><time>' + escapeHtml(new Date(review.createdAt).toLocaleDateString()) + '</time></article>';
+        }).join("") : '<article class="review-card"><p>Client reviews will appear here after completed trips are reviewed.</p></article>';
+        return { reviews, ratingSummary: summary };
+      } catch (error) {
+        const reviewList = document.querySelector("#driver-reviews .reviews-list");
+        const cards = document.querySelectorAll("#driver-reviews .rating-summary-grid .summary-card strong");
+        if (cards[0]) cards[0].textContent = "0.0";
+        if (cards[1]) cards[1].textContent = "0";
+        if (cards[2]) cards[2].textContent = "0";
+        if (reviewList) reviewList.innerHTML = '<article class="review-card"><p>No reviews yet.</p></article>';
+        return { reviews: [], ratingSummary: {} };
+      }
+    }
+
+    async function loadDriverDashboardData() {
+      const user = await loadCurrentDriver();
+      if (!user) return;
+      const profile = await loadBackendDriverProfile();
+      const results = await Promise.all([
+        loadBackendDriverBookings(),
+        loadDriverReports(),
+        loadBackendDriverReviews(),
+        loadDriverSubscription(),
+        loadDriverPayments()
+      ]);
+      renderDriverSummary(profile, results[0] || [], results[3]);
+    }
+
+    loadDriverDashboardData();
+
+    if (driverLogoutButton) {
+      driverLogoutButton.addEventListener("click", function () {
+        window.localStorage.removeItem("umusareUserToken");
+        window.localStorage.removeItem("umusareDriverToken");
+        window.localStorage.removeItem("umusareUser");
+        window.location.href = "login.html";
+      });
+    }
+
+    if (dummyPaymentOption) dummyPaymentOption.hidden = !dummyPaymentsEnabled;
+    if (realPaymentOption) realPaymentOption.hidden = !realPaymentsEnabled;
+    if (dummyPaymentStatusLabel) dummyPaymentStatusLabel.hidden = !dummyPaymentsEnabled;
+    if (paymentModeNote) {
+      paymentModeNote.textContent = realPaymentsEnabled
+        ? "Mobile Money payments are prepared for provider integration. The backend will confirm payment status."
+        : dummyPaymentsEnabled
+          ? "Dummy payments are enabled for test mode. Real Mobile Money payments are not active yet."
+          : "Payment simulation is not available in this environment.";
+    }
+
+    if (!dummyPaymentsEnabled && !realPaymentsEnabled) {
+      paymentPanel.hidden = true;
+      manageSubscriptionButton.textContent = "Payment not active yet";
+      manageSubscriptionButton.setAttribute("aria-disabled", "true");
+      confirmPaymentButton.disabled = true;
+      paymentConfirmation.querySelector("h2").textContent = "Payment simulation is not available in this environment.";
+    } else if (!dummyPaymentsEnabled && realPaymentsEnabled && realPaymentOption) {
+      realPaymentOption.querySelector("input").checked = true;
+    }
+
+    function statusClass(status) {
+      return "status-" + status.toLowerCase().replaceAll(" ", "-");
+    }
+
+    function updateDriverRowStatus(row, status) {
+      row.dataset.bookingStatus = status;
+      const statusCell = row.children[6];
+      statusCell.innerHTML = '<span class="booking-status-badge ' + statusClass(status) + '">' + status + '</span>';
+      renderDriverActions(row);
+    }
+
+    function renderDriverActions(row) {
+      const status = row.dataset.bookingStatus;
+      const actionCell = row.querySelector(".driver-status-actions");
+      const viewButton = '<button class="action-btn view-driver-booking" type="button">View Details</button>';
+      const contact = '<button class="action-btn priority-contact" type="button" disabled>Contact loads from booking</button>';
+      const report = '<a class="action-btn reject" href="#driver-reports">Report Issue</a>';
+      const actionMap = {
+        "Pending": viewButton + '<button class="action-btn approve" type="button" data-next-status="Accepted">Accept Booking</button><button class="action-btn reject" type="button" data-next-status="Cancelled">Reject Booking</button>',
+        "Accepted": viewButton + '<button class="action-btn approve" type="button" data-next-status="Driver on the way">Mark as Driver on the way</button>' + contact,
+        "Driver on the way": viewButton + '<button class="action-btn approve" type="button" data-next-status="Trip started">Mark as Trip started</button>' + contact,
+        "Trip started": viewButton + '<button class="action-btn approve" type="button" data-next-status="Completed">Mark as Completed</button>' + report,
+        "Completed": viewButton,
+        "Cancelled": viewButton,
+        "Reported": '<button class="action-btn view-driver-booking" type="button">View Report</button>',
+        "Reviewed": '<button class="action-btn view-driver-booking" type="button">View Review</button>'
+      };
+      actionCell.innerHTML = actionMap[status] || viewButton;
+    }
+
+    driverBookingRows.forEach(renderDriverActions);
+
+    document.getElementById("driver-bookings").addEventListener("click", function (event) {
+      const backendActionButton = event.target.closest(".driver-booking-action");
+      if (backendActionButton) {
+        const note = backendActionButton.dataset.action === "reject" ? window.prompt("Add a short rejection note.") : "";
+        if (backendActionButton.dataset.action === "reject" && !note) return;
+        window.UmusareApi.request("/bookings/" + backendActionButton.dataset.bookingId + "/" + backendActionButton.dataset.action, {
+          method: "PATCH",
+          body: JSON.stringify({ note: note || undefined })
+        }).then(loadBackendDriverBookings).catch(function (error) {
+          window.alert(error.message || "Unable to update booking.");
+        });
+        return;
+      }
+
+      const statusButton = event.target.closest("[data-next-status]");
+      if (statusButton) {
+        updateDriverRowStatus(statusButton.closest("tr"), statusButton.dataset.nextStatus);
+        return;
+      }
+
+      const viewButton = event.target.closest(".view-driver-booking");
+      if (viewButton) {
+        if (viewButton.dataset.bookingId) {
+          openDriverBackendBookingDetail(viewButton.dataset.bookingId);
+        } else {
+          driverBookingDetail.hidden = false;
+          driverBookingDetail.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+    });
+
+    viewDriverBookingButtons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        driverBookingDetail.hidden = false;
+        driverBookingDetail.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    closeDriverBookingPanel.addEventListener("click", function () {
+      driverBookingDetail.hidden = true;
+    });
+
+    availabilityInputs.forEach(function (input) {
+      input.addEventListener("change", function () {
+        availableLaterFields.hidden = document.querySelector("input[name='availability']:checked").value !== "Available Later";
+      });
+    });
+
+    availabilityForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const selected = document.querySelector("input[name='availability']:checked").value;
+      const body = { availability: selected };
+      if (selected === "Available Later") {
+        body.availableLater = {
+          date: availabilityForm.elements.availableDate.value,
+          startTime: availabilityForm.elements.startTime.value,
+          endTime: availabilityForm.elements.endTime.value
+        };
+      }
+      try {
+        const payload = await window.UmusareApi.request("/drivers/me/availability", {
+          method: "PATCH",
+          body: JSON.stringify(body)
+        });
+        availabilityConfirmation.textContent = "Availability updated successfully.";
+        availabilityConfirmation.hidden = false;
+        setDriverBackendStatus("Availability updated successfully.", false);
+      } catch (error) {
+        availabilityConfirmation.textContent = error.message || "Unable to update availability.";
+        availabilityConfirmation.hidden = false;
+        setDriverBackendStatus(error.message || "Unable to update availability.", true);
+      }
+      availabilityConfirmation.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+
+    driverProfileForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const vehicleTypes = Array.from(document.querySelectorAll("input[name='vehicleTypes']:checked")).map(function (input) {
+        return input.value;
+      });
+      const body = {
+        city: driverProfileForm.elements.city.value,
+        location: driverProfileForm.elements.location.value,
+        experienceYears: Number(driverProfileForm.elements.experienceYears.value),
+        languages: driverProfileForm.elements.languages.value,
+        gender: driverProfileForm.elements.gender.value,
+        vehicleTypes: vehicleTypes,
+        profilePhoto: driverProfileForm.elements.profilePhoto.value,
+        shortBio: driverProfileForm.elements.shortBio.value
+      };
+      try {
+        const payload = await window.UmusareApi.request("/drivers/me", {
+          method: "PATCH",
+          body: JSON.stringify(body)
+        });
+        populateDriverProfile(payload.data);
+        driverProfileConfirmation.textContent = "Public profile updated.";
+        driverProfileConfirmation.hidden = false;
+      } catch (error) {
+        driverProfileConfirmation.textContent = error.message || "Unable to update public profile.";
+        driverProfileConfirmation.hidden = false;
+        setDriverBackendStatus(error.message || "Unable to update public profile.", true);
+      }
+      driverProfileConfirmation.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+
+    driverReportForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const formData = new FormData(driverReportForm);
+      const typeMap = {
+        "Client safety concern": "Client misconduct",
+        "Emergency concern": "Safety concern",
+        "Wrong booking details": "Other"
+      };
+      try {
+        await window.UmusareApi.request("/reports", {
+          method: "POST",
+          body: JSON.stringify({
+            bookingId: formData.get("booking-id") || undefined,
+            reportType: typeMap[formData.get("issue-type")] || formData.get("issue-type"),
+            urgency: formData.get("issue-type") === "Emergency concern" ? "Emergency" : "Medium",
+            description: driverReportForm.querySelector("textarea").value
+          })
+        });
+        await loadDriverReports();
+        await loadBackendDriverBookings();
+      } catch (error) {
+        driverReportConfirmation.querySelector("h2").textContent = error.message || "Unable to submit report.";
+      }
+      driverReportConfirmation.hidden = false;
+      driverReportConfirmation.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+
+    upgradeToProButton.addEventListener("click", function () {
+      upgradePanel.hidden = false;
+      paymentPanel.hidden = true;
+      subscriptionConfirmation.hidden = true;
+      upgradePanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    closeUpgradePanel.addEventListener("click", function () {
+      upgradePanel.hidden = true;
+    });
+
+    manageSubscriptionButton.addEventListener("click", function () {
+      if (!dummyPaymentsEnabled && !realPaymentsEnabled) {
+        showDummyPaymentDisabledMessage();
+        return;
+      }
+      paymentPanel.hidden = false;
+      paymentConfirmation.hidden = true;
+      paymentPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    closePaymentPanel.addEventListener("click", function () {
+      paymentPanel.hidden = true;
+    });
+
+    cancelPaymentButton.addEventListener("click", function () {
+      paymentPanel.hidden = true;
+    });
+
+    confirmUpgradeButton.addEventListener("click", async function () {
+      try {
+        const payload = await window.UmusareApi.request("/subscriptions/select-plan", {
+          method: "POST",
+          body: JSON.stringify({ plan: "Pro" })
+        });
+        populateSubscription(payload.data.subscription);
+        paymentSelectedPlan.textContent = "Pro";
+        paymentAmountDue.textContent = "5,000 RWF";
+        upgradePanel.hidden = true;
+        paymentPanel.hidden = !dummyPaymentsEnabled;
+        paymentPanel.hidden = !(dummyPaymentsEnabled || realPaymentsEnabled);
+        subscriptionConfirmation.querySelector("h2").textContent = payload.data.message;
+        if (!dummyPaymentsEnabled && !realPaymentsEnabled) {
+          subscriptionConfirmation.querySelector("h2").textContent += " Payment simulation is not available in this environment.";
+        }
+        subscriptionConfirmation.hidden = false;
+      } catch (error) {
+        subscriptionConfirmation.querySelector("h2").textContent = error.message || "Unable to select Pro plan.";
+        subscriptionConfirmation.hidden = false;
+      }
+      subscriptionConfirmation.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+
+    confirmPaymentButton.addEventListener("click", async function () {
+      if (!dummyPaymentsEnabled && !realPaymentsEnabled) {
+        showDummyPaymentDisabledMessage();
+        return;
+      }
+      try {
+        if (!currentSubscriptionId) {
+          const selected = await window.UmusareApi.request("/subscriptions/select-plan", {
+            method: "POST",
+            body: JSON.stringify({ plan: "Basic" })
+          });
+          populateSubscription(selected.data.subscription);
+        }
+        const method = selectedPaymentMethod();
+        const paymentPath = method === "mobile-money"
+          ? "/payments/subscription/mobile-money/initiate"
+          : "/payments/dummy-subscription-payment";
+        const requestBody = {
+          subscriptionId: currentSubscriptionId,
+          phoneNumber: document.getElementById("dummyPaymentPhone").value
+        };
+        if (method === "dummy") {
+          requestBody.simulateStatus = document.getElementById("dummyPaymentStatus").value;
+        }
+        const payload = await window.UmusareApi.request(paymentPath, {
+          method: "POST",
+          body: JSON.stringify(requestBody)
+        });
+        populateSubscription(payload.data.subscription);
+        await loadDriverPayments();
+        paymentConfirmation.querySelector("h2").textContent = method === "mobile-money"
+          ? "Mobile Money payment started. Umusare will activate your subscription after provider confirmation."
+          : payload.data.subscription.status === "Active"
+          ? "Subscription activated. Your profile is now visible if your driver profile is approved."
+          : "Dummy payment saved with status " + payload.data.payment.status + ".";
+      } catch (error) {
+        paymentConfirmation.querySelector("h2").textContent = error.message || "Unable to simulate payment.";
+      }
+      paymentConfirmation.hidden = false;
+      paymentPanel.hidden = true;
+      paymentConfirmation.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  </script>
+</body>
+</html>

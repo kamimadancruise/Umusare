@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Umusare Admin Login</title>
+  <link rel="stylesheet" href="../frontend/styles.css">
+  <link rel="icon" type="image/png" href="../frontend/assets/images/logo.png">
+</head>
+<body class="admin-body">
+  <!-- Admin portal area - protected routes will be added later. -->
+  <!-- Admin routes will require admin authentication. Non-admin users should be redirected away after auth is implemented. -->
+  <!-- Admin API calls are routed through admin-api.js and will connect to protected backend admin endpoints later. -->
+  <main class="admin-auth-main">
+    <section class="auth-panel admin-login-panel" aria-labelledby="admin-login-title">
+      <a class="site-logo nav-logo admin-login-logo" href="../frontend/index.html" aria-label="Umusare public website">
+        <span class="brand-badge"><img src="../frontend/assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
+        <span class="brand-name">Umusare Admin</span>
+      </a>
+
+      <div class="auth-role-copy">
+        <p class="eyebrow">Authorized Umusare staff only.</p>
+        <h1 id="admin-login-title">Umusare Admin Login</h1>
+        <p>Use an admin account to access operations, verification, safety reports, support tickets, subscriptions, and analytics.</p>
+      </div>
+
+      <form class="auth-form" id="adminLoginForm">
+        <label>
+          Email or phone
+          <input type="text" name="identifier" autocomplete="username" required>
+        </label>
+
+        <label>
+          Password
+          <input type="password" name="password" autocomplete="current-password" required>
+        </label>
+
+        <p class="admin-auth-error" id="adminLoginError" role="alert" hidden></p>
+
+        <button class="btn btn-primary submit-btn" type="submit">Log in as Admin</button>
+      </form>
+
+      <p class="contact-safety-note">Admin accounts cannot be created from public signup. Create an admin user manually or with a seed script in a later backend step.</p>
+      <a class="auth-link" href="../frontend/index.html">Return to public website</a>
+    </section>
+  </main>
+
+  <script src="admin-api.js"></script>
+  <script>
+    const adminLoginForm = document.getElementById("adminLoginForm");
+    const adminLoginError = document.getElementById("adminLoginError");
+
+    function showAdminLoginError(message) {
+      adminLoginError.textContent = message;
+      adminLoginError.hidden = false;
+    }
+
+    adminLoginForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      adminLoginError.hidden = true;
+
+      const formData = new FormData(adminLoginForm);
+      const identifier = String(formData.get("identifier") || "").trim();
+      const password = String(formData.get("password") || "");
+
+      try {
+        await window.UmusareAdminAuth.loginAdmin({ identifier, password });
+        window.location.href = "admin-dashboard.html";
+      } catch (error) {
+        showAdminLoginError(error.message || "Unable to log in. Please try again.");
+      }
+    });
+  </script>
+</body>
+</html>

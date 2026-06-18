@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plan Ahead | Umusare</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+<body data-page="plan">
+    <header class="site-header">
+    <nav class="navbar">
+      <a class="site-logo nav-logo" href="index.html" aria-label="Umusare home">
+        <span class="brand-badge"><img src="assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
+        <span class="brand-name">Umusare</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" data-nav-toggle>
+        <span>Menu</span>
+      </button>
+      <div class="nav-panel" id="primary-nav" data-nav-panel>
+        <div class="nav-links" aria-label="Main navigation">
+          <a class="nav-link nav-home" href="index.html">Home</a>
+          <a class="nav-link nav-find" href="find-driver.html">Find a Driver</a>
+          <a class="nav-link nav-quick" href="quick-book.html">Quick Book</a>
+          <a class="nav-link nav-plan" href="plan-ahead.html">Plan Ahead</a>
+          <a class="nav-link nav-driver" href="become-driver.html">Become a Driver</a>
+        </div>
+        <div class="nav-actions">
+          <a class="nav-login" href="login.html">Login</a>
+          <a class="nav-cta" href="quick-book.html">Get a Driver</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page-main plan-ahead-main">
+    <section class="page-intro">
+      <p class="eyebrow">Scheduled driver request</p>
+      <h1>Plan Ahead</h1>
+      <p class="intro">
+        Schedule a verified designated driver in advance for nights out, events,
+        airport transfers, business trips, and longer journeys.
+      </p>
+      <p class="availability-helper">Plan Ahead allows you to request a driver for a future date and time.</p>
+    </section>
+
+    <form class="application-form plan-ahead-form" id="planAheadForm">
+      <section class="form-panel" aria-labelledby="trip-schedule">
+        <h2 id="trip-schedule">Trip Schedule</h2>
+        <div class="form-grid">
+          <label>
+            Date
+            <input type="date" name="trip-date" required>
+          </label>
+
+          <label>
+            Start time
+            <input type="time" name="start-time" required>
+          </label>
+
+          <label>
+            Expected trip duration
+            <input type="text" name="trip-duration" placeholder="Example: 2 hours" required>
+          </label>
+
+          <label>
+            Return trip needed?
+            <select name="return-needed" id="returnNeeded" required>
+              <option value="">Select option</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </label>
+
+          <label class="return-time-field" id="returnTimeField" hidden>
+            Return time
+            <input type="time" name="return-time" id="returnTime">
+          </label>
+        </div>
+      </section>
+
+      <section class="form-panel" aria-labelledby="client-details">
+        <h2 id="client-details">Client Details</h2>
+        <div class="form-grid">
+          <label>
+            Full name
+            <input type="text" name="full-name" autocomplete="name" required>
+          </label>
+
+          <label>
+            Phone number
+            <input type="tel" name="phone-number" autocomplete="tel" required>
+          </label>
+
+          <label>
+            Email address
+            <input type="email" name="email-address" autocomplete="email" required>
+          </label>
+        </div>
+      </section>
+
+      <section class="form-panel" aria-labelledby="trip-details">
+        <h2 id="trip-details">Trip Details</h2>
+        <div class="form-grid">
+          <label>
+            Pickup location
+            <input type="text" name="pickup-location" required>
+          </label>
+
+          <label>
+            Destination
+            <input type="text" name="destination" required>
+          </label>
+
+          <label>
+            Additional stops
+            <input type="text" name="additional-stops" placeholder="Optional">
+          </label>
+
+          <label>
+            Type of trip
+            <select name="trip-type" required>
+              <option value="">Select trip type</option>
+              <option value="night-out">Night out</option>
+              <option value="airport-transfer">Airport transfer</option>
+              <option value="event-wedding">Event / wedding</option>
+              <option value="business-meeting">Business meeting</option>
+              <option value="long-distance">Long-distance trip</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+        </div>
+
+        <label>
+          Special instructions
+          <textarea name="special-instructions" rows="4" placeholder="Timing details, parking instructions, or anything the driver should prepare for."></textarea>
+        </label>
+      </section>
+
+      <section class="form-panel" aria-labelledby="vehicle-details">
+        <h2 id="vehicle-details">Vehicle Details</h2>
+        <div class="form-grid">
+          <label>
+            Car type
+            <select name="car-type" required>
+              <option value="">Select car type</option>
+              <option value="automatic">Automatic</option>
+              <option value="manual">Manual</option>
+              <option value="suv">SUV</option>
+              <option value="pickup">Pickup</option>
+              <option value="luxury-car">Luxury car</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+
+          <label>
+            Is the vehicle insured?
+            <select name="vehicle-insured" required>
+              <option value="">Select option</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+              <option value="not-sure">Not sure</option>
+            </select>
+          </label>
+        </div>
+
+        <label>
+          Any vehicle notes the driver should know?
+          <textarea name="vehicle-notes" rows="3" placeholder="Example: parking brake issue, sensitive clutch, dashboard warning lights."></textarea>
+        </label>
+      </section>
+
+      <section class="form-panel" aria-labelledby="driver-preferences">
+        <h2 id="driver-preferences">Driver Preferences</h2>
+        <div class="form-grid">
+          <label>
+            Preferred driver gender
+            <select name="preferred-gender">
+              <option value="any">Any</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </label>
+
+          <label>
+            Minimum experience
+            <select name="minimum-experience">
+              <option value="any">Any</option>
+              <option value="2-plus">2+ years</option>
+              <option value="5-plus">5+ years</option>
+              <option value="10-plus">10+ years</option>
+            </select>
+          </label>
+
+          <label>
+            Languages preferred
+            <input type="text" name="languages-preferred" placeholder="English, Kinyarwanda, French">
+          </label>
+
+          <label>
+            Preferred rating
+            <select name="preferred-rating">
+              <option value="any">Any</option>
+              <option value="4-plus">4+ stars</option>
+              <option value="4-5-plus">4.5+ stars</option>
+            </select>
+          </label>
+        </div>
+      </section>
+
+      <section class="form-panel agreement-panel" aria-label="Safety confirmation">
+        <h2>Safety Confirmation</h2>
+        <p class="safety-notice">
+          Umusare connects you with an independent driver who will drive your own vehicle.
+          Please confirm the driver's profile photo before starting the trip and check your
+          insurance policy regarding third-party drivers.
+        </p>
+
+        <label class="agreement">
+          <input type="checkbox" name="own-vehicle" required>
+          <span>I understand that the driver will operate my own vehicle.</span>
+        </label>
+
+        <label class="agreement">
+          <input type="checkbox" name="connection-platform" required>
+          <span>I understand that Umusare is only a connection platform and does not own or operate vehicles.</span>
+        </label>
+
+        <label class="agreement">
+          <input type="checkbox" name="share-details" required>
+          <span>I agree to share my booking details with available verified drivers.</span>
+        </label>
+
+        <button class="btn btn-primary submit-btn" type="submit">Schedule My Driver</button>
+      </section>
+    </form>
+
+    <div class="confirmation-message plan-confirmation" id="planAheadConfirmation" hidden>
+      <h2>Booking Scheduled</h2>
+      <p>Your scheduled booking request has been created. Verified drivers matching your preferences will be notified.</p>
+      <p class="booking-status-helper">Your scheduled booking request has been created. Verified drivers matching your preferences will be notified.</p>
+      <dl class="booking-summary">
+        <div>
+          <dt>Booking ID</dt>
+          <dd id="planSummaryBookingId">Pending</dd>
+        </div>
+        <div>
+          <dt>Booking type</dt>
+          <dd>Plan Ahead</dd>
+        </div>
+        <div>
+          <dt>Date and time</dt>
+          <dd id="planSummaryDateTime">Pending</dd>
+        </div>
+        <div>
+          <dt>Pickup location</dt>
+          <dd id="planSummaryPickup">Pending</dd>
+        </div>
+        <div>
+          <dt>Destination</dt>
+          <dd id="planSummaryDestination">Pending</dd>
+        </div>
+        <div>
+          <dt>Selected driver</dt>
+          <dd id="planSummaryDriver">Matching verified driver</dd>
+        </div>
+        <div>
+          <dt>Driver preferences</dt>
+          <dd id="planSummaryPreferences">Any verified driver</dd>
+        </div>
+        <div>
+          <dt>Status</dt>
+          <dd><span class="booking-status-badge status-pending">Pending</span></dd>
+        </div>
+      </dl>
+      <p class="contact-safety-note">Before starting the trip, confirm that the driver's face matches the profile photo.</p>
+      <div class="contact-actions plan-contact-actions" id="planContactActions" aria-label="Scheduled booking contact options">
+        <a class="contact-btn" href="support.html">Support &amp; Emergency Help</a>
+      </div>
+      <div class="confirmation-actions">
+        <a class="btn btn-primary" href="client-dashboard.html#plan-ahead-trips">Go to Client Dashboard</a>
+        <a class="btn btn-secondary" href="index.html">Return Home</a>
+      </div>
+    </div>
+  </main>
+
+    <footer class="site-footer" id="contact">
+    <div class="footer-brand">
+      <a class="site-logo footer-logo" href="index.html" aria-label="Umusare home">
+        <span class="brand-badge"><img src="assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
+        <span class="brand-name">Umusare</span>
+      </a>
+      <p>Umusare connects clients with verified independent drivers who drive the client's own vehicle.</p>
+    </div>
+    <div class="footer-links-grid">
+      <section class="footer-section">
+        <h2>Main links</h2>
+        <a href="index.html">Home</a>
+        <a href="find-driver.html">Find a Driver</a>
+        <a href="quick-book.html">Quick Book</a>
+        <a href="plan-ahead.html">Plan Ahead</a>
+      </section>
+      <section class="footer-section">
+        <h2>Safety links</h2>
+        <a href="safety.html">Safety</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="contact.html">Contact</a>
+      </section>
+      <section class="footer-section">
+        <h2>Driver links</h2>
+        <a href="become-driver.html">Become a Driver</a>
+        <a href="driver-agreement.html">Driver Agreement</a>
+        <a href="driver-dashboard.html">Driver Dashboard</a>
+      </section>
+      <section class="footer-section demo-access">
+        <h2>Demo Access</h2>
+        <!-- Temporary demo links until real authentication and role-based routing are built. -->
+        <a href="client-dashboard.html">Client Dashboard</a>
+        <a href="driver-dashboard.html">Driver Dashboard</a>
+        <!-- Admin portal access is separated and will be protected by admin authentication later. -->
+      </section>
+    </div>
+    <p class="footer-meta">&copy; 2026 Umusare Rwanda. All rights reserved.</p>
+  </footer>
+
+  <div class="mobile-quick-book" data-mobile-quick-book>
+    <a class="mobile-quick-book-link" href="quick-book.html" aria-label="Quick book an Umusare driver">
+      <span>Quick Book Driver</span>
+      <small>Get a verified driver fast</small>
+    </a>
+    <button class="mobile-quick-book-close" type="button" aria-label="Hide quick book button" data-mobile-quick-book-close>&times;</button>
+  </div>
+  <script src="site.js"></script>
+  <script src="api.js"></script>
+  <script>
+    const planAheadForm = document.getElementById("planAheadForm");
+    const planAheadConfirmation = document.getElementById("planAheadConfirmation");
+    const returnNeeded = document.getElementById("returnNeeded");
+    const returnTimeField = document.getElementById("returnTimeField");
+    const returnTime = document.getElementById("returnTime");
+    const planSummaryDateTime = document.getElementById("planSummaryDateTime");
+    const planSummaryBookingId = document.getElementById("planSummaryBookingId");
+    const planSummaryPickup = document.getElementById("planSummaryPickup");
+    const planSummaryDestination = document.getElementById("planSummaryDestination");
+    const planSummaryDriver = document.getElementById("planSummaryDriver");
+    const planSummaryPreferences = document.getElementById("planSummaryPreferences");
+    const planContactActions = document.getElementById("planContactActions");
+    let selectedPlanDriverProfile = null;
+
+    function formatSelectedDriver(slug) {
+      if (!slug) return "Matching verified driver";
+      return selectedPlanDriverProfile ? (selectedPlanDriverProfile.fullName || selectedPlanDriverProfile.displayName || "Selected verified driver") : "Selected verified driver";
+    }
+
+    async function loadSelectedPlanDriver() {
+      const selectedDriver = new URLSearchParams(window.location.search).get("driver");
+      if (!selectedDriver) return;
+      try {
+        const payload = await window.UmusareApi.drivers.profile(selectedDriver);
+        selectedPlanDriverProfile = payload.data.driver;
+      } catch (error) {
+        selectedPlanDriverProfile = null;
+      }
+    }
+
+    returnNeeded.addEventListener("change", function () {
+      const needsReturn = returnNeeded.value === "yes";
+      returnTimeField.hidden = !needsReturn;
+      returnTime.required = needsReturn;
+      if (!needsReturn) {
+        returnTime.value = "";
+      }
+    });
+
+    function titleOptionValue(value) {
+      const map = {
+        any: "Any",
+        male: "Male",
+        female: "Female",
+        "2-plus": "2+ years",
+        "5-plus": "5+ years",
+        "10-plus": "10+ years",
+        "4-plus": "4+ stars",
+        "4-5-plus": "4.5+ stars"
+      };
+      return map[value] || value;
+    }
+
+    function contactButton(action, fallbackLabel) {
+      if (!action || !action.href) return "";
+      const whatsappClass = action.href.includes("wa.me") ? " whatsapp-btn" : "";
+      return '<a class="contact-btn' + whatsappClass + '" href="' + action.href + '">' + (action.label || fallbackLabel) + '</a>';
+    }
+
+    function renderPlanContactActions(actions) {
+      const contactHtml = [
+        contactButton(actions && actions.callSupport, "Call Support"),
+        contactButton(actions && actions.whatsappSupport, "WhatsApp Support")
+      ].filter(Boolean).join("");
+      planContactActions.innerHTML = contactHtml + '<a class="contact-btn" href="support.html">Support &amp; Emergency Help</a>';
+    }
+
+    planAheadForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const formData = new FormData(planAheadForm);
+      const submitButton = planAheadForm.querySelector("button[type='submit']");
+      const originalButtonText = submitButton ? submitButton.textContent : "";
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = "Scheduling your booking...";
+      }
+      const selectedDriver = new URLSearchParams(window.location.search).get("driver");
+      const date = formData.get("trip-date") || "Pending date";
+      const time = formData.get("start-time") || "Pending time";
+      const preferences = [
+        formData.get("preferred-gender") || "Any",
+        formData.get("minimum-experience") || "Any experience",
+        formData.get("languages-preferred") || "Any language",
+        formData.get("preferred-rating") || "Any rating"
+      ].join(" / ").replaceAll("-", " ");
+      try {
+        const payload = await window.UmusareApi.request("/bookings/plan-ahead", {
+          method: "POST",
+          body: JSON.stringify({
+            clientName: formData.get("full-name"),
+            phone: formData.get("phone-number"),
+            email: formData.get("email-address"),
+            pickupLocation: formData.get("pickup-location"),
+            destination: formData.get("destination"),
+            dateTime: date + "T" + time,
+            carType: formData.get("car-type"),
+            selectedDriverId: selectedDriver || undefined,
+            returnTripNeeded: formData.get("return-needed") === "yes",
+            returnTime: formData.get("return-time") || undefined,
+            additionalStops: formData.get("additional-stops"),
+            tripType: formData.get("trip-type"),
+            preferredDriverGender: titleOptionValue(formData.get("preferred-gender")),
+            preferredMinExperience: titleOptionValue(formData.get("minimum-experience")),
+            preferredLanguages: formData.get("languages-preferred"),
+            preferredRating: titleOptionValue(formData.get("preferred-rating")),
+            clientNotes: formData.get("special-instructions")
+          })
+        });
+        const booking = payload.data.booking;
+        const suggestedDrivers = payload.data.suggestedDrivers || [];
+        const suggestedDriver = suggestedDrivers[0];
+        planSummaryBookingId.textContent = booking.bookingId;
+        planSummaryDateTime.textContent = date + " at " + time;
+        planSummaryPickup.textContent = booking.pickupLocation;
+        planSummaryDestination.textContent = booking.destination;
+        planSummaryDriver.textContent = booking.driverName !== "Pending assignment" ? booking.driverName : suggestedDriver ? suggestedDriver.fullName : formatSelectedDriver(selectedDriver);
+        planSummaryPreferences.textContent = preferences;
+        renderPlanContactActions(booking.contactActions);
+        planAheadForm.hidden = true;
+        planAheadConfirmation.hidden = false;
+        planAheadConfirmation.scrollIntoView({ behavior: "smooth", block: "center" });
+      } catch (error) {
+        let status = document.getElementById("planAheadStatus");
+        if (!status) {
+          status = document.createElement("p");
+          status.id = "planAheadStatus";
+          status.className = "form-error";
+          planAheadForm.appendChild(status);
+        }
+        status.textContent = "We couldn't schedule your booking. Please try again or contact support.";
+      } finally {
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.textContent = originalButtonText;
+        }
+      }
+    });
+    loadSelectedPlanDriver();
+  </script>
+</body>
+</html>

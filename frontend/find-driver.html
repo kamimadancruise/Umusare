@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find a Driver | Umusare</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+<body data-page="find">
+  <header class="site-header">
+    <nav class="navbar">
+      <a class="site-logo nav-logo" href="index.html" aria-label="Umusare home">
+        <span class="brand-badge"><img src="assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
+        <span class="brand-name">Umusare</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" data-nav-toggle>
+        <span>Menu</span>
+      </button>
+      <div class="nav-panel" id="primary-nav" data-nav-panel>
+        <div class="nav-links" aria-label="Main navigation">
+          <a class="nav-link nav-home" href="index.html">Home</a>
+          <a class="nav-link nav-find" href="find-driver.html">Find a Driver</a>
+          <a class="nav-link nav-quick" href="quick-book.html">Quick Book</a>
+          <a class="nav-link nav-plan" href="plan-ahead.html">Plan Ahead</a>
+          <a class="nav-link nav-driver" href="become-driver.html">Become a Driver</a>
+        </div>
+        <div class="nav-actions">
+          <a class="nav-login" href="login.html">Login</a>
+          <a class="nav-cta" href="quick-book.html">Get a Driver</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page-main">
+    <section class="page-intro">
+      <p class="eyebrow">Available drivers</p>
+      <h1>Find a Driver</h1>
+      <p class="intro">
+        Search by driver details, filter for availability, and choose a trusted Umusare driver near you.
+      </p>
+    </section>
+
+    <section class="driver-search" aria-label="Search and filter drivers">
+      <form class="driver-filter-panel" id="driverFilterForm">
+        <div class="filter-search-row">
+          <label class="filter-search-label">
+            Search drivers
+            <input type="search" name="driver-search" id="driverSearchInput" placeholder="Search by driver name, city, language, or vehicle type">
+          </label>
+          <button class="btn btn-secondary" type="button" id="clearDriverFilters">Clear Filters</button>
+        </div>
+
+        <details class="mobile-filter-group" open>
+          <summary>Filters</summary>
+          <div class="driver-filter-grid">
+            <label>
+              Location / City
+              <select name="location-filter" id="locationFilter">
+                <option value="Any location">Any location</option>
+                <option value="Kigali">Kigali</option>
+                <option value="Nyarugenge">Nyarugenge</option>
+                <option value="Gasabo">Gasabo</option>
+                <option value="Kicukiro">Kicukiro</option>
+                <option value="Huye">Huye</option>
+                <option value="Musanze">Musanze</option>
+                <option value="Rubavu">Rubavu</option>
+                <option value="Other">Other</option>
+              </select>
+            </label>
+
+            <label>
+              Availability
+              <select name="availability-filter" id="availabilityFilter">
+                <option value="Any availability">Any availability</option>
+                <option value="Available Now">Available Now</option>
+                <option value="Available Later">Available Later</option>
+                <option value="Offline">Offline</option>
+              </select>
+            </label>
+
+            <label>
+              Rating
+              <select name="rating-filter" id="ratingFilter">
+                <option value="Any rating">Any rating</option>
+                <option value="4">4+ stars</option>
+                <option value="4.5">4.5+ stars</option>
+                <option value="5">5 stars</option>
+              </select>
+            </label>
+
+            <label>
+              Experience
+              <select name="experience-filter" id="experienceFilter">
+                <option value="Any experience">Any experience</option>
+                <option value="2">2+ years</option>
+                <option value="5">5+ years</option>
+                <option value="10">10+ years</option>
+              </select>
+            </label>
+
+            <label>
+              Language
+              <select name="language-filter" id="languageFilter">
+                <option value="Any language">Any language</option>
+                <option value="Kinyarwanda">Kinyarwanda</option>
+                <option value="English">English</option>
+                <option value="French">French</option>
+                <option value="Swahili">Swahili</option>
+              </select>
+            </label>
+
+            <label>
+              Gender
+              <select name="gender-filter" id="genderFilter">
+                <option value="Any gender">Any gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </label>
+
+            <label>
+              Vehicle type
+              <select name="vehicle-filter" id="vehicleFilter">
+                <option value="Any vehicle type">Any vehicle type</option>
+                <option value="Automatic">Automatic</option>
+                <option value="Manual">Manual</option>
+                <option value="SUV">SUV</option>
+                <option value="Pickup">Pickup</option>
+                <option value="Luxury car">Luxury car</option>
+              </select>
+            </label>
+
+            <label>
+              Driver type
+              <select name="driver-type-filter" id="driverTypeFilter">
+                <option value="Any driver">Any driver</option>
+                <option value="Verified Driver">Verified Driver</option>
+                <option value="Pro Driver">Pro Driver</option>
+                <option value="Top Driver">Top Driver</option>
+              </select>
+            </label>
+          </div>
+        </details>
+      </form>
+    </section>
+
+    <p class="contact-safety-note driver-contact-note">Before starting the trip, confirm that the driver's face matches the profile photo.</p>
+
+    <section class="driver-grid" id="driverGrid" aria-label="Driver results"></section>
+
+    <section class="empty-state" id="driverEmptyState" hidden>
+      <h2>No drivers match your search right now.</h2>
+      <p>Try changing your filters or use Quick Book.</p>
+      <a class="btn btn-urgent" href="quick-book.html">Quick Book</a>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="footer-brand">
+      <a class="site-logo footer-logo" href="index.html" aria-label="Umusare home">
+        <span class="brand-badge"><img src="assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
+        <span class="brand-name">Umusare</span>
+      </a>
+      <p>Umusare connects clients with verified independent drivers who drive the client's own vehicle.</p>
+    </div>
+    <div class="footer-links-grid">
+      <section class="footer-section">
+        <h2>Main links</h2>
+        <a href="index.html">Home</a>
+        <a href="find-driver.html">Find a Driver</a>
+        <a href="quick-book.html">Quick Book</a>
+        <a href="plan-ahead.html">Plan Ahead</a>
+      </section>
+      <section class="footer-section">
+        <h2>Safety links</h2>
+        <a href="safety.html">Safety</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="contact.html">Contact</a>
+      </section>
+      <section class="footer-section">
+        <h2>Driver links</h2>
+        <a href="become-driver.html">Become a Driver</a>
+        <a href="driver-agreement.html">Driver Agreement</a>
+        <a href="driver-dashboard.html">Driver Dashboard</a>
+      </section>
+      <section class="footer-section demo-access">
+        <h2>Demo Access</h2>
+        <!-- Temporary demo links until real authentication and role-based routing are built. -->
+        <a href="client-dashboard.html">Client Dashboard</a>
+        <a href="driver-dashboard.html">Driver Dashboard</a>
+        <!-- Admin portal access is separated and will be protected by admin authentication later. -->
+      </section>
+    </div>
+    <p class="footer-meta">&copy; 2026 Umusare Rwanda. All rights reserved.</p>
+  </footer>
+
+  <div class="mobile-quick-book" data-mobile-quick-book>
+    <a class="mobile-quick-book-link" href="quick-book.html" aria-label="Quick book an Umusare driver">
+      <span>Quick Book Driver</span>
+      <small>Get a verified driver fast</small>
+    </a>
+    <button class="mobile-quick-book-close" type="button" aria-label="Hide quick book button" data-mobile-quick-book-close>&times;</button>
+  </div>
+
+  <script src="site.js"></script>
+  <script src="api.js"></script>
+  <script>
+    const driverGrid = document.getElementById("driverGrid");
+    const driverEmptyState = document.getElementById("driverEmptyState");
+    const driverSearchInput = document.getElementById("driverSearchInput");
+    const locationFilter = document.getElementById("locationFilter");
+    const availabilityFilter = document.getElementById("availabilityFilter");
+    const ratingFilter = document.getElementById("ratingFilter");
+    const experienceFilter = document.getElementById("experienceFilter");
+    const languageFilter = document.getElementById("languageFilter");
+    const genderFilter = document.getElementById("genderFilter");
+    const vehicleFilter = document.getElementById("vehicleFilter");
+    const driverTypeFilter = document.getElementById("driverTypeFilter");
+    const driverFilterForm = document.getElementById("driverFilterForm");
+    const clearDriverFilters = document.getElementById("clearDriverFilters");
+
+    function availabilityClass(availability) {
+      if (availability === "Available Now") return "availability-now";
+      if (availability === "Available Later") return "availability-later";
+      return "availability-offline";
+    }
+
+    function driverInitials(name) {
+      return String(name || "UD").split(" ").map(function (part) {
+        return part.charAt(0);
+      }).join("").slice(0, 2).toUpperCase();
+    }
+
+    function renderDrivers(drivers) {
+      driverGrid.innerHTML = drivers.map(function (driver) {
+        const priorityClass = driver.availability === "Available Now" ? " priority-driver" : "";
+        const offlineClass = driver.availability === "Offline" ? " is-offline-driver" : "";
+        const vehicleTags = (driver.vehicleTypes || []).map(function (type) {
+          return "<span>" + type + "</span>";
+        }).join("");
+        const displayName = driver.fullName || driver.displayName || "Verified Umusare Driver";
+        const profileId = driver.publicDriverId;
+
+        return `
+          <article class="driver-card${priorityClass}${offlineClass}" data-availability="${driver.availability}">
+            <a class="driver-card-link" href="driver-profile.html?driver=${profileId}" aria-label="View ${displayName} driver profile">
+              <div class="driver-photo" aria-hidden="true">${driverInitials(displayName)}</div>
+              <div class="driver-info">
+                <div class="driver-card-heading">
+                  <h2>${displayName}</h2>
+                  <span class="badge verified-badge">${driver.driverBadge}</span>
+                </div>
+                <p>${driver.location || driver.city || "Rwanda"}</p>
+                <p class="rating">Rating: ${Number(driver.ratingAverage || 0).toFixed(1)} stars</p>
+                <span class="availability-badge ${availabilityClass(driver.availability)}">${driver.availability}</span>
+                <dl class="driver-card-meta">
+                  <div><dt>Experience</dt><dd>${driver.experienceYears}+ years</dd></div>
+                  <div><dt>Languages</dt><dd>${(driver.languages || []).join(", ")}</dd></div>
+                  <div><dt>Gender</dt><dd>${driver.gender}</dd></div>
+                </dl>
+                <div class="vehicle-tags">${vehicleTags}</div>
+              </div>
+            </a>
+            <div class="driver-card-actions">
+              <a class="action-btn" href="driver-profile.html?driver=${profileId}">View Profile</a>
+              <a class="action-btn approve" href="quick-book.html?driver=${profileId}">Quick Book</a>
+              <a class="action-btn" href="plan-ahead.html?driver=${profileId}">Plan Ahead</a>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      driverEmptyState.hidden = drivers.length > 0;
+    }
+
+    function buildDriverQuery() {
+      const params = new URLSearchParams();
+      if (driverSearchInput.value.trim()) params.set("search", driverSearchInput.value.trim());
+      if (locationFilter.value !== "Any location") params.set("city", locationFilter.value);
+      if (availabilityFilter.value !== "Any availability") params.set("availability", availabilityFilter.value);
+      if (ratingFilter.value !== "Any rating") params.set("ratingMin", ratingFilter.value);
+      if (experienceFilter.value !== "Any experience") params.set("experienceMin", experienceFilter.value);
+      if (languageFilter.value !== "Any language") params.set("language", languageFilter.value);
+      if (genderFilter.value !== "Any gender") params.set("gender", genderFilter.value);
+      if (vehicleFilter.value !== "Any vehicle type") params.set("vehicleType", vehicleFilter.value);
+      if (driverTypeFilter.value !== "Any driver") params.set("driverBadge", driverTypeFilter.value);
+      return params.toString();
+    }
+
+    async function applyDriverFilters() {
+      driverGrid.innerHTML = '<article class="driver-card"><p>Loading verified drivers...</p></article>';
+      driverEmptyState.hidden = true;
+      try {
+        const query = buildDriverQuery();
+        const payload = await window.UmusareApi.request("/drivers" + (query ? "?" + query : ""));
+        renderDrivers(payload.data.drivers || []);
+      } catch (error) {
+        driverGrid.innerHTML = "";
+        driverEmptyState.hidden = false;
+        driverEmptyState.querySelector("h2").textContent = "Unable to load verified drivers.";
+        driverEmptyState.querySelector("p").textContent = "Please try again or use Quick Book while we reconnect to Umusare.";
+      }
+    }
+
+    function clearFilters() {
+      driverFilterForm.reset();
+      applyDriverFilters();
+      driverSearchInput.focus();
+    }
+
+    driverFilterForm.addEventListener("input", applyDriverFilters);
+    driverFilterForm.addEventListener("change", applyDriverFilters);
+    driverFilterForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      applyDriverFilters();
+    });
+
+    clearDriverFilters.addEventListener("click", clearFilters);
+    applyDriverFilters();
+  </script>
+</body>
+</html>

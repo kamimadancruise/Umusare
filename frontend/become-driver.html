@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Become a Driver | Umusare</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+<body data-page="driver">
+    <header class="site-header">
+    <nav class="navbar">
+      <a class="site-logo nav-logo" href="index.html" aria-label="Umusare home">
+        <span class="brand-badge"><img src="assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
+        <span class="brand-name">Umusare</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" data-nav-toggle>
+        <span>Menu</span>
+      </button>
+      <div class="nav-panel" id="primary-nav" data-nav-panel>
+        <div class="nav-links" aria-label="Main navigation">
+          <a class="nav-link nav-home" href="index.html">Home</a>
+          <a class="nav-link nav-find" href="find-driver.html">Find a Driver</a>
+          <a class="nav-link nav-quick" href="quick-book.html">Quick Book</a>
+          <a class="nav-link nav-plan" href="plan-ahead.html">Plan Ahead</a>
+          <a class="nav-link nav-driver" href="become-driver.html">Become a Driver</a>
+        </div>
+        <div class="nav-actions">
+          <a class="nav-login" href="login.html">Login</a>
+          <a class="nav-cta" href="quick-book.html">Get a Driver</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page-main">
+    <section class="page-intro">
+      <p class="eyebrow">Driver registration</p>
+      <h1>Become a Verified Umusare Driver</h1>
+      <p class="intro">
+        Register to offer designated driving services to clients who need a trusted
+        professional to drive their own car safely and responsibly.
+      </p>
+    </section>
+
+    <form class="application-form" id="driverApplicationForm">
+      <section class="form-panel" aria-labelledby="personal-details">
+        <h2 id="personal-details">Personal Details</h2>
+        <div class="form-grid">
+          <label>
+            Full name
+            <input type="text" name="full-name" required>
+          </label>
+
+          <label>
+            Phone number
+            <input type="tel" name="phone-number" required>
+          </label>
+
+          <label>
+            Email address
+            <input type="email" name="email-address" required>
+          </label>
+
+          <label>
+            Age
+            <input type="number" name="age" min="18" required>
+          </label>
+
+          <label>
+            Gender
+            <select name="gender" required>
+              <option value="">Select gender</option>
+              <option value="female">Female</option>
+              <option value="male">Male</option>
+              <option value="prefer-not-to-say">Prefer not to say</option>
+            </select>
+          </label>
+
+          <label>
+            Location / City
+            <input type="text" name="location" required>
+          </label>
+        </div>
+      </section>
+
+      <section class="form-panel" aria-labelledby="driving-details">
+        <h2 id="driving-details">Driving Details</h2>
+        <div class="form-grid">
+          <label>
+            Years of driving experience
+            <input type="number" name="driving-experience" min="0" required>
+          </label>
+
+          <label>
+            Languages spoken
+            <input type="text" name="languages" placeholder="English, Kinyarwanda, French">
+          </label>
+
+          <label>
+            Driver's licence number
+            <input type="text" name="licence-number" required>
+          </label>
+        </div>
+
+        <fieldset class="checkbox-group">
+          <legend>Vehicle types they can drive</legend>
+          <label><input type="checkbox" name="vehicle-type" value="automatic"> Automatic</label>
+          <label><input type="checkbox" name="vehicle-type" value="manual"> Manual</label>
+          <label><input type="checkbox" name="vehicle-type" value="suv"> SUV</label>
+          <label><input type="checkbox" name="vehicle-type" value="pickup"> Pickup</label>
+          <label><input type="checkbox" name="vehicle-type" value="luxury-car"> Luxury car</label>
+        </fieldset>
+
+        <label>
+          Short bio / description
+          <textarea name="bio" rows="5" placeholder="Tell clients about your driving style, experience, and availability."></textarea>
+        </label>
+      </section>
+
+      <section class="form-panel" aria-labelledby="documents">
+        <h2 id="documents">Required Documents</h2>
+        <p class="contact-safety-note">
+          To protect clients and maintain trust on Umusare, drivers must provide identity,
+          licence, education, profile photo, and criminal record verification documents
+          before their profile can become visible.
+        </p>
+        <div class="form-grid">
+          <label>
+            National ID or Passport
+            <input type="file" name="national-id" accept=".pdf,.jpg,.jpeg,.png" required>
+          </label>
+
+          <label>
+            Driver's Licence
+            <input type="file" name="drivers-licence" accept=".pdf,.jpg,.jpeg,.png" required>
+          </label>
+
+          <label>
+            Proof of secondary education
+            <input type="file" name="education-proof" accept=".pdf,.jpg,.jpeg,.png" required>
+          </label>
+
+          <label>
+            Recent profile photo
+            <input type="file" name="profile-photo" accept="image/*" required>
+          </label>
+
+          <label>
+            Police Clearance / Criminal Record Certificate
+            <input type="file" name="criminal-record-certificate" accept=".pdf,.jpg,.jpeg,.png" required>
+            <small>Upload a recent document showing your criminal record status. This helps Umusare verify driver safety before approval.</small>
+          </label>
+        </div>
+      </section>
+
+      <section class="form-panel agreement-panel" aria-label="Driver confirmations">
+        <label class="agreement">
+          <input type="checkbox" name="accurate-information" required>
+          <span>I confirm that all information submitted is true and accurate.</span>
+        </label>
+
+        <label class="agreement">
+          <input type="checkbox" name="membership-agreement" required>
+          <span>I agree to the Umusare Driver Membership &amp; Service Agreement.</span>
+        </label>
+
+        <button class="btn btn-primary submit-btn" type="submit">Submit Driver Application</button>
+      </section>
+    </form>
+    <div class="confirmation-message compact-confirmation" id="driverApplicationConfirmation" hidden>
+      <h2>Driver application submitted.</h2>
+      <p id="driverApplicationConfirmationText">Umusare will review verification documents, profile details, and subscription status before the profile becomes visible.</p>
+    </div>
+    <div class="confirmation-message compact-confirmation" id="driverApplicationStatusSummary" hidden></div>
+
+    <section class="plans-section" aria-labelledby="subscription-plans">
+      <div class="section-heading">
+        <p class="eyebrow">Driver subscriptions</p>
+        <h2 id="subscription-plans">Choose a Plan</h2>
+      </div>
+
+      <div class="plans-grid" id="driverPlanChoices">
+        <article class="plan-card selectable-plan" data-plan-card="Basic">
+          <h3>Basic</h3>
+          <p class="plan-price">2,500 RWF/month</p>
+          <ul>
+            <li>Profile listing</li>
+            <li>Verified badge</li>
+            <li>Up to 10 bookings/month</li>
+          </ul>
+          <button class="btn btn-secondary choose-plan-btn" type="button" data-plan-choice="Basic">Choose Basic</button>
+        </article>
+
+        <article class="plan-card featured-plan selectable-plan" data-plan-card="Pro">
+          <h3>Pro</h3>
+          <p class="plan-price">5,000 RWF/month</p>
+          <ul>
+            <li>Priority listing</li>
+            <li>Unlimited bookings</li>
+            <li>Featured placement</li>
+            <li>Analytics</li>
+            <li>Top Driver badge</li>
+          </ul>
+          <button class="btn btn-primary choose-plan-btn" type="button" data-plan-choice="Pro">Choose Pro</button>
+        </article>
+      </div>
+      <p class="subscription-note">Your profile becomes visible after verification and active subscription.</p>
+      <p class="confirmation-message compact-confirmation" id="selectedPlanMessage" hidden>Selected plan: <strong id="selectedPlanName">Basic</strong></p>
+    </section>
+  </main>
+
+    <footer class="site-footer" id="contact">
+    <div class="footer-brand">
+      <a class="site-logo footer-logo" href="index.html" aria-label="Umusare home">
+        <span class="brand-badge"><img src="assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
+        <span class="brand-name">Umusare</span>
+      </a>
+      <p>Umusare connects clients with verified independent drivers who drive the client's own vehicle.</p>
+    </div>
+    <div class="footer-links-grid">
+      <section class="footer-section">
+        <h2>Main links</h2>
+        <a href="index.html">Home</a>
+        <a href="find-driver.html">Find a Driver</a>
+        <a href="quick-book.html">Quick Book</a>
+        <a href="plan-ahead.html">Plan Ahead</a>
+      </section>
+      <section class="footer-section">
+        <h2>Safety links</h2>
+        <a href="safety.html">Safety</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="contact.html">Contact</a>
+      </section>
+      <section class="footer-section">
+        <h2>Driver links</h2>
+        <a href="become-driver.html">Become a Driver</a>
+        <a href="driver-agreement.html">Driver Agreement</a>
+        <a href="driver-dashboard.html">Driver Dashboard</a>
+      </section>
+      <section class="footer-section demo-access">
+        <h2>Demo Access</h2>
+        <!-- Temporary demo links until real authentication and role-based routing are built. -->
+        <a href="client-dashboard.html">Client Dashboard</a>
+        <a href="driver-dashboard.html">Driver Dashboard</a>
+        <!-- Admin portal access is separated and will be protected by admin authentication later. -->
+      </section>
+    </div>
+    <p class="footer-meta">&copy; 2026 Umusare Rwanda. All rights reserved.</p>
+  </footer>
+  <div class="mobile-quick-book" data-mobile-quick-book>
+    <a class="mobile-quick-book-link" href="quick-book.html" aria-label="Quick book an Umusare driver">
+      <span>Quick Book Driver</span>
+      <small>Get a verified driver fast</small>
+    </a>
+    <button class="mobile-quick-book-close" type="button" aria-label="Hide quick book button" data-mobile-quick-book-close>&times;</button>
+  </div>
+  <script src="site.js"></script>
+  <script src="api.js"></script>
+  <script>
+    const planButtons = document.querySelectorAll("[data-plan-choice]");
+    const planCards = document.querySelectorAll("[data-plan-card]");
+    const selectedPlanMessage = document.getElementById("selectedPlanMessage");
+    const selectedPlanName = document.getElementById("selectedPlanName");
+    const driverApplicationForm = document.getElementById("driverApplicationForm");
+    const driverApplicationConfirmation = document.getElementById("driverApplicationConfirmation");
+    const driverApplicationStatusSummary = document.getElementById("driverApplicationStatusSummary");
+
+    function escapeHtml(value) {
+      return String(value === undefined || value === null ? "" : value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    planButtons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        const selectedPlan = button.dataset.planChoice;
+        planCards.forEach(function (card) {
+          card.classList.toggle("is-selected-plan", card.dataset.planCard === selectedPlan);
+        });
+        selectedPlanName.textContent = selectedPlan;
+        selectedPlanMessage.hidden = false;
+      });
+    });
+
+    function canonicalGender(value) {
+      return {
+        female: "Female",
+        male: "Male",
+        "prefer-not-to-say": "Prefer not to say"
+      }[value] || value;
+    }
+
+    function canonicalVehicle(value) {
+      return {
+        automatic: "Automatic",
+        manual: "Manual",
+        suv: "SUV",
+        pickup: "Pickup",
+        "luxury-car": "Luxury car"
+      }[value] || value;
+    }
+
+    async function uploadDriverDocument(applicationId, documentType, file) {
+      if (!file) return null;
+      const uploadData = new FormData();
+      uploadData.append("document", file);
+      uploadData.append("documentType", documentType);
+      return window.UmusareApi.request("/driver-applications/" + encodeURIComponent(applicationId) + "/documents", {
+        method: "POST",
+        body: uploadData
+      });
+    }
+
+    function renderApplicationStatusSummary(data) {
+      if (!driverApplicationStatusSummary || !data || !data.application) return;
+      const checklist = data.documentChecklist || {};
+      const missing = data.missingRequiredDocuments || [];
+      const checklistLabels = {
+        nationalIdOrPassport: "National ID or Passport",
+        driversLicence: "Driver's Licence",
+        secondaryEducationProof: "Proof of secondary education",
+        profilePhoto: "Profile photo",
+        policeClearanceCertificate: "Police Clearance / Criminal Record Certificate"
+      };
+      driverApplicationStatusSummary.innerHTML = '<h2>Application status</h2>'
+        + '<p><strong>Application number:</strong> ' + escapeHtml(data.application.applicationNumber || "Pending") + '</p>'
+        + '<p><strong>Status:</strong> ' + escapeHtml(data.application.status || "Pending") + '</p>'
+        + '<h3>Document checklist</h3>'
+        + '<ul>' + Object.keys(checklistLabels).map(function (key) {
+          return '<li>' + escapeHtml(checklistLabels[key]) + ': ' + escapeHtml(checklist[key] || "Missing") + '</li>';
+        }).join("") + '</ul>'
+        + '<p><strong>Missing documents:</strong> ' + escapeHtml(missing.length ? missing.join(", ") : "None") + '</p>'
+        + '<p>Next step: Umusare admin will review submitted details and documents.</p>';
+      driverApplicationStatusSummary.hidden = false;
+    }
+
+    async function loadCurrentDriverApplicationStatus() {
+      if (!window.UmusareApi.getToken()) return;
+      try {
+        const payload = await window.UmusareApi.request("/driver-applications/me", { skipAuthRedirect: true });
+        renderApplicationStatusSummary(payload.data);
+        if (payload.data && payload.data.application && ["Pending", "Under Review", "Needs More Info", "Approved"].includes(payload.data.application.status)) {
+          driverApplicationForm.hidden = true;
+        }
+      } catch (error) {
+        // No application yet is a normal state for newly registered drivers.
+      }
+    }
+
+    driverApplicationForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const formData = new FormData(driverApplicationForm);
+      const selectedPlan = selectedPlanName.textContent || "Basic";
+      const vehicleTypes = Array.from(driverApplicationForm.querySelectorAll("input[name='vehicle-type']:checked")).map(function (input) {
+        return canonicalVehicle(input.value);
+      });
+      let status = document.getElementById("driverApplicationStatus");
+      if (!status) {
+        status = document.createElement("p");
+        status.id = "driverApplicationStatus";
+        status.className = "analytics-note";
+        driverApplicationForm.appendChild(status);
+      }
+      status.textContent = "Submitting application...";
+      try {
+        const payload = await window.UmusareApi.request("/driver-applications", {
+          method: "POST",
+          body: JSON.stringify({
+            fullName: formData.get("full-name"),
+            phone: formData.get("phone-number"),
+            email: formData.get("email-address"),
+            age: Number(formData.get("age")),
+            gender: canonicalGender(formData.get("gender")),
+            city: formData.get("location"),
+            location: formData.get("location"),
+            experienceYears: Number(formData.get("driving-experience")),
+            languages: formData.get("languages"),
+            vehicleTypes: vehicleTypes,
+            driverLicenceNumber: formData.get("licence-number"),
+            shortBio: formData.get("bio"),
+            selectedSubscriptionPlan: selectedPlan
+          })
+        });
+        const application = payload.data.application;
+        const applicationId = application.id || application._id;
+        await Promise.all([
+          uploadDriverDocument(applicationId, "national_id_or_passport", formData.get("national-id")),
+          uploadDriverDocument(applicationId, "drivers_licence", formData.get("drivers-licence")),
+          uploadDriverDocument(applicationId, "secondary_education_proof", formData.get("education-proof")),
+          uploadDriverDocument(applicationId, "profile_photo", formData.get("profile-photo")),
+          uploadDriverDocument(applicationId, "police_clearance_certificate", formData.get("criminal-record-certificate"))
+        ]);
+        const statusPayload = await window.UmusareApi.request("/driver-applications/me");
+        document.getElementById("driverApplicationConfirmationText").textContent = "Application " + (application.applicationNumber || "") + " was submitted with status Pending. Your document checklist has been sent for admin review.";
+        renderApplicationStatusSummary(statusPayload.data);
+        driverApplicationForm.hidden = true;
+        driverApplicationConfirmation.hidden = false;
+        driverApplicationConfirmation.scrollIntoView({ behavior: "smooth", block: "center" });
+      } catch (error) {
+        status.textContent = error.message || "Unable to submit application. Please log in as a driver and try again.";
+        status.classList.add("form-error");
+      }
+    });
+
+    loadCurrentDriverApplicationStatus();
+  </script>
+</body>
+</html>

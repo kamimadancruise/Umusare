@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log in to Umusare</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="navbar">
+      <a class="site-logo nav-logo" href="index.html" aria-label="Umusare home">
+        <span class="brand-badge"><img src="assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
+        <span class="brand-name">Umusare</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" data-nav-toggle>
+        <span>Menu</span>
+      </button>
+      <div class="nav-panel" id="primary-nav" data-nav-panel>
+        <div class="nav-links" aria-label="Main navigation">
+          <a class="nav-link nav-home" href="index.html">Home</a>
+          <a class="nav-link nav-find" href="find-driver.html">Find a Driver</a>
+          <a class="nav-link nav-quick" href="quick-book.html">Quick Book</a>
+          <a class="nav-link nav-plan" href="plan-ahead.html">Plan Ahead</a>
+          <a class="nav-link nav-driver" href="become-driver.html">Become a Driver</a>
+        </div>
+        <div class="nav-actions">
+          <a class="nav-login" href="login.html">Login</a>
+          <a class="nav-cta" href="quick-book.html">Get a Driver</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page-main auth-main">
+    <section class="auth-shell">
+      <div class="auth-intro">
+        <p class="eyebrow">Secure access preview</p>
+        <h1>Log in to Umusare</h1>
+        <p class="intro">Access your bookings or driver profile.</p>
+      </div>
+
+      <section class="auth-panel" aria-label="Umusare login form">
+        <div class="role-selector" role="tablist" aria-label="Login role">
+          <button class="role-card is-active" type="button" role="tab" aria-selected="true" data-role="client">
+            <span>Client</span>
+            <small>Bookings and reports</small>
+          </button>
+          <button class="role-card" type="button" role="tab" aria-selected="false" data-role="driver">
+            <span>Driver</span>
+            <small>Trips and profile</small>
+          </button>
+        </div>
+
+        <div class="auth-role-copy">
+          <p class="eyebrow" id="selectedRoleLabel">Client Login</p>
+          <h2 id="selectedRoleTitle">Client Login</h2>
+          <p id="selectedRoleText">Manage your bookings, saved drivers, reviews, and reports.</p>
+        </div>
+
+        <!-- Front-end login now calls the Umusare backend auth route; production session hardening comes later. -->
+        <form class="auth-form" id="loginForm">
+          <label>
+            Email or phone number
+            <input type="text" name="login-id" autocomplete="username" required>
+          </label>
+
+          <label>
+            Password
+            <input type="password" name="password" autocomplete="current-password" required>
+          </label>
+
+          <div class="auth-row">
+            <label class="agreement remember-me">
+              <input type="checkbox" name="remember-me">
+              <span>Remember me</span>
+            </label>
+            <a class="auth-link" href="forgot-password.html">Forgot password?</a>
+          </div>
+
+          <button class="btn btn-primary submit-btn" type="submit" id="loginSubmit">Go to Client Dashboard</button>
+        </form>
+
+        <p class="auth-switch">New to Umusare? <a href="create-account.html">Create an account</a></p>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="footer-brand">
+      <a class="site-logo footer-logo" href="index.html" aria-label="Umusare home">
+        <span class="brand-badge"><img src="assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
+        <span class="brand-name">Umusare</span>
+      </a>
+      <p>Umusare connects clients with verified independent drivers who drive the client's own vehicle.</p>
+    </div>
+    <div class="footer-links-grid">
+      <section class="footer-section">
+        <h2>Main links</h2>
+        <a href="index.html">Home</a>
+        <a href="find-driver.html">Find a Driver</a>
+        <a href="quick-book.html">Quick Book</a>
+        <a href="plan-ahead.html">Plan Ahead</a>
+      </section>
+      <section class="footer-section">
+        <h2>Safety links</h2>
+        <a href="safety.html">Safety</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="contact.html">Contact</a>
+      </section>
+      <section class="footer-section">
+        <h2>Driver links</h2>
+        <a href="become-driver.html">Become a Driver</a>
+        <a href="driver-agreement.html">Driver Agreement</a>
+        <a href="driver-dashboard.html">Driver Dashboard</a>
+      </section>
+      <section class="footer-section demo-access">
+        <h2>Demo Access</h2>
+        <!-- Temporary demo links until real authentication and role-based routing are built. -->
+        <a href="client-dashboard.html">Client Dashboard</a>
+        <a href="driver-dashboard.html">Driver Dashboard</a>
+        <!-- Admin portal access is separated and will be protected by admin authentication later. -->
+      </section>
+    </div>
+    <p class="footer-meta">&copy; 2026 Umusare Rwanda. All rights reserved.</p>
+  </footer>
+
+  <script src="site.js"></script>
+  <script src="api.js"></script>
+  <script>
+    const roleContent = {
+      client: {
+        title: "Client Login",
+        text: "Manage your bookings, saved drivers, reviews, and reports.",
+        button: "Go to Client Dashboard",
+        href: "client-dashboard.html"
+      },
+      driver: {
+        title: "Driver Login",
+        text: "Manage your bookings, availability, profile, subscription, and reviews.",
+        button: "Go to Driver Dashboard",
+        href: "driver-dashboard.html"
+      },
+    };
+
+    let selectedRole = "client";
+    const roleCards = document.querySelectorAll("[data-role]");
+    const selectedRoleLabel = document.getElementById("selectedRoleLabel");
+    const selectedRoleTitle = document.getElementById("selectedRoleTitle");
+    const selectedRoleText = document.getElementById("selectedRoleText");
+    const loginSubmit = document.getElementById("loginSubmit");
+    const loginForm = document.getElementById("loginForm");
+
+    function setRole(role) {
+      selectedRole = role;
+      const content = roleContent[role];
+      roleCards.forEach(function (card) {
+        const isActive = card.dataset.role === role;
+        card.classList.toggle("is-active", isActive);
+        card.setAttribute("aria-selected", String(isActive));
+      });
+      selectedRoleLabel.textContent = content.title;
+      selectedRoleTitle.textContent = content.title;
+      selectedRoleText.textContent = content.text;
+      loginSubmit.textContent = content.button;
+    }
+
+    roleCards.forEach(function (card) {
+      card.addEventListener("click", function () {
+        setRole(card.dataset.role);
+      });
+    });
+
+    loginForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const identifierInput = loginForm.querySelector("input[type='text'], input[type='email'], input[type='tel']");
+      const passwordInput = loginForm.querySelector("input[type='password']");
+      const originalButtonText = loginSubmit.textContent;
+      loginSubmit.disabled = true;
+      loginSubmit.textContent = "Logging you in...";
+      try {
+        const payload = await window.UmusareApi.request("/auth/login", {
+          method: "POST",
+          skipAuthRedirect: true,
+          body: JSON.stringify({
+            identifier: identifierInput ? identifierInput.value : "",
+            password: passwordInput ? passwordInput.value : ""
+          })
+        });
+        const user = payload.data.user;
+        const token = payload.data.token;
+        if (!user || user.role !== selectedRole) {
+          throw new Error("This account does not match the selected login role.");
+        }
+        window.localStorage.setItem("umusareUserToken", token);
+        window.localStorage.setItem("umusareUser", JSON.stringify(user));
+        window.location.href = roleContent[selectedRole].href;
+      } catch (error) {
+        let status = document.getElementById("publicLoginStatus");
+        if (!status) {
+          status = document.createElement("p");
+          status.id = "publicLoginStatus";
+          status.className = "form-error";
+          loginForm.appendChild(status);
+        }
+        const message = error.message || "Login failed.";
+        status.textContent = message.toLowerCase().includes("invalid")
+          ? "Invalid email/phone or password."
+          : message;
+      } finally {
+        loginSubmit.disabled = false;
+        loginSubmit.textContent = originalButtonText;
+      }
+    });
+  </script>
+</body>
+</html>

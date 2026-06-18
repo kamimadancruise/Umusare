@@ -1,0 +1,39 @@
+{
+  "name": "umusare-api",
+  "version": "0.1.0",
+  "description": "Initial backend API foundation for the Umusare platform.",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "build": "node --check src/server.js",
+    "start": "node src/server.js",
+    "test:db": "node src/seed/testDbConnection.js",
+    "seed:admin": "node src/seed/seedAdmin.js",
+    "seed:demo": "node src/seed/seedDemoData.js",
+    "seed:clear-demo": "node src/seed/clearDemoData.js",
+    "clear:demo": "node src/seed/clearDemoData.js"
+  },
+  "keywords": [
+    "umusare",
+    "api",
+    "express"
+  ],
+  "author": "",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "google-auth-library": "^9.15.1",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.5",
+    "multer": "^1.4.5-lts.1",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}

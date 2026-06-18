@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Driver Profile | Umusare</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+<body data-page="profile">
+    <header class="site-header">
+    <nav class="navbar">
+      <a class="site-logo nav-logo" href="index.html" aria-label="Umusare home">
+        <span class="brand-badge"><img src="assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
+        <span class="brand-name">Umusare</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" data-nav-toggle>
+        <span>Menu</span>
+      </button>
+      <div class="nav-panel" id="primary-nav" data-nav-panel>
+        <div class="nav-links" aria-label="Main navigation">
+          <a class="nav-link nav-home" href="index.html">Home</a>
+          <a class="nav-link nav-find" href="find-driver.html">Find a Driver</a>
+          <a class="nav-link nav-quick" href="quick-book.html">Quick Book</a>
+          <a class="nav-link nav-plan" href="plan-ahead.html">Plan Ahead</a>
+          <a class="nav-link nav-driver" href="become-driver.html">Become a Driver</a>
+        </div>
+        <div class="nav-actions">
+          <a class="nav-login" href="login.html">Login</a>
+          <a class="nav-cta" href="quick-book.html">Get a Driver</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page-main profile-main">
+    <a class="back-link" href="find-driver.html">Back to Find a Driver</a>
+    <section class="profile-panel" id="driverProfileLoading">
+      <h1>Loading driver profile...</h1>
+      <p>Verified driver details will load from the Umusare backend.</p>
+    </section>
+  </main>
+
+    <footer class="site-footer" id="contact">
+    <div class="footer-brand">
+      <a class="site-logo footer-logo" href="index.html" aria-label="Umusare home">
+        <span class="brand-badge"><img src="assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
+        <span class="brand-name">Umusare</span>
+      </a>
+      <p>Umusare connects clients with verified independent drivers who drive the client's own vehicle.</p>
+    </div>
+    <div class="footer-links-grid">
+      <section class="footer-section">
+        <h2>Main links</h2>
+        <a href="index.html">Home</a>
+        <a href="find-driver.html">Find a Driver</a>
+        <a href="quick-book.html">Quick Book</a>
+        <a href="plan-ahead.html">Plan Ahead</a>
+      </section>
+      <section class="footer-section">
+        <h2>Safety links</h2>
+        <a href="safety.html">Safety</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="contact.html">Contact</a>
+      </section>
+      <section class="footer-section">
+        <h2>Driver links</h2>
+        <a href="become-driver.html">Become a Driver</a>
+        <a href="driver-agreement.html">Driver Agreement</a>
+        <a href="driver-dashboard.html">Driver Dashboard</a>
+      </section>
+      <section class="footer-section demo-access">
+        <h2>Demo Access</h2>
+        <!-- Temporary demo links until real authentication and role-based routing are built. -->
+        <a href="client-dashboard.html">Client Dashboard</a>
+        <a href="driver-dashboard.html">Driver Dashboard</a>
+        <!-- Admin portal access is separated and will be protected by admin authentication later. -->
+      </section>
+    </div>
+    <p class="footer-meta">&copy; 2026 Umusare Rwanda. All rights reserved.</p>
+  </footer>
+  <div class="mobile-quick-book" data-mobile-quick-book>
+    <a class="mobile-quick-book-link" href="quick-book.html" aria-label="Quick book an Umusare driver">
+      <span>Quick Book Driver</span>
+      <small>Get a verified driver fast</small>
+    </a>
+    <button class="mobile-quick-book-close" type="button" aria-label="Hide quick book button" data-mobile-quick-book-close>&times;</button>
+  </div>
+  <script src="site.js"></script>
+  <script src="api.js"></script>
+  <script>
+    const profileParams = new URLSearchParams(window.location.search);
+    const selectedSlug = profileParams.get("driver");
+
+    function profileAvailabilityClass(availability) {
+      if (availability === "Available Now") return "availability-now";
+      if (availability === "Available Later") return "availability-later";
+      return "availability-offline";
+    }
+
+    function profileInitials(name) {
+      return String(name || "UD").split(" ").map(function (part) {
+        return part.charAt(0);
+      }).join("").slice(0, 2).toUpperCase();
+    }
+
+    async function loadDriverProfile() {
+      if (!selectedSlug) {
+        document.querySelector(".profile-main").innerHTML = '<a class="back-link" href="find-driver.html">Back to Find a Driver</a><section class="profile-panel"><h1>Driver profile not available.</h1><p>Select a verified driver from Find a Driver to view a public profile.</p><a class="btn btn-primary" href="find-driver.html">Browse Verified Drivers</a></section>';
+        return;
+      }
+
+      try {
+        const payload = await window.UmusareApi.request("/drivers/" + encodeURIComponent(selectedSlug));
+        const selectedDriver = payload.data.driver;
+        const ratingSummary = payload.data.ratingSummary || {};
+        const reviews = payload.data.reviews || [];
+        const displayName = selectedDriver.fullName || selectedDriver.displayName || "Verified Umusare Driver";
+
+        document.querySelector(".profile-main").innerHTML = [
+          '<a class="back-link" href="find-driver.html">Back to Find a Driver</a>',
+          '<section class="profile-header">',
+            '<div class="profile-photo" aria-hidden="true"></div>',
+            '<div class="profile-summary">',
+              '<div class="profile-title-row"><h1></h1><span class="badge verified-badge"></span></div>',
+              '<p class="profile-rating"></p>',
+              '<div class="profile-stats"></div>',
+            '</div>',
+          '</section>',
+          '<section class="profile-layout">',
+            '<div class="profile-content">',
+              '<section class="profile-panel" aria-labelledby="driver-details">',
+                '<h2 id="driver-details">Driver Details</h2>',
+                '<p class="availability-explainer"><strong>Available Now</strong> means the driver can receive immediate booking requests. <strong>Available Later</strong> means the driver is scheduled for future availability. <strong>Offline</strong> means the driver is not currently taking bookings.</p>',
+                '<dl class="detail-list"><div><dt>Experience</dt><dd></dd></div><div><dt>Languages</dt><dd></dd></div><div><dt>Gender</dt><dd></dd></div></dl>',
+                '<div class="vehicle-tags" aria-label="Vehicle types this driver can drive"></div>',
+                '<p class="profile-bio"></p>',
+              '</section>',
+              '<section class="profile-panel" aria-labelledby="verification-status"><h2 id="verification-status">Verification Status</h2><div class="verification-grid"></div></section>',
+              '<section class="profile-panel" aria-labelledby="safety-note"><h2 id="safety-note">Safety Note</h2><p class="safety-notice">Umusare verifies driver-submitted documents before profiles become visible. However, clients should always confirm that the driver&#39;s face matches the profile photo before starting the trip.</p></section>',
+              '<section class="profile-panel" aria-labelledby="client-reviews"><h2 id="client-reviews">Client Reviews</h2><div class="rating-summary-grid"></div><div class="reviews-list"></div></section>',
+            '</div>',
+            '<aside class="profile-sidebar" aria-label="Driver booking actions">',
+              '<section class="profile-panel"><p class="eyebrow">Driver level</p><span class="subscription-badge"></span><p class="sidebar-copy">This driver has completed Umusare verification and can receive bookings when available.</p><p class="contact-safety-note">Only the public driver level is shown. Private payment details are never displayed on public profiles.</p><p class="contact-safety-note">Before starting the trip, confirm that the driver&#39;s face matches the profile photo.</p><div class="profile-actions"><a class="btn btn-urgent" href="quick-book.html">Quick Book This Driver</a><a class="btn btn-primary" href="plan-ahead.html">Plan Ahead With This Driver</a></div></section>',
+              '<a class="report-btn" href="client-dashboard.html#safety-reports">Report Driver</a>',
+            '</aside>',
+          '</section>'
+        ].join("");
+
+        document.querySelector(".profile-photo").textContent = profileInitials(displayName);
+        document.querySelector(".profile-title-row h1").textContent = displayName;
+        document.querySelector(".profile-title-row .badge").textContent = selectedDriver.driverBadge;
+        document.querySelector(".profile-rating").textContent = "Average rating: " + Number(selectedDriver.ratingAverage || 0).toFixed(1) + " stars from " + (selectedDriver.reviewCount || 0) + " reviews";
+        document.querySelector(".profile-stats").innerHTML = [
+          "<span>" + (selectedDriver.completedTrips || 0) + " completed trips</span>",
+          "<span>" + (selectedDriver.reviewCount || 0) + " reviews</span>",
+          "<span>" + (selectedDriver.location || selectedDriver.city || "Rwanda") + "</span>",
+          '<span class="availability-badge ' + profileAvailabilityClass(selectedDriver.availability) + '">' + selectedDriver.availability + "</span>"
+        ].join("");
+        const detailItems = document.querySelectorAll(".detail-list dd");
+        detailItems[0].textContent = selectedDriver.experienceYears + " years";
+        detailItems[1].textContent = (selectedDriver.languages || []).join(", ");
+        detailItems[2].textContent = selectedDriver.gender || "Not specified";
+        document.querySelector(".vehicle-tags").innerHTML = (selectedDriver.vehicleTypes || []).map(function (type) {
+          return "<span>" + type + "</span>";
+        }).join("");
+        document.querySelector(".profile-bio").textContent = selectedDriver.shortBio || "This verified Umusare driver has completed safety verification.";
+        document.querySelector(".verification-grid").innerHTML = [
+          "ID verified",
+          "Driver's licence verified",
+          "Education proof verified",
+          "Profile photo verified",
+          "Criminal record checked"
+        ].map(function (label) {
+          return '<span class="verification-badge">' + label + "</span>";
+        }).join("");
+        document.querySelector(".rating-summary-grid").innerHTML = [
+          '<article class="summary-card"><span>Average star rating</span><strong>' + Number(ratingSummary.average || 0).toFixed(1) + "</strong></article>",
+          '<article class="summary-card"><span>Number of reviews</span><strong>' + (ratingSummary.reviewCount || 0) + "</strong></article>",
+          '<article class="summary-card"><span>Completed trips</span><strong>' + (ratingSummary.completedTrips || 0) + "</strong></article>"
+        ].join("");
+        document.querySelector(".reviews-list").innerHTML = reviews.length ? reviews.map(function (review) {
+          return '<article class="review-card"><div><h3>' + review.clientFirstName + '</h3><p class="rating">' + review.rating + ' stars</p></div><p>' + review.reviewText + '</p><time>' + new Date(review.createdAt).toLocaleDateString() + '</time></article>';
+        }).join("") : '<article class="review-card"><p>No reviews yet.</p></article>';
+        document.querySelector(".subscription-badge").textContent = selectedDriver.driverBadge;
+        document.querySelector(".profile-actions .btn-urgent").setAttribute("href", "quick-book.html?driver=" + selectedDriver.publicDriverId);
+        document.querySelector(".profile-actions .btn-primary").setAttribute("href", "plan-ahead.html?driver=" + selectedDriver.publicDriverId);
+        document.querySelector(".report-btn").setAttribute("href", "client-dashboard.html#safety-reports?driver=" + selectedDriver.publicDriverId + "&booking=not-sure");
+      } catch (error) {
+        document.querySelector(".profile-main").innerHTML = '<a class="back-link" href="find-driver.html">Back to Find a Driver</a><section class="profile-panel"><h1>Driver profile not available.</h1><p>This driver may be hidden, suspended, not approved, or not actively subscribed.</p><a class="btn btn-primary" href="find-driver.html">Browse Verified Drivers</a></section>';
+      }
+    }
+
+    loadDriverProfile();
+  </script>
+</body>
+</html>

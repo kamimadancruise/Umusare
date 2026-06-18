@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support &amp; Emergency Help | Umusare</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="navbar">
+      <a class="site-logo nav-logo" href="index.html" aria-label="Umusare home">
+        <span class="brand-badge"><img src="assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
+        <span class="brand-name">Umusare</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" data-nav-toggle>
+        <span>Menu</span>
+      </button>
+      <div class="nav-panel" id="primary-nav" data-nav-panel>
+        <div class="nav-links" aria-label="Main navigation">
+          <a class="nav-link nav-home" href="index.html">Home</a>
+          <a class="nav-link nav-find" href="find-driver.html">Find a Driver</a>
+          <a class="nav-link nav-quick" href="quick-book.html">Quick Book</a>
+          <a class="nav-link nav-plan" href="plan-ahead.html">Plan Ahead</a>
+          <a class="nav-link nav-driver" href="become-driver.html">Become a Driver</a>
+        </div>
+        <div class="nav-actions">
+          <a class="nav-login" href="login.html">Login</a>
+          <a class="nav-cta" href="quick-book.html">Get a Driver</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page-main support-page">
+    <section class="page-intro support-hero">
+      <div>
+        <p class="eyebrow">Umusare support</p>
+        <h1>Support &amp; Emergency Help</h1>
+      </div>
+      <p class="intro">Need help with a booking, driver, safety concern, or incident? Contact Umusare support or submit a report.</p>
+      <div class="section-links" data-support-actions>
+        <a class="btn btn-primary" href="tel:+250788000222">Call Support</a>
+        <a class="btn btn-secondary whatsapp-btn" href="https://wa.me/250788000222?text=Hello%20Umusare%20Support%2C%20I%20need%20help%20with%20my%20booking.">WhatsApp Support</a>
+      </div>
+    </section>
+
+    <section class="emergency-notice-panel">
+      <h2>Emergency first</h2>
+      <p>If there is immediate danger, a serious accident, injury, crime, or threat to safety, contact emergency services first. Umusare support is for platform assistance and follow-up.</p>
+      <div class="emergency-contact-grid">
+        <a class="contact-btn emergency-contact" href="tel:112"><span>Rwanda National Police</span><strong>112</strong></a>
+        <a class="contact-btn emergency-contact" href="tel:912"><span>Emergency medical help</span><strong>912</strong></a>
+        <a class="contact-btn emergency-contact" href="tel:111"><span>Fire brigade</span><strong>111</strong></a>
+      </div>
+    </section>
+
+    <section class="support-options" aria-labelledby="quick-support-options">
+      <div class="section-heading">
+        <p class="eyebrow">Quick support options</p>
+        <h2 id="quick-support-options">Choose what you need help with.</h2>
+      </div>
+      <div class="support-card-grid">
+        <article class="support-card"><h3>Booking help</h3><p>Get help with a pending, accepted, cancelled, or completed booking.</p><a class="action-btn" href="#support-form">Contact Support</a></article>
+        <article class="support-card"><h3>Driver issue</h3><p>Report a wrong driver, unsafe conduct, late arrival, or profile mismatch.</p><a class="action-btn reject" href="client-dashboard.html#safety-reports">Report Driver Issue</a></article>
+        <article class="support-card"><h3>Accident or vehicle issue</h3><p>Report an accident, damage, or vehicle-related problem during a trip.</p><a class="action-btn reject" href="client-dashboard.html#safety-reports">Report Incident</a></article>
+        <article class="support-card"><h3>Lost or missing property</h3><p>Report missing belongings or suspected theft after a trip.</p><a class="action-btn reject" href="client-dashboard.html#safety-reports">Report Missing Property</a></article>
+        <article class="support-card"><h3>Payment or subscription issue</h3><p>Get help with driver subscription status or payment activation questions.</p><a class="action-btn" href="driver-dashboard.html#driver-subscription">Subscription Help</a></article>
+      </div>
+    </section>
+
+    <section class="form-panel support-contact-panel">
+      <h2>Contact Umusare Support</h2>
+      <div class="contact-actions" data-support-actions>
+        <a class="contact-btn" href="tel:+250788000222">Call Umusare Support</a>
+        <a class="contact-btn whatsapp-btn" href="https://wa.me/250788000222?text=Hello%20Umusare%20Support%2C%20I%20need%20help%20with%20my%20booking.">WhatsApp Umusare Support</a>
+        <a class="contact-btn" href="mailto:support@umusare.rw">Email Support: support@umusare.rw</a>
+      </div>
+    </section>
+
+    <section class="form-panel" id="support-form">
+      <h2>Support Request</h2>
+      <!-- Later: connect this form to the backend ticketing/support workflow. -->
+      <form class="application-form" id="supportRequestForm">
+        <div class="form-grid">
+          <label>Full name<input type="text" name="full-name" required></label>
+          <label>Phone number<input type="tel" name="phone" required></label>
+          <label>Email address<input type="email" name="email"></label>
+          <label>User type<select name="user-type"><option>Client</option><option>Driver</option><option>Admin / Staff</option><option>Other</option></select></label>
+          <label>Issue category<select name="issue-category"><option>Booking help</option><option>Driver issue</option><option>Accident or incident</option><option>Safety concern</option><option>Lost or missing property</option><option>Subscription issue</option><option>Technical problem</option><option>Other</option></select></label>
+          <label>Booking ID, optional<input type="text" name="booking-id" placeholder="Enter your booking ID if available"></label>
+          <label>Upload evidence/photo<input type="file" name="evidence" accept="image/*"></label>
+        </div>
+        <label>Message / description<textarea name="message" rows="5" placeholder="Describe what happened and what help you need." required></textarea></label>
+        <button class="btn btn-primary submit-btn" type="submit">Submit Support Request</button>
+      </form>
+      <div class="confirmation-message compact-confirmation" id="supportRequestConfirmation" hidden>
+        <h2>Support ticket submission is not connected yet. Please call, WhatsApp, or email Umusare Support for help.</h2>
+      </div>
+    </section>
+
+    <section class="form-panel">
+      <h2>Need to submit a formal incident report?</h2>
+      <p class="intro">Use the incident reporting guidance or open the client Safety &amp; Reports form to submit a detailed report.</p>
+      <div class="section-links">
+        <a class="btn btn-primary" href="incident-reporting-policy.html">Go to Incident Reporting</a>
+        <a class="btn btn-secondary" href="client-dashboard.html#safety-reports">Open Report Form</a>
+      </div>
+    </section>
+
+    <section class="form-panel checkbox-reminder">
+      <h2>Before starting a trip</h2>
+      <label><input type="checkbox" disabled> Confirm the driver's face matches the profile photo.</label>
+      <label><input type="checkbox" disabled> Confirm the destination before the driver starts the trip.</label>
+      <label><input type="checkbox" disabled> Make sure your phone is available.</label>
+      <label><input type="checkbox" disabled> Do not start the trip if you feel unsafe.</label>
+      <label><input type="checkbox" disabled> Report concerns through Umusare as soon as possible.</label>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="footer-brand">
+      <a class="site-logo footer-logo" href="index.html" aria-label="Umusare home"><span class="brand-badge"><img src="assets/images/logo.png" alt="" onerror="this.hidden=true"></span><span class="brand-name">Umusare</span></a>
+      <p>Umusare connects clients with verified independent drivers who drive the client's own vehicle.</p>
+    </div>
+    <div class="footer-links-grid">
+      <section class="footer-section"><h2>Main links</h2><a href="index.html">Home</a><a href="find-driver.html">Find a Driver</a><a href="quick-book.html">Quick Book</a><a href="plan-ahead.html">Plan Ahead</a></section>
+      <section class="footer-section"><h2>Safety links</h2><a href="safety.html">Safety</a><a href="privacy-policy.html">Privacy Policy</a><a href="contact.html">Contact</a></section>
+      <section class="footer-section"><h2>Driver links</h2><a href="become-driver.html">Become a Driver</a><a href="driver-agreement.html">Driver Agreement</a><a href="driver-dashboard.html">Driver Dashboard</a></section>
+      <section class="footer-section demo-access"><h2>Demo Access</h2><a href="client-dashboard.html">Client Dashboard</a><a href="driver-dashboard.html">Driver Dashboard</a><!-- Admin portal access is separated and will be protected by admin authentication later. --></section>
+    </div>
+    <p class="footer-meta">&copy; 2026 Umusare Rwanda. All rights reserved.</p>
+  </footer>
+
+  <div class="mobile-quick-book" data-mobile-quick-book>
+    <a class="mobile-quick-book-link" href="quick-book.html" aria-label="Quick book an Umusare driver"><span>Quick Book Driver</span><small>Get a verified driver fast</small></a>
+    <button class="mobile-quick-book-close" type="button" aria-label="Hide quick book button" data-mobile-quick-book-close>&times;</button>
+  </div>
+  <script src="site.js"></script>
+  <script src="api.js"></script>
+  <script>
+    function supportButton(action, className, fallbackLabel) {
+      if (!action || !action.href) return "";
+      return '<a class="' + className + '" href="' + action.href + '">' + (action.label || fallbackLabel) + '</a>';
+    }
+
+    async function loadSupportContactActions() {
+      try {
+        const payload = await window.UmusareApi.request("/support/contact");
+        const actions = payload.data.contactActions || {};
+        const heroHtml = [
+          supportButton(actions.callSupport, "btn btn-primary", "Call Support"),
+          supportButton(actions.whatsappSupport, "btn btn-secondary whatsapp-btn", "WhatsApp Support")
+        ].filter(Boolean).join("");
+        const panelHtml = [
+          supportButton(actions.callSupport, "contact-btn", "Call Umusare Support"),
+          supportButton(actions.whatsappSupport, "contact-btn whatsapp-btn", "WhatsApp Umusare Support"),
+          supportButton(actions.emailSupport, "contact-btn", "Email Support")
+        ].filter(Boolean).join("");
+        const containers = document.querySelectorAll("[data-support-actions]");
+        if (containers[0] && heroHtml) containers[0].innerHTML = heroHtml;
+        if (containers[1] && panelHtml) containers[1].innerHTML = panelHtml;
+      } catch (error) {
+        // Keep the static support fallbacks if the local API is not running.
+      }
+    }
+
+    loadSupportContactActions();
+
+    document.getElementById("supportRequestForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      document.getElementById("supportRequestConfirmation").hidden = false;
+      document.getElementById("supportRequestConfirmation").scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  </script>
+</body>
+</html>

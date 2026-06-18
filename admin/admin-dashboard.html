@@ -1,0 +1,1658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Umusare</title>
+  <link rel="stylesheet" href="../frontend/styles.css">
+  <link rel="icon" type="image/png" href="../frontend/assets/images/logo.png">
+  <script src="admin-api.js"></script>
+</head>
+<body class="admin-body admin-protected-page">
+  <!-- Admin portal area - protected routes and admin authentication will be added later. -->
+  <!-- Admin routes will require admin authentication. Non-admin users should be redirected away after auth is implemented. -->
+  <!-- Admin API calls will be connected to the backend later. -->
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <a class="site-logo nav-logo admin-logo" href="../frontend/index.html" aria-label="Umusare home">
+        <span class="brand-badge"><img src="../frontend/assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
+        <span class="brand-name">Umusare Admin</span>
+      </a>
+      <nav class="admin-menu" aria-label="Admin navigation">
+        <a href="#overview">Dashboard Overview</a>
+        <a href="#statistics">Statistics &amp; Analytics</a>
+        <a href="#applications">Driver Applications</a>
+        <a href="#verified-drivers">Verified Drivers</a>
+        <a href="#bookings">Bookings</a>
+        <a href="#subscriptions">Subscriptions</a>
+        <a href="#complaints">Reviews &amp; Complaints</a>
+        <a href="#incidents">Incident Reports</a>
+        <a href="#suspended">Suspended Drivers</a>
+        <a href="#settings">Settings</a>
+      </nav>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <div>
+          <p class="eyebrow">Operations dashboard</p>
+          <h1>Admin Dashboard</h1>
+          <p class="admin-session-label" id="adminSessionLabel">Verifying admin session...</p>
+        </div>
+        <div class="admin-topbar-actions">
+          <a class="btn btn-secondary" href="../frontend/index.html">View Site</a>
+          <button class="btn btn-primary" type="button" id="adminLogoutButton">Logout</button>
+        </div>
+      </header>
+
+      <section class="admin-section" id="overview">
+        <div class="admin-section-heading">
+          <h2>Dashboard Overview</h2>
+          <p>Live operational snapshot for driver trust, bookings, subscriptions, and safety workflows.</p>
+        </div>
+        <div class="summary-grid">
+          <article class="summary-card">
+            <span>Loading dashboard statistics</span>
+            <strong>...</strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="admin-section analytics-section" id="statistics">
+        <div class="admin-section-heading">
+          <p class="eyebrow">Statistics &amp; Analytics</p>
+          <h2>Platform Intelligence</h2>
+          <p>Live admin statistics from the Umusare backend. Dummy revenue remains test data until real payments are connected.</p>
+          <div class="analytics-filter-row" aria-label="Analytics date range filters">
+            <button class="analytics-filter-chip is-active" type="button" data-analytics-range="Today">Today</button>
+            <button class="analytics-filter-chip" type="button" data-analytics-range="This week">This week</button>
+            <button class="analytics-filter-chip" type="button" data-analytics-range="This month">This month</button>
+            <button class="analytics-filter-chip" type="button" data-analytics-range="This year">This year</button>
+          </div>
+        </div>
+
+        <div class="analytics-meta">
+          <span id="analyticsRangeLabel">Loading analytics for Today.</span>
+          <span>Protected admin API data.</span>
+        </div>
+
+        <div class="analytics-summary-grid" id="analyticsSummaryGrid" aria-label="Statistics overview cards"></div>
+
+        <div class="analytics-chart-grid">
+          <article class="analytics-chart-card analytics-wide-card">
+            <div class="analytics-card-header">
+              <div>
+                <span class="analytics-kicker">Bookings over time</span>
+                <h3>Quick Book vs Plan Ahead</h3>
+              </div>
+              <span class="analytics-pill">Timeline</span>
+            </div>
+            <div class="analytics-bars" id="bookingsOverTimeChart" aria-label="Bookings over time chart"></div>
+          </article>
+
+          <article class="analytics-chart-card">
+            <div class="analytics-card-header">
+              <div>
+                <span class="analytics-kicker">Status</span>
+                <h3>Booking status breakdown</h3>
+              </div>
+            </div>
+            <div class="analytics-donut-wrap" id="bookingStatusChart"></div>
+          </article>
+
+          <article class="analytics-chart-card">
+            <div class="analytics-card-header">
+              <div>
+                <span class="analytics-kicker">Drivers</span>
+                <h3>Driver availability</h3>
+              </div>
+            </div>
+            <div class="analytics-donut-wrap" id="driverAvailabilityChart"></div>
+          </article>
+
+          <article class="analytics-chart-card">
+            <div class="analytics-card-header">
+              <div>
+                <span class="analytics-kicker">Subscriptions</span>
+                <h3>Plan distribution</h3>
+              </div>
+            </div>
+            <div class="analytics-donut-wrap" id="subscriptionPlanChart"></div>
+          </article>
+
+          <article class="analytics-chart-card analytics-wide-card">
+            <div class="analytics-card-header">
+              <div>
+                <span class="analytics-kicker">Safety</span>
+                <h3>Incident reports by type</h3>
+              </div>
+            </div>
+            <div class="analytics-horizontal-bars" id="incidentTypeChart"></div>
+          </article>
+        </div>
+
+        <div class="analytics-lower-grid">
+          <article class="analytics-chart-card">
+            <div class="analytics-card-header">
+              <div>
+                <span class="analytics-kicker">Quality</span>
+                <h3>Top performing drivers</h3>
+              </div>
+            </div>
+            <div class="table-wrap analytics-table-wrap">
+              <table class="admin-table analytics-table">
+                <thead>
+                  <tr>
+                    <th>Driver name</th>
+                    <th>Rating</th>
+                    <th>Completed trips</th>
+                    <th>Plan</th>
+                    <th>Availability</th>
+                    <th>Reports</th>
+                  </tr>
+                </thead>
+                <tbody id="topDriversTableBody"></tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="analytics-chart-card">
+            <div class="analytics-card-header">
+              <div>
+                <span class="analytics-kicker">Users</span>
+                <h3>Users &amp; applications</h3>
+              </div>
+            </div>
+            <div class="client-activity-grid" id="clientActivityGrid"></div>
+          </article>
+
+          <article class="analytics-chart-card analytics-revenue-card">
+            <div class="analytics-card-header">
+              <div>
+                <span class="analytics-kicker">Revenue</span>
+                <h3>Subscription revenue placeholder</h3>
+              </div>
+            </div>
+            <div class="revenue-detail-grid" id="revenueDetailGrid"></div>
+            <p class="analytics-note">Dummy revenue figures are test placeholders until real payment processing is connected.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="admin-section" id="applications">
+        <div class="admin-section-heading">
+          <h2>Driver Applications</h2>
+          <p>Review submitted driver documents before approving profiles for public visibility.</p>
+        </div>
+        <div class="table-wrap">
+          <table class="admin-table" id="verifiedDriversTable">
+            <thead>
+              <tr>
+                <th>Driver name</th>
+                <th>Phone number</th>
+                <th>City</th>
+                <th>Experience</th>
+                <th>Documents</th>
+                <th>Application date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminApplicationsTableBody">
+              <tr>
+                <td colspan="7">Loading driver applications...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="analytics-note" id="adminApplicationsStatus">Driver applications are loaded from the protected Umusare admin API.</p>
+
+        <aside class="application-detail-panel" id="applicationDetail" hidden>
+          <div class="panel-header">
+            <h3>Driver Application Detail</h3>
+            <button class="close-panel" id="closeApplicationPanel" type="button">Close</button>
+          </div>
+          <div id="applicationDetailContent">
+            <p>Select a driver application to review submitted details and protected document statuses.</p>
+          </div>
+        </aside>
+      </section>
+
+      <section class="admin-section" id="verified-drivers">
+        <div class="admin-section-heading">
+          <h2>Verified Drivers</h2>
+          <p>Manage driver visibility, status, and trust signals.</p>
+          <div class="admin-filter-row" aria-label="Verified driver availability filter">
+            <span>Availability</span>
+            <button class="availability-filter-chip is-active" type="button" data-admin-availability-filter="Any availability">Any availability</button>
+            <button class="availability-filter-chip" type="button" data-admin-availability-filter="Available Now">Available Now</button>
+            <button class="availability-filter-chip" type="button" data-admin-availability-filter="Available Later">Available Later</button>
+            <button class="availability-filter-chip" type="button" data-admin-availability-filter="Offline">Offline</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Driver name</th>
+                <th>Rating</th>
+                <th>Subscription</th>
+                <th>Profile status</th>
+                <th>Availability</th>
+                <th>Completed trips</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="7">Loading verified drivers...</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="analytics-note" id="adminDriverStatus">Approved drivers are loaded from the protected admin API.</p>
+      </section>
+
+      <section class="admin-section" id="bookings">
+        <div class="admin-section-heading">
+          <h2>Bookings</h2>
+          <p>Operational view of active and scheduled booking activity.</p>
+        </div>
+        <div class="table-wrap">
+          <table class="admin-table" id="adminBookingsTable">
+            <thead>
+              <tr>
+                <th>Booking ID</th>
+                <th>Client name</th>
+                <th>Driver name</th>
+                <th>Booking type</th>
+                <th>Pickup location</th>
+                <th>Destination</th>
+                <th>Date and time</th>
+                <th>Current status</th>
+                <th>Last updated</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="10">Loading bookings...</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="analytics-note" id="adminBookingStatus">Bookings are loaded from the protected admin API.</p>
+
+        <aside class="application-detail-panel admin-booking-detail" id="adminBookingDetail" hidden>
+          <div class="panel-header">
+            <h3>Booking Details</h3>
+            <button class="close-panel" id="closeAdminBookingPanel" type="button">Close</button>
+          </div>
+          <div id="adminBookingDetailContent">
+            <p>Select a booking to review full details, assign a driver, or update status.</p>
+          </div>
+        </aside>
+      </section>
+
+      <section class="admin-section" id="subscriptions">
+        <div class="admin-section-heading">
+          <h2>Subscriptions</h2>
+          <p>Monitor driver membership plans and payment status. Manual payment overrides are admin-only and audited.</p>
+        </div>
+        <div class="table-wrap">
+          <table class="admin-table subscription-admin-table" id="adminSubscriptionTable">
+            <thead>
+              <tr>
+                <th>Driver name</th>
+                <th>Plan</th>
+                <th>Monthly fee</th>
+                <th>Payment status</th>
+                <th>Renewal date</th>
+                <th>Profile visibility</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="7">Loading subscriptions...</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table class="admin-table subscription-admin-table" id="adminPaymentTable">
+            <thead>
+              <tr>
+                <th>Payment ID</th>
+                <th>Driver</th>
+                <th>Amount</th>
+                <th>Method</th>
+                <th>Provider</th>
+                <th>Provider Txn</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="9">Loading payments...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-section" id="complaints">
+        <div class="admin-section-heading">
+          <h2>Reviews &amp; Complaints</h2>
+          <p>Monitor review quality signals and flag low ratings for staff follow-up.</p>
+          <span class="rating-warning-badge">Rating below 3.5 - admin review recommended.</span>
+        </div>
+        <div class="table-wrap">
+          <table class="admin-table" id="adminReviewTable">
+            <thead>
+              <tr>
+                <th>Review ID</th>
+                <th>Client first name</th>
+                <th>Driver name</th>
+                <th>Rating</th>
+                <th>Review text summary</th>
+                <th>Booking ID</th>
+                <th>Date</th>
+                <th>Flag status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="9">Loading reviews...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-section" id="incidents">
+        <div class="admin-section-heading">
+          <h2>Incident Reports</h2>
+          <p>Safety-sensitive cases that need careful documentation and staff review.</p>
+        </div>
+        <div class="table-wrap">
+          <table class="admin-table" id="adminIncidentTable">
+            <thead>
+              <tr>
+                <th>Report ID</th>
+                <th>Booking ID</th>
+                <th>Reported by</th>
+                <th>Client name</th>
+                <th>Driver name</th>
+                <th>Report type</th>
+                <th>Urgency level</th>
+                <th>Date submitted</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="10">Loading incident reports...</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <aside class="application-detail-panel incident-detail-panel" id="incidentReportDetail" hidden>
+          <div class="panel-header">
+            <h3>Incident Report Detail</h3>
+            <button class="close-panel" id="closeIncidentReportPanel" type="button">Close</button>
+          </div>
+          <p>Select a report to view details.</p>
+        </aside>
+      </section>
+
+      <section class="admin-section" id="suspended">
+        <div class="admin-section-heading">
+          <h2>Suspended Drivers</h2>
+          <p>Drivers temporarily removed from public availability pending review.</p>
+        </div>
+        <div class="table-wrap">
+          <table class="admin-table" id="suspendedDriversTable">
+            <thead>
+              <tr>
+                <th>Driver name</th>
+                <th>Reason for suspension</th>
+                <th>Suspension date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="5">Loading suspended drivers...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-section" id="settings">
+        <div class="admin-section-heading">
+          <h2>Settings</h2>
+          <p>Placeholder area for staff permissions, verification rules, notifications, and safety policy settings.</p>
+        </div>
+        <div class="table-wrap">
+          <h3>Support Tickets</h3>
+          <table class="admin-table" id="adminSupportTicketTable">
+            <thead>
+              <tr>
+                <th>Ticket ID</th>
+                <th>User type</th>
+                <th>Name</th>
+                <th>Issue category</th>
+                <th>Booking ID</th>
+                <th>Status</th>
+                <th>Date submitted</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../frontend/site.js"></script>
+  <script>
+    const adminLogoutButton = document.getElementById("adminLogoutButton");
+    const adminSessionLabel = document.getElementById("adminSessionLabel");
+
+    window.UmusareAdminAuth.requireAdmin().then(function (user) {
+      if (user && adminSessionLabel) {
+        adminSessionLabel.textContent = "Signed in as " + (user.fullName || user.email || "Umusare admin");
+      }
+    });
+
+    if (adminLogoutButton) {
+      adminLogoutButton.addEventListener("click", function () {
+        window.UmusareAdminAuth.logout();
+      });
+    }
+
+    function renderAdminTestTools() {
+      if (!window.UmusareAdminAuth.TEST_MODE_ENABLED || document.getElementById("adminTestTools")) return;
+      const dashboard = document.querySelector(".admin-main");
+      const firstSection = dashboard ? dashboard.querySelector(".admin-section") : null;
+      if (!dashboard || !firstSection) return;
+
+      const panel = document.createElement("section");
+      panel.className = "admin-section";
+      panel.id = "adminTestTools";
+      panel.innerHTML = [
+        '<div class="admin-section-heading">',
+        '<h2>Test Tools</h2>',
+        '<p>Development-only environment information. Admin routes still require authenticated admin access.</p>',
+        '</div>',
+        '<div class="summary-grid">',
+        '<article class="summary-card"><span>Environment</span><strong>' + window.UmusareAdminAuth.APP_ENV + '</strong></article>',
+        '<article class="summary-card"><span>API base URL</span><strong>' + window.UmusareAdminAuth.API_BASE_URL + '</strong></article>',
+        '<article class="summary-card"><span>Dummy payments</span><strong>' + (window.UmusareAdminAuth.DUMMY_PAYMENTS_ENABLED ? "Enabled" : "Disabled") + '</strong></article>',
+        '<article class="summary-card"><span>Demo data</span><strong>' + (window.UmusareAdminAuth.DEMO_DATA_ENABLED ? "Enabled" : "Disabled") + '</strong></article>',
+        '</div>'
+      ].join("");
+      dashboard.insertBefore(panel, firstSection.nextSibling);
+    }
+
+    renderAdminTestTools();
+
+    const applicationPanel = document.getElementById("applicationDetail");
+    const closeApplicationPanel = document.getElementById("closeApplicationPanel");
+    const viewApplicationButtons = document.querySelectorAll(".view-application");
+    const adminBookingDetail = document.getElementById("adminBookingDetail");
+    const closeAdminBookingPanel = document.getElementById("closeAdminBookingPanel");
+    const viewAdminBookingButtons = document.querySelectorAll(".view-admin-booking");
+    const adminBookingsTableBody = document.querySelector("#adminBookingsTable tbody");
+    const adminBookingStatus = document.getElementById("adminBookingStatus");
+    const adminBookingDetailContent = document.getElementById("adminBookingDetailContent");
+    const adminAvailabilityFilters = document.querySelectorAll("[data-admin-availability-filter]");
+    let verifiedDriverRows = document.querySelectorAll("#verified-drivers tbody tr[data-availability]");
+    const verifiedDriversTableBody = document.querySelector("#verifiedDriversTable tbody");
+    const suspendedDriversTableBody = document.querySelector("#suspendedDriversTable tbody");
+    const adminDriverStatus = document.getElementById("adminDriverStatus");
+    const incidentReportDetail = document.getElementById("incidentReportDetail");
+    const closeIncidentReportPanel = document.getElementById("closeIncidentReportPanel");
+    const openIncidentReportButtons = document.querySelectorAll(".open-incident-report");
+    let subscriptionStatusButtons = document.querySelectorAll(".update-subscription-status");
+    const adminApplicationsTableBody = document.getElementById("adminApplicationsTableBody");
+    const adminApplicationsStatus = document.getElementById("adminApplicationsStatus");
+    const applicationDetailContent = document.getElementById("applicationDetailContent");
+    let selectedAdminApplicationId = "";
+
+    function adminStatusClass(status) {
+      return status.toLowerCase().replaceAll(" ", "-");
+    }
+
+    function escapeHtml(value) {
+      return String(value || "").replace(/[&<>"']/g, function (character) {
+        return {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;"
+        }[character];
+      });
+    }
+
+    function formatAdminDate(value) {
+      if (!value) return "Not submitted";
+      return new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    }
+
+    function setAdminApplicationMessage(message, isError) {
+      if (!adminApplicationsStatus) return;
+      adminApplicationsStatus.textContent = message;
+      adminApplicationsStatus.classList.toggle("form-error", Boolean(isError));
+    }
+
+    function setAdminDriverMessage(message, isError) {
+      if (!adminDriverStatus) return;
+      adminDriverStatus.textContent = message;
+      adminDriverStatus.classList.toggle("form-error", Boolean(isError));
+    }
+
+    function setAdminBookingMessage(message, isError) {
+      if (!adminBookingStatus) return;
+      adminBookingStatus.textContent = message;
+      adminBookingStatus.classList.toggle("form-error", Boolean(isError));
+    }
+
+    function renderAdminBookingRows(bookings) {
+      if (!adminBookingsTableBody) return;
+      if (!bookings.length) {
+        adminBookingsTableBody.innerHTML = '<tr><td colspan="10">No bookings found.</td></tr>';
+        return;
+      }
+      adminBookingsTableBody.innerHTML = bookings.map(function (booking) {
+        return '<tr data-booking-id="' + escapeHtml(booking.bookingId) + '">'
+          + '<td>' + escapeHtml(booking.bookingId) + '</td>'
+          + '<td>' + escapeHtml(booking.clientName || "Client") + '</td>'
+          + '<td>' + escapeHtml(booking.driverName || "Pending assignment") + '</td>'
+          + '<td>' + escapeHtml(booking.bookingType) + '</td>'
+          + '<td>' + escapeHtml(booking.pickupLocation) + '</td>'
+          + '<td>' + escapeHtml(booking.destination) + '</td>'
+          + '<td>' + escapeHtml(booking.bookingType === "Quick Book" ? booking.neededTime : new Date(booking.dateTime).toLocaleString()) + '</td>'
+          + '<td><span class="booking-status-badge status-' + adminStatusClass(booking.status) + '">' + escapeHtml(booking.status) + '</span></td>'
+          + '<td>' + (booking.lastUpdated ? new Date(booking.lastUpdated).toLocaleString() : "Pending") + '</td>'
+          + '<td><button class="action-btn view-admin-booking" type="button" data-booking-id="' + escapeHtml(booking.bookingId) + '">View Details</button></td>'
+          + '</tr>';
+      }).join("");
+    }
+
+    async function loadAdminBookings() {
+      if (!adminBookingsTableBody) return;
+      try {
+        const payload = await window.UmusareAdminAuth.request("/admin/bookings");
+        renderAdminBookingRows(payload.data.bookings || []);
+        setAdminBookingMessage("Bookings loaded from the protected admin API.", false);
+      } catch (error) {
+        adminBookingsTableBody.innerHTML = '<tr><td colspan="10">Unable to load bookings.</td></tr>';
+        setAdminBookingMessage(error.message || "Unable to load bookings.", true);
+      }
+    }
+
+    async function loadAdminReviews() {
+      const reviewBody = document.querySelector("#adminReviewTable tbody");
+      if (!reviewBody) return;
+      try {
+        const payload = await window.UmusareAdminAuth.request("/admin/reviews");
+        const reviews = payload.data.reviews || [];
+        reviewBody.innerHTML = reviews.length ? reviews.map(function (review) {
+          const flagged = review.flagged || Number(review.rating) <= 2;
+          const warning = flagged ? '<span class="rating-warning-badge">Flagged for review</span>' : '<span class="admin-status active">Normal</span>';
+          const lowAverage = review.lowRatingWarning ? '<br><span class="rating-warning-badge">Rating below 3.5 - admin review recommended.</span>' : "";
+          return '<tr data-review-id="' + escapeHtml(review.reviewId) + '">'
+            + '<td>' + escapeHtml(review.reviewId) + '</td>'
+            + '<td>' + escapeHtml(review.clientFirstName) + '</td>'
+            + '<td>' + escapeHtml(review.driverName) + lowAverage + '</td>'
+            + '<td>' + escapeHtml(review.rating) + ' stars</td>'
+            + '<td>' + escapeHtml(review.reviewSummary || review.reviewText || "") + '</td>'
+            + '<td>' + escapeHtml(review.bookingId || "N/A") + '</td>'
+            + '<td>' + (review.createdAt ? new Date(review.createdAt).toLocaleDateString() : "Pending") + '</td>'
+            + '<td>' + warning + '</td>'
+            + '<td class="table-actions"><button class="action-btn view-admin-review" type="button" data-review-id="' + escapeHtml(review.reviewId) + '">View Review</button><button class="action-btn approve mark-admin-review" type="button" data-review-id="' + escapeHtml(review.reviewId) + '">Mark as Reviewed</button><button class="action-btn reject flag-admin-review" type="button" data-review-id="' + escapeHtml(review.reviewId) + '">Flag</button><button class="action-btn unflag-admin-review" type="button" data-review-id="' + escapeHtml(review.reviewId) + '">Unflag</button></td>'
+            + '</tr>';
+        }).join("") : '<tr><td colspan="9">No reviews found.</td></tr>';
+      } catch (error) {
+        reviewBody.innerHTML = '<tr><td colspan="9">Unable to load reviews.</td></tr>';
+      }
+    }
+
+    async function loadAdminReports() {
+      const incidentBody = document.querySelector("#adminIncidentTable tbody");
+      if (!incidentBody) return;
+      try {
+        const payload = await window.UmusareAdminAuth.request("/admin/reports");
+        const reports = payload.data.reports || [];
+        incidentBody.innerHTML = reports.length ? reports.map(function (report) {
+          return '<tr data-report-id="' + escapeHtml(report.reportId) + '">'
+            + '<td>' + escapeHtml(report.reportId) + '</td>'
+            + '<td>' + escapeHtml(report.bookingId || "General") + '</td>'
+            + '<td>' + escapeHtml(report.reportedByRole) + '</td>'
+            + '<td>' + escapeHtml(report.clientName || "N/A") + '</td>'
+            + '<td>' + escapeHtml(report.driverName || "N/A") + '</td>'
+            + '<td>' + escapeHtml(report.reportType) + '</td>'
+            + '<td><span class="urgency-badge urgency-' + escapeHtml(String(report.urgency).toLowerCase()) + '">' + escapeHtml(report.urgency) + '</span></td>'
+            + '<td>' + (report.createdAt ? new Date(report.createdAt).toLocaleDateString() : "Pending") + '</td>'
+            + '<td><span class="report-status-badge report-status-' + adminStatusClass(report.status) + '">' + escapeHtml(report.status) + '</span></td>'
+            + '<td><button class="action-btn open-incident-report" type="button" data-report-id="' + escapeHtml(report.reportId) + '">Open Report</button></td>'
+            + '</tr>';
+        }).join("") : '<tr><td colspan="10">No incident reports found.</td></tr>';
+      } catch (error) {
+        incidentBody.innerHTML = '<tr><td colspan="10">Unable to load incident reports.</td></tr>';
+      }
+    }
+
+    async function loadAdminSubscriptions() {
+      const subscriptionBody = document.querySelector("#adminSubscriptionTable tbody");
+      if (!subscriptionBody) return;
+      try {
+        const payload = await window.UmusareAdminAuth.request("/admin/subscriptions");
+        const subscriptions = payload.data.subscriptions || [];
+        subscriptionBody.innerHTML = subscriptions.length ? subscriptions.map(function (subscription) {
+          const visible = subscription.profileVisibility === "Visible" && subscription.status === "Active" ? "Visible" : "Hidden";
+          return '<tr data-subscription-id="' + escapeHtml(subscription.subscriptionId) + '" data-subscription-status="' + escapeHtml(subscription.status) + '">'
+            + '<td>' + escapeHtml(subscription.driverName || "Driver") + '</td>'
+            + '<td><span class="subscription-status-badge plan-' + escapeHtml(subscription.plan.toLowerCase()) + '">' + escapeHtml(subscription.plan) + '</span></td>'
+            + '<td>' + escapeHtml(subscription.monthlyFee) + ' ' + escapeHtml(subscription.currency) + '</td>'
+            + '<td><span class="subscription-status-badge status-' + escapeHtml(subscription.status.toLowerCase()) + '">' + escapeHtml(subscription.status) + '</span><br><small>' + escapeHtml(subscription.paymentStatus) + '</small></td>'
+            + '<td>' + (subscription.renewalDate ? new Date(subscription.renewalDate).toLocaleDateString() : "Not active") + '</td>'
+            + '<td><span class="subscription-status-badge status-' + visible.toLowerCase() + '">' + visible + '</span></td>'
+            + '<td class="table-actions"><button class="action-btn approve activate-subscription" type="button" data-subscription-id="' + escapeHtml(subscription.subscriptionId) + '">Activate</button><button class="action-btn expire-subscription" type="button" data-subscription-id="' + escapeHtml(subscription.subscriptionId) + '">Expire</button><button class="action-btn reject cancel-subscription" type="button" data-subscription-id="' + escapeHtml(subscription.subscriptionId) + '">Cancel</button><button class="action-btn change-subscription-plan" type="button" data-subscription-id="' + escapeHtml(subscription.subscriptionId) + '" data-current-plan="' + escapeHtml(subscription.plan) + '">Change Plan</button></td>'
+            + '</tr>';
+        }).join("") : '<tr><td colspan="7">No subscriptions found.</td></tr>';
+      } catch (error) {
+        subscriptionBody.innerHTML = '<tr><td colspan="7">Unable to load subscriptions.</td></tr>';
+      }
+    }
+
+    async function loadAdminPayments() {
+      const paymentBody = document.querySelector("#adminPaymentTable tbody");
+      if (!paymentBody) return;
+      try {
+        const payload = await window.UmusareAdminAuth.request("/admin/payments");
+        const payments = payload.data.payments || [];
+        paymentBody.innerHTML = payments.length ? payments.map(function (payment) {
+          return '<tr data-payment-id="' + escapeHtml(payment.paymentId) + '">'
+            + '<td>' + escapeHtml(payment.paymentId) + '</td>'
+            + '<td>' + escapeHtml(payment.userName || payment.driverName || "Driver") + '</td>'
+            + '<td>' + escapeHtml(payment.amount || 0) + ' ' + escapeHtml(payment.currency || "RWF") + '</td>'
+            + '<td>' + escapeHtml(payment.paymentMethod || "Dummy payment") + '</td>'
+            + '<td>' + escapeHtml(payment.provider || "dummy") + '</td>'
+            + '<td>' + escapeHtml(payment.providerTransactionId || payment.transactionReference || "Pending") + '</td>'
+            + '<td><span class="subscription-status-badge status-' + escapeHtml(String(payment.status || "pending").toLowerCase()) + '">' + escapeHtml(payment.status || "Pending") + '</span></td>'
+            + '<td>' + escapeHtml(payment.createdAt ? new Date(payment.createdAt).toLocaleDateString() : "Pending") + '</td>'
+            + '<td class="table-actions"><button class="action-btn approve mark-payment-success" type="button" data-payment-id="' + escapeHtml(payment.paymentId) + '">Mark Success</button><button class="action-btn reject mark-payment-failed" type="button" data-payment-id="' + escapeHtml(payment.paymentId) + '">Mark Failed</button></td>'
+            + '</tr>';
+        }).join("") : '<tr><td colspan="9">No payments found.</td></tr>';
+      } catch (error) {
+        paymentBody.innerHTML = '<tr><td colspan="9">Unable to load payments.</td></tr>';
+      }
+    }
+
+    function renderAdminReportDetail(report) {
+      const actions = report.contactActions || {};
+      const supportLinks = [
+        actions.callSupport && actions.callSupport.href ? '<a class="action-btn" href="' + escapeHtml(actions.callSupport.href) + '">Call Support</a>' : "",
+        actions.whatsappSupport && actions.whatsappSupport.href ? '<a class="action-btn whatsapp-btn" href="' + escapeHtml(actions.whatsappSupport.href) + '">WhatsApp Support</a>' : ""
+      ].filter(Boolean).join("");
+      incidentReportDetail.innerHTML = '<div class="panel-header"><h3>Incident Report Detail</h3><button class="close-panel" id="closeIncidentReportPanelDynamic" type="button">Close</button></div>'
+        + '<dl class="admin-detail-grid">'
+        + '<div><dt>Report ID</dt><dd>' + escapeHtml(report.reportId) + '</dd></div>'
+        + '<div><dt>Booking ID</dt><dd>' + escapeHtml(report.bookingId || "General") + '</dd></div>'
+        + '<div><dt>Reported by</dt><dd>' + escapeHtml(report.reportedByRole) + '</dd></div>'
+        + '<div><dt>Report type</dt><dd>' + escapeHtml(report.reportType) + '</dd></div>'
+        + '<div><dt>Urgency</dt><dd><span class="urgency-badge urgency-' + escapeHtml(String(report.urgency).toLowerCase()) + '">' + escapeHtml(report.urgency) + '</span></dd></div>'
+        + '<div><dt>Status</dt><dd><span class="report-status-badge report-status-' + adminStatusClass(report.status) + '">' + escapeHtml(report.status) + '</span></dd></div>'
+        + '<div><dt>Client details</dt><dd>' + escapeHtml(report.clientName || "N/A") + (report.clientPhone ? " / " + escapeHtml(report.clientPhone) : "") + '</dd></div>'
+        + '<div><dt>Driver details</dt><dd>' + escapeHtml(report.driverName || "N/A") + (report.driverPhone ? " / " + escapeHtml(report.driverPhone) : "") + '</dd></div>'
+        + '<div><dt>Date submitted</dt><dd>' + (report.createdAt ? new Date(report.createdAt).toLocaleString() : "Pending") + '</dd></div>'
+        + '<div><dt>Last updated</dt><dd>' + (report.lastUpdated ? new Date(report.lastUpdated).toLocaleString() : "Pending") + '</dd></div>'
+        + '</dl>'
+        + '<div class="report-summary-block"><h4>Report description</h4><p>' + escapeHtml(report.description) + '</p></div>'
+        + '<div class="report-summary-block"><h4>Uploaded evidence</h4>' + ((report.evidenceFiles || []).length ? report.evidenceFiles.map(function (file) { return '<p>' + escapeHtml(file.fileName) + ' (' + escapeHtml(file.mimeType || "file") + ')</p>'; }).join("") : '<p>No evidence uploaded.</p>') + '</div>'
+        + '<div class="report-summary-block"><h4>Admin notes</h4><p>' + escapeHtml(report.adminNotes || "No private admin notes yet.") + '</p></div>'
+        + '<div class="table-actions">' + supportLinks + '</div>'
+        + '<label>Status<select id="adminReportStatusSelect"><option>New</option><option>Under Review</option><option>Awaiting Response</option><option>Resolved</option><option>Escalated</option></select></label>'
+        + '<label>Admin note<textarea rows="4" id="adminReportNote" placeholder="Add internal safety team notes, next steps, and follow-up details."></textarea></label>'
+        + '<label>Assign admin ID<input type="text" id="adminReportAssignee" placeholder="Admin user ID"></label>'
+        + '<div class="panel-actions"><button class="btn btn-secondary assign-admin-report" type="button" data-report-id="' + escapeHtml(report.reportId) + '">Assign Report</button><button class="btn btn-primary update-admin-report-status" type="button" data-report-id="' + escapeHtml(report.reportId) + '">Update Status</button><button class="btn btn-secondary add-admin-report-note" type="button" data-report-id="' + escapeHtml(report.reportId) + '">Add Note</button></div>';
+      const select = document.getElementById("adminReportStatusSelect");
+      if (select) select.value = report.status;
+      document.getElementById("closeIncidentReportPanelDynamic").addEventListener("click", function () {
+        incidentReportDetail.hidden = true;
+      });
+    }
+
+    async function openAdminReportDetail(reportId) {
+      incidentReportDetail.hidden = false;
+      incidentReportDetail.innerHTML = '<p>Loading incident report...</p>';
+      incidentReportDetail.scrollIntoView({ behavior: "smooth", block: "start" });
+      try {
+        const payload = await window.UmusareAdminAuth.request("/admin/reports/" + reportId);
+        renderAdminReportDetail(payload.data.report);
+      } catch (error) {
+        incidentReportDetail.innerHTML = '<p>Unable to load incident report.</p>';
+      }
+    }
+
+    function renderAdminBookingDetail(booking) {
+      const actions = booking.contactActions || {};
+      const contactLinks = [
+        actions.callClient && actions.callClient.href ? '<a class="action-btn" href="' + escapeHtml(actions.callClient.href) + '">Call Client</a>' : "",
+        actions.whatsappClient && actions.whatsappClient.href ? '<a class="action-btn whatsapp-btn" href="' + escapeHtml(actions.whatsappClient.href) + '">WhatsApp Client</a>' : "",
+        actions.callDriver && actions.callDriver.href ? '<a class="action-btn" href="' + escapeHtml(actions.callDriver.href) + '">Call Driver</a>' : "",
+        actions.whatsappDriver && actions.whatsappDriver.href ? '<a class="action-btn whatsapp-btn" href="' + escapeHtml(actions.whatsappDriver.href) + '">WhatsApp Driver</a>' : "",
+        actions.callSupport && actions.callSupport.href ? '<a class="action-btn" href="' + escapeHtml(actions.callSupport.href) + '">Call Support</a>' : "",
+        actions.whatsappSupport && actions.whatsappSupport.href ? '<a class="action-btn whatsapp-btn" href="' + escapeHtml(actions.whatsappSupport.href) + '">WhatsApp Support</a>' : ""
+      ].filter(Boolean).join("");
+      adminBookingDetailContent.innerHTML = '<dl class="admin-detail-grid">'
+        + '<div><dt>Booking ID</dt><dd>' + escapeHtml(booking.bookingId) + '</dd></div>'
+        + '<div><dt>Booking type</dt><dd>' + escapeHtml(booking.bookingType) + '</dd></div>'
+        + '<div><dt>Client</dt><dd>' + escapeHtml(booking.clientName) + '</dd></div>'
+        + '<div><dt>Driver</dt><dd>' + escapeHtml(booking.driverName || "Pending assignment") + '</dd></div>'
+        + '<div><dt>Pickup</dt><dd>' + escapeHtml(booking.pickupLocation) + '</dd></div>'
+        + '<div><dt>Destination</dt><dd>' + escapeHtml(booking.destination) + '</dd></div>'
+        + '<div><dt>Date and time</dt><dd>' + escapeHtml(booking.bookingType === "Quick Book" ? booking.neededTime : new Date(booking.dateTime).toLocaleString()) + '</dd></div>'
+        + '<div><dt>Car type</dt><dd>' + escapeHtml(booking.carType) + '</dd></div>'
+        + '<div><dt>Notes</dt><dd>' + escapeHtml(booking.clientNotes || "None") + '</dd></div>'
+        + '<div><dt>Current status</dt><dd><span class="booking-status-badge status-' + adminStatusClass(booking.status) + '">' + escapeHtml(booking.status) + '</span></dd></div>'
+        + '<div><dt>Client contact</dt><dd>' + escapeHtml(booking.clientPhone || "Not available") + '</dd></div>'
+        + '<div><dt>Driver contact</dt><dd>' + escapeHtml(booking.driverPhone || "Not available") + '</dd></div>'
+        + '</dl>'
+        + '<div class="table-actions">' + contactLinks + '</div>'
+        + '<div class="booking-timeline" aria-label="Admin booking status timeline">'
+        + (booking.statusHistory || []).map(function (entry) { return '<span class="timeline-step is-complete">' + escapeHtml(entry.status) + '</span>'; }).join("")
+        + '</div>'
+        + '<div class="report-summary-block"><h4>Suggested Drivers</h4>'
+        + ((booking.candidateDrivers || []).length ? booking.candidateDrivers.map(function (candidate) {
+          return '<div class="document-review-row">'
+            + '<strong>' + escapeHtml(candidate.fullName) + '</strong>'
+            + '<span>' + escapeHtml(candidate.driverBadge || "Verified Driver") + ' / ' + escapeHtml(candidate.availability || "Availability unknown") + '</span>'
+            + '<span>Match score: ' + escapeHtml(candidate.matchScore || 0) + '</span>'
+            + '<span>' + escapeHtml((candidate.vehicleTypes || []).join(", ")) + '</span>'
+            + '</div>';
+        }).join("") : '<p>No suggested drivers saved for this booking.</p>')
+        + '</div>'
+        + '<div class="report-summary-block"><h4>Linked Incident Reports</h4>'
+        + ((booking.incidentReports || []).length ? booking.incidentReports.map(function (report) {
+          return '<div class="document-review-row"><strong>' + escapeHtml(report.reportId) + '</strong><span>' + escapeHtml(report.reportType) + '</span><span>' + escapeHtml(report.urgency) + '</span><span>' + escapeHtml(report.status) + '</span></div>';
+        }).join("") : '<p>No incident reports linked to this booking.</p>')
+        + '</div>'
+        + '<label>Assign driver ID or public ID<input type="text" id="adminAssignDriverId" placeholder="Driver profile ID or publicDriverId"></label>'
+        + '<label>Admin note<textarea rows="3" id="adminBookingNote" placeholder="Add an internal note for staff follow-up."></textarea></label>'
+        + '<label>Status<select id="adminBookingStatusSelect"><option>Pending</option><option>Accepted</option><option>Driver on the way</option><option>Trip started</option><option>Completed</option><option>Cancelled</option><option>Reported</option></select></label>'
+        + '<div class="panel-actions"><button class="btn btn-secondary assign-admin-booking-driver" type="button" data-booking-id="' + escapeHtml(booking.bookingId) + '">Assign Driver</button><button class="btn btn-primary update-admin-booking-status" type="button" data-booking-id="' + escapeHtml(booking.bookingId) + '">Update Status</button></div>';
+      const select = document.getElementById("adminBookingStatusSelect");
+      if (select) select.value = booking.status;
+    }
+
+    async function openAdminBookingDetail(bookingId) {
+      adminBookingDetail.hidden = false;
+      adminBookingDetailContent.innerHTML = '<p>Loading booking detail...</p>';
+      adminBookingDetail.scrollIntoView({ behavior: "smooth", block: "start" });
+      try {
+        const payload = await window.UmusareAdminAuth.request("/admin/bookings/" + bookingId);
+        renderAdminBookingDetail(payload.data.booking);
+      } catch (error) {
+        adminBookingDetailContent.innerHTML = '<p>Unable to load booking detail.</p>';
+        setAdminBookingMessage(error.message || "Unable to load booking detail.", true);
+      }
+    }
+
+    function availabilityBadgeClass(status) {
+      if (status === "Available Now") return "availability-now";
+      if (status === "Available Later") return "availability-later";
+      return "availability-offline";
+    }
+
+    function renderAdminDriverRows(drivers) {
+      if (!verifiedDriversTableBody) return;
+      if (!drivers.length) {
+        verifiedDriversTableBody.innerHTML = '<tr><td colspan="7">No approved driver profiles found.</td></tr>';
+        return;
+      }
+      verifiedDriversTableBody.innerHTML = drivers.map(function (driver) {
+        const subscriptionPlan = driver.subscription ? driver.subscription.plan : "Pending";
+        const profileStatus = driver.isSuspended ? "Suspended" : driver.profileVisibility;
+        const visibilityAction = driver.profileVisibility === "Visible" ? "Hidden" : "Visible";
+        return '<tr data-availability="' + escapeHtml(driver.availability) + '" data-driver-id="' + escapeHtml(driver.id) + '">'
+          + '<td>' + escapeHtml(driver.fullName || "Driver") + '<br><small>' + escapeHtml(driver.publicDriverId) + '</small></td>'
+          + '<td>' + Number(driver.ratingAverage || 0).toFixed(1) + '</td>'
+          + '<td>' + escapeHtml(subscriptionPlan) + '</td>'
+          + '<td><span class="admin-status ' + (profileStatus === "Visible" ? "active" : profileStatus === "Suspended" ? "expired" : "pending") + '">' + escapeHtml(profileStatus) + '</span></td>'
+          + '<td><span class="availability-badge ' + availabilityBadgeClass(driver.availability) + '">' + escapeHtml(driver.availability) + '</span></td>'
+          + '<td>' + escapeHtml(driver.completedTrips || 0) + '</td>'
+          + '<td class="table-actions">'
+          + '<a class="action-btn" href="../frontend/driver-profile.html?driver=' + escapeHtml(driver.publicDriverId) + '">View Profile</a>'
+          + '<button class="action-btn toggle-driver-visibility" type="button" data-driver-id="' + escapeHtml(driver.id) + '" data-next-visibility="' + visibilityAction + '">' + (visibilityAction === "Visible" ? "Show" : "Hide") + '</button>'
+          + '<button class="action-btn reject suspend-admin-driver" type="button" data-driver-id="' + escapeHtml(driver.id) + '">Suspend</button>'
+          + '</td>'
+          + '</tr>';
+      }).join("");
+      verifiedDriverRows = document.querySelectorAll("#verifiedDriversTable tbody tr[data-availability]");
+    }
+
+    function renderSuspendedDriverRows(drivers) {
+      if (!suspendedDriversTableBody) return;
+      const suspendedDrivers = drivers.filter(function (driver) { return driver.isSuspended; });
+      if (!suspendedDrivers.length) {
+        suspendedDriversTableBody.innerHTML = '<tr><td colspan="5">No suspended drivers found.</td></tr>';
+        return;
+      }
+      suspendedDriversTableBody.innerHTML = suspendedDrivers.map(function (driver) {
+        return '<tr data-driver-id="' + escapeHtml(driver.id) + '">'
+          + '<td>' + escapeHtml(driver.fullName || "Driver") + '</td>'
+          + '<td>' + escapeHtml(driver.suspensionReason || "Admin suspension") + '</td>'
+          + '<td>Backend record</td>'
+          + '<td><span class="admin-status expired">Suspended</span></td>'
+          + '<td><button class="action-btn unsuspend-admin-driver" type="button" data-driver-id="' + escapeHtml(driver.id) + '">Unsuspend</button></td>'
+          + '</tr>';
+      }).join("");
+    }
+
+    async function loadAdminDrivers() {
+      try {
+        const payload = await window.UmusareAdminAuth.request("/admin/drivers");
+        const drivers = payload.data.drivers || [];
+        renderAdminDriverRows(drivers);
+        renderSuspendedDriverRows(drivers);
+        setAdminDriverMessage("Driver profiles loaded from the protected admin API.", false);
+      } catch (error) {
+        if (verifiedDriversTableBody) verifiedDriversTableBody.innerHTML = '<tr><td colspan="7">Unable to load driver profiles.</td></tr>';
+        if (suspendedDriversTableBody) suspendedDriversTableBody.innerHTML = '<tr><td colspan="5">Unable to load suspended drivers.</td></tr>';
+        setAdminDriverMessage(error.message || "Unable to load driver profiles.", true);
+      }
+    }
+
+    async function updateAdminDriverVisibility(driverId, profileVisibility) {
+      try {
+        await window.UmusareAdminAuth.request("/admin/drivers/" + driverId + "/visibility", {
+          method: "PATCH",
+          body: JSON.stringify({ profileVisibility: profileVisibility })
+        });
+        setAdminDriverMessage("Driver visibility updated.", false);
+        await loadAdminDrivers();
+      } catch (error) {
+        setAdminDriverMessage(error.message || "Unable to update driver visibility.", true);
+      }
+    }
+
+    async function suspendAdminDriver(driverId) {
+      const suspensionReason = window.prompt("Why is this driver being suspended?");
+      if (!suspensionReason) return;
+      try {
+        await window.UmusareAdminAuth.request("/admin/drivers/" + driverId + "/suspend", {
+          method: "PATCH",
+          body: JSON.stringify({ suspensionReason: suspensionReason })
+        });
+        setAdminDriverMessage("Driver suspended.", false);
+        await loadAdminDrivers();
+      } catch (error) {
+        setAdminDriverMessage(error.message || "Unable to suspend driver.", true);
+      }
+    }
+
+    async function unsuspendAdminDriver(driverId) {
+      try {
+        await window.UmusareAdminAuth.request("/admin/drivers/" + driverId + "/unsuspend", {
+          method: "PATCH"
+        });
+        setAdminDriverMessage("Driver unsuspended.", false);
+        await loadAdminDrivers();
+      } catch (error) {
+        setAdminDriverMessage(error.message || "Unable to unsuspend driver.", true);
+      }
+    }
+
+    function renderDocumentStatusPill(status) {
+      const className = status === "Verified" ? "active" : status === "Missing" || status === "Rejected" ? "rejected" : "pending";
+      return '<span class="admin-status ' + className + '">' + escapeHtml(status) + '</span>';
+    }
+
+    async function loadAdminApplications() {
+      if (!adminApplicationsTableBody) return;
+      adminApplicationsTableBody.innerHTML = '<tr><td colspan="7">Loading driver applications...</td></tr>';
+      try {
+        const payload = await window.UmusareAdminAuth.request("/admin/driver-applications");
+        const applications = payload.data.applications || [];
+        if (!applications.length) {
+          adminApplicationsTableBody.innerHTML = '<tr><td colspan="7">No driver applications have been submitted yet.</td></tr>';
+          setAdminApplicationMessage("No driver applications found.", false);
+          return;
+        }
+
+        adminApplicationsTableBody.innerHTML = applications.map(function (application) {
+          const docs = application.documentSummary || {};
+          const allVerified = docs.allVerified;
+          const docsLabel = allVerified ? "All verified" : (docs.verifiedCount || 0) + "/" + (docs.totalRequired || 5) + " verified";
+          return '<tr data-application-id="' + escapeHtml(application.id) + '">'
+            + '<td>' + escapeHtml(application.fullName) + '<br><small>' + escapeHtml(application.applicationNumber) + '</small></td>'
+            + '<td>' + escapeHtml(application.phone) + '</td>'
+            + '<td>' + escapeHtml(application.city) + '</td>'
+            + '<td>' + escapeHtml(application.experienceYears) + ' years</td>'
+            + '<td>' + renderDocumentStatusPill(docsLabel) + '</td>'
+            + '<td>' + formatAdminDate(application.submittedAt) + '</td>'
+            + '<td class="table-actions">'
+            + '<button class="action-btn view-application" type="button" data-application-id="' + escapeHtml(application.id) + '">View</button>'
+            + '<button class="action-btn approve approve-admin-application" type="button" data-application-id="' + escapeHtml(application.id) + '">Approve</button>'
+            + '<button class="action-btn reject reject-admin-application" type="button" data-application-id="' + escapeHtml(application.id) + '">Reject</button>'
+            + '</td>'
+            + '</tr>';
+        }).join("");
+        setAdminApplicationMessage("Driver applications loaded from the protected admin API.", false);
+      } catch (error) {
+        adminApplicationsTableBody.innerHTML = '<tr><td colspan="7">Unable to load driver applications.</td></tr>';
+        setAdminApplicationMessage(error.message || "Unable to load driver applications.", true);
+      }
+    }
+
+    function renderApplicationDetail(detail) {
+      const application = detail.application || {};
+      const applicant = detail.applicant || {};
+      const documents = detail.documents || [];
+      const checklist = detail.documentChecklist || {};
+      const initials = String(application.fullName || "UA").split(" ").map(function (part) { return part.charAt(0); }).join("").slice(0, 2).toUpperCase();
+      applicationDetailContent.innerHTML = '<div class="application-profile">'
+        + '<div class="profile-photo admin-photo" aria-hidden="true">' + escapeHtml(initials) + '</div>'
+        + '<div>'
+        + '<h4>' + escapeHtml(application.fullName) + '</h4>'
+        + '<dl class="admin-detail-grid">'
+        + '<div><dt>Application</dt><dd>' + escapeHtml(application.applicationNumber) + '</dd></div>'
+        + '<div><dt>Status</dt><dd>' + renderDocumentStatusPill(application.status || "Pending") + '</dd></div>'
+        + '<div><dt>Age</dt><dd>' + escapeHtml(application.age) + '</dd></div>'
+        + '<div><dt>Gender</dt><dd>' + escapeHtml(application.gender) + '</dd></div>'
+        + '<div><dt>Phone</dt><dd>' + escapeHtml(application.phone || applicant.phone) + '</dd></div>'
+        + '<div><dt>Email</dt><dd>' + escapeHtml(application.email || applicant.email) + '</dd></div>'
+        + '<div><dt>Location</dt><dd>' + escapeHtml(application.location || application.city) + '</dd></div>'
+        + '<div><dt>Licence number</dt><dd>' + escapeHtml(application.driverLicenceNumber) + '</dd></div>'
+        + '<div><dt>Languages</dt><dd>' + escapeHtml((application.languages || []).join(", ")) + '</dd></div>'
+        + '<div><dt>Experience</dt><dd>' + escapeHtml(application.experienceYears) + ' years</dd></div>'
+        + '</dl>'
+        + '</div>'
+        + '</div>'
+        + '<div class="vehicle-tags">' + (application.vehicleTypes || []).map(function (type) { return '<span>' + escapeHtml(type) + '</span>'; }).join("") + '</div>'
+        + '<div class="document-checklist"><h4>Required Document Checklist</h4>'
+        + Object.keys(checklist).map(function (key) { return '<span>' + escapeHtml(key) + ': ' + escapeHtml(checklist[key]) + '</span>'; }).join("")
+        + '</div>'
+        + '<div class="report-summary-block"><h4>Uploaded Documents</h4><p>Private document files stay protected. Admins can review metadata here; production document viewing should use signed private URLs.</p>'
+        + documents.map(function (document) {
+          return '<div class="document-review-row">'
+            + '<strong>' + escapeHtml(document.documentType) + '</strong>'
+            + '<span>' + escapeHtml(document.fileName || "No file name") + '</span>'
+            + renderDocumentStatusPill(document.status)
+            + '<div class="table-actions">'
+            + '<button class="action-btn view-admin-document" type="button" data-document-id="' + escapeHtml(document.id) + '">View metadata</button>'
+            + '<button class="action-btn approve verify-admin-document" type="button" data-document-id="' + escapeHtml(document.id) + '">Mark Verified</button>'
+            + '<button class="action-btn needs-review-admin-document" type="button" data-document-id="' + escapeHtml(document.id) + '">Needs Review</button>'
+            + '<button class="action-btn reject reject-admin-document" type="button" data-document-id="' + escapeHtml(document.id) + '">Reject</button>'
+            + '</div>'
+            + (document.rejectionReason ? '<p class="analytics-note">Reason: ' + escapeHtml(document.rejectionReason) + '</p>' : '')
+            + '</div>';
+        }).join("")
+        + '</div>'
+        + '<div class="panel-actions">'
+        + '<button class="btn btn-secondary set-under-review-admin-application" type="button">Mark Under Review</button>'
+        + '<button class="btn btn-primary approve-admin-application" type="button">Approve Driver</button>'
+        + '<button class="btn reject-panel-btn reject-admin-application" type="button">Reject Application</button>'
+        + '<button class="btn btn-secondary request-info-admin-application" type="button">Request More Information</button>'
+        + '</div>';
+    }
+
+    async function openApplicationDetail(applicationId) {
+      selectedAdminApplicationId = applicationId;
+      applicationPanel.hidden = false;
+      applicationDetailContent.innerHTML = '<p>Loading application detail...</p>';
+      applicationPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+      try {
+        const payload = await window.UmusareAdminAuth.request("/admin/driver-applications/" + applicationId);
+        renderApplicationDetail(payload.data);
+        setAdminApplicationMessage("Application detail loaded.", false);
+      } catch (error) {
+        applicationDetailContent.innerHTML = '<p>Unable to load this application.</p>';
+        setAdminApplicationMessage(error.message || "Unable to load application detail.", true);
+      }
+    }
+
+    async function updateApplicationStatus(applicationId, status) {
+      const body = { status: status };
+      if (status === "Rejected") {
+        const reason = window.prompt("Why is this application being rejected?");
+        if (!reason) return;
+        body.rejectionReason = reason;
+      }
+      if (status === "Needs More Info") {
+        const requestedInfo = window.prompt("What information should the driver provide?");
+        if (!requestedInfo) return;
+        body.requestedInfo = requestedInfo;
+      }
+
+      try {
+        await window.UmusareAdminAuth.request("/admin/driver-applications/" + applicationId + "/status", {
+          method: "PATCH",
+          body: JSON.stringify(body)
+        });
+        const message = status === "Approved" ? "Driver approved successfully." : status === "Rejected" ? "Application rejected." : status === "Needs More Info" ? "More information requested." : "Application marked under review.";
+        setAdminApplicationMessage(message, false);
+        await loadAdminApplications();
+        await openApplicationDetail(applicationId);
+      } catch (error) {
+        setAdminApplicationMessage(error.message || "All required documents must be verified before approval.", true);
+      }
+    }
+
+    async function updateDocumentStatus(documentId, action) {
+      if (!selectedAdminApplicationId) return;
+      const options = { method: "PATCH" };
+      if (action === "reject") {
+        const rejectionReason = window.prompt("Why is this document being rejected?");
+        if (!rejectionReason) return;
+        options.body = JSON.stringify({ rejectionReason: rejectionReason });
+      }
+
+      const actionPath = action === "verify" ? "verify" : action === "reject" ? "reject" : "needs-review";
+      try {
+        await window.UmusareAdminAuth.request("/admin/driver-applications/" + selectedAdminApplicationId + "/documents/" + documentId + "/" + actionPath, options);
+        setAdminApplicationMessage("Document status updated.", false);
+        await openApplicationDetail(selectedAdminApplicationId);
+        await loadAdminApplications();
+      } catch (error) {
+        setAdminApplicationMessage(error.message || "Unable to update document status.", true);
+      }
+    }
+
+    async function viewDocumentMetadata(documentId) {
+      if (!selectedAdminApplicationId) return;
+      try {
+        const payload = await window.UmusareAdminAuth.request("/admin/driver-applications/" + selectedAdminApplicationId + "/documents/" + documentId + "/view");
+        const document = payload.data.document;
+        setAdminApplicationMessage("Protected document metadata: " + document.fileName + " (" + document.status + "). Local placeholder: " + document.localFilePath, false);
+      } catch (error) {
+        setAdminApplicationMessage(error.message || "Unable to load protected document metadata.", true);
+      }
+    }
+
+    function parseRwfAmount(value) {
+      return Number(String(value || "0").replace(/[^\d]/g, "")) || 0;
+    }
+
+    function formatRwf(value) {
+      return new Intl.NumberFormat("en-US").format(value) + " RWF";
+    }
+
+    function countBy(items, getKey) {
+      return items.reduce(function (totals, item) {
+        const key = getKey(item);
+        totals[key] = (totals[key] || 0) + 1;
+        return totals;
+      }, {});
+    }
+
+    function statusBadgeClass(status) {
+      return "booking-status-badge status-" + adminStatusClass(status);
+    }
+
+    function renderDonutChart(targetId, entries) {
+      const target = document.getElementById(targetId);
+      if (!target) return;
+      const total = entries.reduce(function (sum, entry) { return sum + entry.value; }, 0);
+      if (!total) {
+        target.innerHTML = '<p class="analytics-note">No analytics data available yet.</p>';
+        return;
+      }
+      const palette = ["#2B160D", "#8A5632", "#C18A55", "#3A2114", "#6F4429", "#B87844", "#F5E8D2", "#7A5C44"];
+      let cursor = 0;
+      const gradientStops = entries.map(function (entry, index) {
+        const start = cursor;
+        const end = cursor + (entry.value / total) * 100;
+        cursor = end;
+        const color = palette[index % palette.length];
+        return color + " " + start.toFixed(2) + "% " + end.toFixed(2) + "%";
+      }).join(", ");
+
+      target.innerHTML = '<div class="analytics-donut" style="background: conic-gradient(' + gradientStops + ');"><span>' + total + '</span></div><div class="analytics-legend">' + entries.map(function (entry, index) {
+        return '<span><i style="background:' + palette[index % palette.length] + '"></i>' + entry.label + ' <strong>' + entry.value + '</strong></span>';
+      }).join("") + '</div>';
+    }
+
+    function renderHorizontalBars(targetId, entries) {
+      const target = document.getElementById(targetId);
+      if (!target) return;
+      const max = Math.max.apply(null, entries.map(function (entry) { return entry.value; }).concat([0]));
+      if (!max) {
+        target.innerHTML = '<p class="analytics-note">No analytics data available yet.</p>';
+        return;
+      }
+      target.innerHTML = entries.map(function (entry) {
+        const width = Math.max(8, (entry.value / max) * 100);
+        return '<div class="analytics-hbar-row"><div class="analytics-hbar-label"><span>' + entry.label + '</span><strong>' + entry.value + '</strong></div><div class="analytics-hbar-track"><span style="width:' + width + '%"></span></div></div>';
+      }).join("");
+    }
+
+    function analyticsPeriodFromLabel(rangeLabel) {
+      const label = String(rangeLabel || "Today").toLowerCase();
+      if (label.indexOf("week") !== -1) return "week";
+      if (label.indexOf("month") !== -1) return "month";
+      if (label.indexOf("year") !== -1) return "year";
+      return "today";
+    }
+
+    function formatCompactDate(value) {
+      if (!value) return "N/A";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return String(value);
+      return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+    }
+
+    function mapEntries(source, labels) {
+      const data = source || {};
+      const orderedLabels = labels.slice();
+      Object.keys(data).forEach(function (label) {
+        if (!orderedLabels.includes(label)) orderedLabels.push(label);
+      });
+      return orderedLabels.map(function (label) {
+        return { label: label, value: Number(data[label] || 0) };
+      });
+    }
+
+    function renderBookingsOverTime(series) {
+      const target = document.getElementById("bookingsOverTimeChart");
+      if (!target) return;
+      const byDate = {};
+      (series || []).forEach(function (entry) {
+        const dateKey = entry.date || "N/A";
+        if (!byDate[dateKey]) byDate[dateKey] = { label: formatCompactDate(dateKey), quick: 0, plan: 0 };
+        if (entry.bookingType === "Quick Book") byDate[dateKey].quick += Number(entry.count || 0);
+        if (entry.bookingType === "Plan Ahead") byDate[dateKey].plan += Number(entry.count || 0);
+      });
+      const rows = Object.keys(byDate).sort().map(function (key) { return byDate[key]; }).slice(-10);
+      if (!rows.length) {
+        target.innerHTML = '<p class="analytics-note">No bookings found for this period.</p>';
+        return;
+      }
+      const quickBookings = rows.map(function (row) { return row.quick; });
+      const planAheadBookings = rows.map(function (row) { return row.plan; });
+      const max = Math.max.apply(null, quickBookings.concat(planAheadBookings));
+
+      target.innerHTML = rows.map(function (row, index) {
+        const quickHeight = Math.max(12, (quickBookings[index] / max) * 100);
+        const planHeight = Math.max(12, (planAheadBookings[index] / max) * 100);
+        return '<div class="analytics-bar-group"><div class="analytics-bar-stack"><span class="analytics-bar quick" style="height:' + quickHeight + '%" title="Quick Book: ' + quickBookings[index] + '"></span><span class="analytics-bar plan" style="height:' + planHeight + '%" title="Plan Ahead: ' + planAheadBookings[index] + '"></span></div><strong>' + escapeHtml(row.label) + '</strong></div>';
+      }).join("") + '<div class="analytics-bar-legend"><span><i class="quick"></i>Quick Book</span><span><i class="plan"></i>Plan Ahead</span></div>';
+    }
+
+    function renderOverviewCards(analytics) {
+      const grid = document.querySelector("#overview .summary-grid");
+      if (!grid) return;
+      const cards = [
+        ["Pending applications", analytics.pendingDriverApplications],
+        ["Approved drivers", analytics.approvedDrivers],
+        ["Visible drivers", analytics.visibleDrivers],
+        ["Active subscriptions", analytics.activeSubscriptions],
+        ["Pending bookings", analytics.pendingBookings],
+        ["Completed bookings", analytics.completedBookings],
+        ["Open incident reports", analytics.openIncidentReports, "danger-card"],
+        ["Emergency reports", analytics.emergencyReports, "danger-card"],
+        ["Flagged reviews", analytics.flaggedReviews, "warning-card"],
+        ["Dummy revenue this month", formatRwf(Number(analytics.monthlyDummyRevenue || 0))]
+      ];
+
+      grid.innerHTML = cards.map(function (card) {
+        return '<article class="summary-card ' + (card[2] || "") + '"><span>' + escapeHtml(card[0]) + '</span><strong>' + escapeHtml(card[1] || 0) + '</strong></article>';
+      }).join("");
+    }
+
+    function renderRecentActivity(activity) {
+      const overview = document.getElementById("overview");
+      if (!overview) return;
+      let feed = document.getElementById("adminRecentActivityFeed");
+      if (!feed) {
+        feed = document.createElement("div");
+        feed.id = "adminRecentActivityFeed";
+        feed.className = "report-summary-block";
+        overview.appendChild(feed);
+      }
+      const items = activity || [];
+      feed.innerHTML = '<h4>Recent activity</h4>' + (items.length ? items.slice(0, 8).map(function (item) {
+        return '<div class="document-review-row"><strong>' + escapeHtml(item.title) + '</strong><span>' + escapeHtml(item.description || "") + '</span><span>' + escapeHtml(formatCompactDate(item.createdAt)) + '</span></div>';
+      }).join("") : '<p>No recent activity yet.</p>');
+    }
+
+    function renderRecentActivityError() {
+      const overview = document.getElementById("overview");
+      if (!overview) return;
+      let feed = document.getElementById("adminRecentActivityFeed");
+      if (!feed) {
+        feed = document.createElement("div");
+        feed.id = "adminRecentActivityFeed";
+        feed.className = "report-summary-block";
+        overview.appendChild(feed);
+      }
+      feed.innerHTML = '<h4>Recent activity</h4><p>Unable to load recent activity.</p>';
+    }
+
+    async function loadAdminOverviewAnalytics() {
+      const grid = document.querySelector("#overview .summary-grid");
+      if (grid) {
+        grid.innerHTML = '<article class="summary-card"><span>Loading statistics</span><strong>...</strong></article>';
+      }
+      try {
+        const overviewPayload = await window.UmusareAdminAuth.request("/admin/analytics/overview");
+        const activityPayload = await window.UmusareAdminAuth.request("/admin/analytics/recent-activity");
+        renderOverviewCards((overviewPayload.data && overviewPayload.data.analytics) || {});
+        renderRecentActivity((activityPayload.data && activityPayload.data.activity) || []);
+      } catch (error) {
+        if (grid) {
+          grid.innerHTML = '<article class="summary-card danger-card"><span>Unable to load dashboard statistics.</span><strong>!</strong></article>';
+        }
+        renderRecentActivityError();
+      }
+    }
+
+    async function renderAdminAnalytics(rangeLabel) {
+      const period = analyticsPeriodFromLabel(rangeLabel);
+      const summaryGrid = document.getElementById("analyticsSummaryGrid");
+      if (summaryGrid) {
+        summaryGrid.innerHTML = '<article class="analytics-summary-card"><span>Loading analytics</span><strong>...</strong></article>';
+      }
+
+      try {
+        const query = "?period=" + encodeURIComponent(period);
+        const responses = await Promise.all([
+          window.UmusareAdminAuth.request("/admin/analytics/overview"),
+          window.UmusareAdminAuth.request("/admin/analytics/bookings" + query),
+          window.UmusareAdminAuth.request("/admin/analytics/drivers"),
+          window.UmusareAdminAuth.request("/admin/analytics/applications"),
+          window.UmusareAdminAuth.request("/admin/analytics/revenue" + query),
+          window.UmusareAdminAuth.request("/admin/analytics/reports")
+        ]);
+        const overview = (responses[0].data && responses[0].data.analytics) || {};
+        const bookings = (responses[1].data && responses[1].data.analytics) || {};
+        const drivers = (responses[2].data && responses[2].data.analytics) || {};
+        const applications = (responses[3].data && responses[3].data.analytics) || {};
+        const revenue = (responses[4].data && responses[4].data.analytics) || {};
+        const reports = (responses[5].data && responses[5].data.analytics) || {};
+        const summaryCards = [
+          ["Total bookings", overview.totalBookings || 0],
+          ["Completed bookings", bookings.completedBookings || 0],
+          ["Pending bookings", (bookings.bookingsByStatus && bookings.bookingsByStatus.Pending) || overview.pendingBookings || 0],
+          ["Cancelled bookings", bookings.cancelledBookings || 0],
+          ["Visible drivers", overview.visibleDrivers || 0],
+          ["Suspended drivers", overview.suspendedDrivers || 0],
+          ["Pending driver applications", overview.pendingDriverApplications || 0],
+          ["Verified documents", applications.documentsVerified || 0],
+          ["Total clients", overview.totalClients || 0],
+          ["Open incident reports", reports.openReports || overview.openIncidentReports || 0],
+          ["Emergency reports", reports.emergencyReports || overview.emergencyReports || 0],
+          ["Monthly dummy revenue", formatRwf(Number(revenue.monthlyDummyRevenue || 0))],
+          ["Average platform rating", Number(overview.averagePlatformRating || 0).toFixed(1) + " stars"]
+        ];
+        if (summaryGrid) {
+          summaryGrid.innerHTML = summaryCards.map(function (card) {
+            return '<article class="analytics-summary-card"><span>' + escapeHtml(card[0]) + '</span><strong>' + escapeHtml(card[1]) + '</strong></article>';
+          }).join("");
+        }
+        renderBookingsOverTime(bookings.bookingsByDay || []);
+        renderDonutChart("bookingStatusChart", mapEntries(bookings.bookingsByStatus, ["Pending", "Accepted", "Driver on the way", "Trip started", "Completed", "Cancelled", "Reported", "Reviewed"]));
+        renderDonutChart("driverAvailabilityChart", mapEntries(drivers.driversByAvailability, ["Available Now", "Available Later", "Offline"]));
+        renderDonutChart("subscriptionPlanChart", [
+          { label: "Basic", value: revenue.activeBasicSubscriptions || 0 },
+          { label: "Pro", value: revenue.activeProSubscriptions || 0 },
+          { label: "Expired / Pending", value: (overview.expiredSubscriptions || 0) + (overview.pendingSubscriptions || 0) }
+        ]);
+        renderHorizontalBars("incidentTypeChart", mapEntries(reports.reportsByType, ["Safety concern", "Accident", "Misconduct", "Theft or missing property", "Wrong driver arrived", "Vehicle issue", "Payment dispute", "Other"]));
+
+        const topDriversBody = document.getElementById("topDriversTableBody");
+        if (topDriversBody) {
+          topDriversBody.innerHTML = (drivers.topRatedDrivers || []).slice(0, 5).map(function (driver) {
+            return '<tr><td>' + escapeHtml(driver.fullName) + '</td><td>' + escapeHtml(driver.ratingAverage || 0) + '</td><td>' + escapeHtml(driver.completedTrips || 0) + '</td><td><span class="subscription-status-badge plan-' + adminStatusClass(driver.driverBadge || "Verified Driver") + '">' + escapeHtml(driver.driverBadge || "Verified Driver") + '</span></td><td><span class="availability-badge ' + availabilityBadgeClass(driver.availability) + '">' + escapeHtml(driver.availability || "Offline") + '</span></td><td>See reports</td></tr>';
+          }).join("") || '<tr><td colspan="6">No approved drivers found yet.</td></tr>';
+        }
+
+        const clientActivityGrid = document.getElementById("clientActivityGrid");
+        if (clientActivityGrid) {
+          const applicationStatus = applications.applicationsByStatus || {};
+          const driverVisibility = drivers.driversByVisibility || {};
+          clientActivityGrid.innerHTML = [
+            ["Total clients", overview.totalClients || 0],
+            ["Total users", overview.totalUsers || 0],
+            ["Visible drivers", driverVisibility.Visible || overview.visibleDrivers || 0],
+            ["Hidden drivers", driverVisibility.Hidden || 0],
+            ["Applications pending", applicationStatus.Pending || 0],
+            ["Applications approved", applicationStatus.Approved || 0],
+            ["Applications rejected", applicationStatus.Rejected || 0],
+            ["Documents needing review", applications.documentsPendingReview || 0]
+          ].map(function (item) {
+            return '<div class="client-activity-card"><span>' + escapeHtml(item[0]) + '</span><strong>' + escapeHtml(item[1]) + '</strong></div>';
+          }).join("");
+        }
+
+        const revenueDetailGrid = document.getElementById("revenueDetailGrid");
+        if (revenueDetailGrid) {
+          revenueDetailGrid.innerHTML = [
+            ["Estimated dummy revenue", formatRwf(Number(revenue.totalDummyRevenue || 0))],
+            ["Revenue for selected period", formatRwf(Number(revenue.monthlyDummyRevenue || 0))],
+            ["Active Basic subscriptions", revenue.activeBasicSubscriptions || 0],
+            ["Active Pro subscriptions", revenue.activeProSubscriptions || 0],
+            ["Pending payments", revenue.pendingPayments || 0],
+            ["Failed payments", revenue.failedPayments || 0]
+          ].map(function (item) {
+            return '<div class="revenue-detail-card"><span>' + escapeHtml(item[0]) + '</span><strong>' + escapeHtml(item[1]) + '</strong></div>';
+          }).join("");
+        }
+
+        const rangeOutput = document.getElementById("analyticsRangeLabel");
+        if (rangeOutput) {
+          rangeOutput.textContent = "Showing protected API analytics for " + rangeLabel + ".";
+        }
+      } catch (error) {
+        if (summaryGrid) {
+          summaryGrid.innerHTML = '<article class="analytics-summary-card"><span>Unable to load analytics.</span><strong>!</strong></article>';
+        }
+        const rangeOutput = document.getElementById("analyticsRangeLabel");
+        if (rangeOutput) rangeOutput.textContent = "Unable to load dashboard statistics.";
+      }
+    }
+
+    function renderSupportTicketsPlaceholder() {
+      const supportBody = document.querySelector("#adminSupportTicketTable tbody");
+      if (supportBody) {
+        supportBody.innerHTML = '<tr><td colspan="7">Support ticket API is not connected yet. No sample ticket data is shown in production mode.</td></tr>';
+      }
+    }
+
+    loadAdminOverviewAnalytics();
+    renderAdminAnalytics("Today");
+    renderSupportTicketsPlaceholder();
+    loadAdminApplications();
+    loadAdminDrivers();
+    loadAdminBookings();
+    loadAdminReviews();
+    loadAdminReports();
+    loadAdminSubscriptions();
+    loadAdminPayments();
+
+    document.querySelectorAll("[data-analytics-range]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        document.querySelectorAll("[data-analytics-range]").forEach(function (chip) {
+          chip.classList.toggle("is-active", chip === button);
+        });
+        renderAdminAnalytics(button.dataset.analyticsRange);
+      });
+    });
+
+    if (adminApplicationsTableBody) {
+      adminApplicationsTableBody.addEventListener("click", function (event) {
+        const viewButton = event.target.closest(".view-application");
+        const approveButton = event.target.closest(".approve-admin-application");
+        const rejectButton = event.target.closest(".reject-admin-application");
+        if (viewButton) {
+          openApplicationDetail(viewButton.dataset.applicationId);
+        }
+        if (approveButton) {
+          updateApplicationStatus(approveButton.dataset.applicationId, "Approved");
+        }
+        if (rejectButton) {
+          updateApplicationStatus(rejectButton.dataset.applicationId, "Rejected");
+        }
+      });
+    }
+
+    if (applicationPanel) {
+      applicationPanel.addEventListener("click", function (event) {
+        const approveButton = event.target.closest(".approve-admin-application");
+        const rejectButton = event.target.closest(".reject-admin-application");
+        const requestInfoButton = event.target.closest(".request-info-admin-application");
+        const underReviewButton = event.target.closest(".set-under-review-admin-application");
+        const verifyDocumentButton = event.target.closest(".verify-admin-document");
+        const rejectDocumentButton = event.target.closest(".reject-admin-document");
+        const needsReviewButton = event.target.closest(".needs-review-admin-document");
+        const viewDocumentButton = event.target.closest(".view-admin-document");
+
+        if (approveButton) updateApplicationStatus(selectedAdminApplicationId, "Approved");
+        if (rejectButton) updateApplicationStatus(selectedAdminApplicationId, "Rejected");
+        if (requestInfoButton) updateApplicationStatus(selectedAdminApplicationId, "Needs More Info");
+        if (underReviewButton) updateApplicationStatus(selectedAdminApplicationId, "Under Review");
+        if (verifyDocumentButton) updateDocumentStatus(verifyDocumentButton.dataset.documentId, "verify");
+        if (rejectDocumentButton) updateDocumentStatus(rejectDocumentButton.dataset.documentId, "reject");
+        if (needsReviewButton) updateDocumentStatus(needsReviewButton.dataset.documentId, "needs-review");
+        if (viewDocumentButton) viewDocumentMetadata(viewDocumentButton.dataset.documentId);
+      });
+    }
+
+    closeApplicationPanel.addEventListener("click", function () {
+      applicationPanel.hidden = true;
+    });
+
+    viewAdminBookingButtons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        adminBookingDetail.hidden = false;
+        adminBookingDetail.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    if (adminBookingsTableBody) {
+      adminBookingsTableBody.addEventListener("click", function (event) {
+        const viewButton = event.target.closest(".view-admin-booking");
+        if (viewButton) {
+          openAdminBookingDetail(viewButton.dataset.bookingId);
+        }
+      });
+    }
+
+    if (adminBookingDetail) {
+      adminBookingDetail.addEventListener("click", async function (event) {
+        const assignButton = event.target.closest(".assign-admin-booking-driver");
+        const statusButton = event.target.closest(".update-admin-booking-status");
+        if (assignButton) {
+          const driverId = document.getElementById("adminAssignDriverId").value;
+          if (!driverId) {
+            setAdminBookingMessage("Driver ID is required to assign a driver.", true);
+            return;
+          }
+          try {
+            await window.UmusareAdminAuth.request("/admin/bookings/" + assignButton.dataset.bookingId + "/assign-driver", {
+              method: "PATCH",
+              body: JSON.stringify({ driverId: driverId })
+            });
+            await loadAdminBookings();
+            await openAdminBookingDetail(assignButton.dataset.bookingId);
+            setAdminBookingMessage("Driver assigned to booking.", false);
+          } catch (error) {
+            setAdminBookingMessage(error.message || "Unable to assign driver.", true);
+          }
+        }
+        if (statusButton) {
+          const status = document.getElementById("adminBookingStatusSelect").value;
+          const note = document.getElementById("adminBookingNote").value;
+          try {
+            await window.UmusareAdminAuth.request("/admin/bookings/" + statusButton.dataset.bookingId + "/status", {
+              method: "PATCH",
+              body: JSON.stringify({ status: status, note: note || "Admin status update" })
+            });
+            await loadAdminBookings();
+            await openAdminBookingDetail(statusButton.dataset.bookingId);
+            setAdminBookingMessage("Booking status updated.", false);
+          } catch (error) {
+            setAdminBookingMessage(error.message || "Unable to update booking status.", true);
+          }
+        }
+      });
+    }
+
+    closeAdminBookingPanel.addEventListener("click", function () {
+      adminBookingDetail.hidden = true;
+    });
+
+    const adminReviewTable = document.getElementById("adminReviewTable");
+    if (adminReviewTable) {
+      adminReviewTable.addEventListener("click", async function (event) {
+        const reviewId = event.target.dataset.reviewId;
+        if (!reviewId) return;
+        try {
+          if (event.target.classList.contains("mark-admin-review")) {
+            await window.UmusareAdminAuth.request("/admin/reviews/" + reviewId + "/mark-reviewed", { method: "PATCH" });
+          } else if (event.target.classList.contains("flag-admin-review")) {
+            const flagReason = window.prompt("Why should this review be flagged?");
+            if (!flagReason) return;
+            await window.UmusareAdminAuth.request("/admin/reviews/" + reviewId + "/flag", {
+              method: "PATCH",
+              body: JSON.stringify({ flagReason: flagReason })
+            });
+          } else if (event.target.classList.contains("unflag-admin-review")) {
+            await window.UmusareAdminAuth.request("/admin/reviews/" + reviewId + "/unflag", { method: "PATCH" });
+          } else if (event.target.classList.contains("view-admin-review")) {
+            const payload = await window.UmusareAdminAuth.request("/admin/reviews/" + reviewId);
+            const review = payload.data.review;
+            window.alert((review.reviewText || "No review text") + (review.flagReason ? "\nFlag: " + review.flagReason : ""));
+          }
+          await loadAdminReviews();
+        } catch (error) {
+          window.alert("Unable to update review.");
+        }
+      });
+    }
+
+    document.getElementById("adminIncidentTable").addEventListener("click", function (event) {
+      const button = event.target.closest(".open-incident-report");
+      if (button) {
+        if (button.dataset.reportId) {
+          openAdminReportDetail(button.dataset.reportId);
+        } else {
+          incidentReportDetail.hidden = false;
+          incidentReportDetail.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+    });
+
+    if (incidentReportDetail) {
+      incidentReportDetail.addEventListener("click", async function (event) {
+        const statusButton = event.target.closest(".update-admin-report-status");
+        const assignButton = event.target.closest(".assign-admin-report");
+        const noteButton = event.target.closest(".add-admin-report-note");
+        if (!statusButton && !assignButton && !noteButton) return;
+        const reportId = (statusButton || assignButton || noteButton).dataset.reportId;
+        try {
+          if (statusButton) {
+            const status = document.getElementById("adminReportStatusSelect").value;
+            const note = document.getElementById("adminReportNote").value || "Admin status update";
+            await window.UmusareAdminAuth.request("/admin/reports/" + reportId + "/status", {
+              method: "PATCH",
+              body: JSON.stringify({ status: status, note: note })
+            });
+          }
+          if (assignButton) {
+            const assignedAdminId = document.getElementById("adminReportAssignee").value;
+            if (!assignedAdminId) {
+              window.alert("Assigned admin ID is required.");
+              return;
+            }
+            await window.UmusareAdminAuth.request("/admin/reports/" + reportId + "/assign", {
+              method: "PATCH",
+              body: JSON.stringify({ assignedAdminId: assignedAdminId })
+            });
+          }
+          if (noteButton) {
+            const note = document.getElementById("adminReportNote").value;
+            if (!note) {
+              window.alert("Admin note is required.");
+              return;
+            }
+            await window.UmusareAdminAuth.request("/admin/reports/" + reportId + "/add-note", {
+              method: "PATCH",
+              body: JSON.stringify({ note: note })
+            });
+          }
+          await loadAdminReports();
+          await openAdminReportDetail(reportId);
+        } catch (error) {
+          window.alert("Unable to update incident report.");
+        }
+      });
+    }
+
+    closeIncidentReportPanel.addEventListener("click", function () {
+      incidentReportDetail.hidden = true;
+    });
+
+    document.getElementById("adminSubscriptionTable").addEventListener("click", async function (event) {
+      const subscriptionId = event.target.dataset.subscriptionId;
+      if (!subscriptionId) return;
+      try {
+        if (event.target.classList.contains("activate-subscription")) {
+          await window.UmusareAdminAuth.request("/admin/subscriptions/" + subscriptionId + "/activate", { method: "PATCH" });
+        }
+        if (event.target.classList.contains("expire-subscription")) {
+          await window.UmusareAdminAuth.request("/admin/subscriptions/" + subscriptionId + "/expire", { method: "PATCH" });
+        }
+        if (event.target.classList.contains("cancel-subscription")) {
+          const reason = window.prompt("Why are you cancelling this subscription?");
+          if (!reason) return;
+          await window.UmusareAdminAuth.request("/admin/subscriptions/" + subscriptionId + "/cancel", {
+            method: "PATCH",
+            body: JSON.stringify({ reason: reason })
+          });
+        }
+        if (event.target.classList.contains("change-subscription-plan")) {
+          const current = event.target.dataset.currentPlan;
+          await window.UmusareAdminAuth.request("/admin/subscriptions/" + subscriptionId + "/change-plan", {
+            method: "PATCH",
+            body: JSON.stringify({ plan: current === "Basic" ? "Pro" : "Basic" })
+          });
+        }
+        await loadAdminSubscriptions();
+        await loadAdminDrivers();
+      } catch (error) {
+        window.alert("Unable to update subscription.");
+      }
+    });
+
+    document.getElementById("adminPaymentTable").addEventListener("click", async function (event) {
+      const paymentId = event.target.dataset.paymentId;
+      if (!paymentId) return;
+      try {
+        if (event.target.classList.contains("mark-payment-success")) {
+          await window.UmusareAdminAuth.request("/admin/payments/" + paymentId + "/mark-success", { method: "PATCH" });
+        }
+        if (event.target.classList.contains("mark-payment-failed")) {
+          await window.UmusareAdminAuth.request("/admin/payments/" + paymentId + "/mark-failed", { method: "PATCH" });
+        }
+        await loadAdminPayments();
+        await loadAdminSubscriptions();
+        await loadAdminDrivers();
+      } catch (error) {
+        window.alert("Unable to update subscription/payment.");
+      }
+    });
+
+    if (verifiedDriversTableBody) {
+      verifiedDriversTableBody.addEventListener("click", function (event) {
+        const visibilityButton = event.target.closest(".toggle-driver-visibility");
+        const suspendButton = event.target.closest(".suspend-admin-driver");
+        if (visibilityButton) {
+          updateAdminDriverVisibility(visibilityButton.dataset.driverId, visibilityButton.dataset.nextVisibility);
+        }
+        if (suspendButton) {
+          suspendAdminDriver(suspendButton.dataset.driverId);
+        }
+      });
+    }
+
+    if (suspendedDriversTableBody) {
+      suspendedDriversTableBody.addEventListener("click", function (event) {
+        const unsuspendButton = event.target.closest(".unsuspend-admin-driver");
+        if (unsuspendButton) {
+          unsuspendAdminDriver(unsuspendButton.dataset.driverId);
+        }
+      });
+    }
+
+    adminAvailabilityFilters.forEach(function (button) {
+      button.addEventListener("click", function () {
+        const selected = button.dataset.adminAvailabilityFilter;
+        adminAvailabilityFilters.forEach(function (chip) {
+          chip.classList.toggle("is-active", chip === button);
+        });
+        verifiedDriverRows = document.querySelectorAll("#verifiedDriversTable tbody tr[data-availability]");
+        verifiedDriverRows.forEach(function (row) {
+          row.hidden = selected !== "Any availability" && row.dataset.availability !== selected;
+        });
+      });
+    });
+  </script>
+</body>
+</html>
