@@ -1,0 +1,25 @@
+{
+  "rewrites": [
+    { "source": "/quick-book", "destination": "/quick-book.html" },
+    { "source": "/plan-ahead", "destination": "/plan-ahead.html" },
+    { "source": "/find-driver", "destination": "/find-driver.html" },
+    { "source": "/become-driver", "destination": "/become-driver.html" },
+    { "source": "/contact", "destination": "/contact.html" },
+    { "source": "/support", "destination": "/support.html" },
+    { "source": "/terms", "destination": "/terms.html" },
+    { "source": "/privacy-policy", "destination": "/privacy-policy.html" },
+    { "source": "/safety", "destination": "/safety.html" },
+    { "source": "/safety-policy", "destination": "/safety-policy.html" },
+    { "source": "/client-disclaimer", "destination": "/client-disclaimer.html" },
+    { "source": "/driver-agreement", "destination": "/driver-agreement.html" },
+    { "source": "/incident-reporting-policy", "destination": "/incident-reporting-policy.html" },
+    { "source": "/login", "destination": "/login.html" },
+    { "source": "/create-account", "destination": "/create-account.html" },
+    { "source": "/forgot-password", "destination": "/forgot-password.html" },
+    { "source": "/client-login", "destination": "/login.html" },
+    { "source": "/driver-login", "destination": "/login.html" },
+    { "source": "/client-dashboard", "destination": "/client-dashboard.html" },
+    { "source": "/driver-dashboard", "destination": "/driver-dashboard.html" },
+    { "source": "/driver-profile", "destination": "/driver-profile.html" }
+  ]
+}
