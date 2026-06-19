@@ -1,4 +1,5 @@
 (function () {
+  const viteEnv = import.meta && import.meta.env ? import.meta.env : {};
   const isLocalHost = ["", "localhost", "127.0.0.1"].includes(window.location.hostname)
     || window.location.protocol === "file:";
   const isStagingHost = /admin-staging\.umusare\.com$/i.test(window.location.hostname);
@@ -7,11 +8,12 @@
     : isStagingHost
       ? "https://api-staging.umusare.com/api"
       : "https://api.umusare.com/api";
-  const explicitApiBaseUrl = window.VITE_API_BASE_URL || window.UMUSARE_API_BASE_URL;
+  const explicitApiBaseUrl = window.VITE_API_BASE_URL || window.UMUSARE_API_BASE_URL || viteEnv.VITE_API_BASE_URL;
   const storedApiBaseUrl = window.localStorage.getItem("VITE_API_BASE_URL")
     || window.localStorage.getItem("UMUSARE_API_BASE_URL");
   const APP_ENV = window.VITE_APP_ENV
     || window.UMUSARE_APP_ENV
+    || viteEnv.VITE_APP_ENV
     || window.localStorage.getItem("VITE_APP_ENV")
     || window.localStorage.getItem("UMUSARE_APP_ENV")
     || (isLocalHost ? "development" : isStagingHost ? "staging" : "production");
@@ -19,6 +21,7 @@
   const TEST_MODE_ENABLED = !isProduction && String(
     window.VITE_ENABLE_TEST_MODE
     || window.UMUSARE_ENABLE_TEST_MODE
+    || viteEnv.VITE_ENABLE_TEST_MODE
     || window.localStorage.getItem("VITE_ENABLE_TEST_MODE")
     || window.localStorage.getItem("UMUSARE_ENABLE_TEST_MODE")
     || (isLocalHost || isStagingHost ? "true" : "false")
@@ -26,6 +29,7 @@
   const DEMO_DATA_ENABLED = !isProduction && String(
     window.VITE_ENABLE_DEMO_DATA
     || window.UMUSARE_ENABLE_DEMO_DATA
+    || viteEnv.VITE_ENABLE_DEMO_DATA
     || window.localStorage.getItem("VITE_ENABLE_DEMO_DATA")
     || window.localStorage.getItem("UMUSARE_ENABLE_DEMO_DATA")
     || (isStagingHost ? "true" : "false")
@@ -33,6 +37,7 @@
   const DUMMY_PAYMENTS_ENABLED = !isProduction && String(
     window.VITE_ENABLE_DUMMY_PAYMENTS
     || window.UMUSARE_ENABLE_DUMMY_PAYMENTS
+    || viteEnv.VITE_ENABLE_DUMMY_PAYMENTS
     || window.localStorage.getItem("VITE_ENABLE_DUMMY_PAYMENTS")
     || window.localStorage.getItem("UMUSARE_ENABLE_DUMMY_PAYMENTS")
     || (TEST_MODE_ENABLED ? "true" : "false")
@@ -40,6 +45,7 @@
   const REAL_PAYMENTS_ENABLED = String(
     window.VITE_ENABLE_REAL_PAYMENTS
     || window.UMUSARE_ENABLE_REAL_PAYMENTS
+    || viteEnv.VITE_ENABLE_REAL_PAYMENTS
     || window.localStorage.getItem("VITE_ENABLE_REAL_PAYMENTS")
     || window.localStorage.getItem("UMUSARE_ENABLE_REAL_PAYMENTS")
     || "false"
@@ -69,7 +75,10 @@
   }
 
   function publicSitePath() {
-    return "../frontend/index.html";
+    if (isLocalHost || window.location.protocol === "file:") {
+      return "../frontend/index.html";
+    }
+    return "https://umusare.com/";
   }
 
   async function request(path, options) {
@@ -88,7 +97,7 @@
     try {
       response = await fetch(API_BASE_URL + path, Object.assign({}, requestOptions, { headers }));
     } catch (error) {
-      throw new Error("Unable to reach the Umusare backend at " + API_BASE_URL + ". Check that the API is running and that this admin page is using the local API URL.");
+      throw new Error("Unable to reach the Umusare backend. Check the admin API base URL and try again.");
     }
     const payload = await response.json().catch(function () {
       return { success: false, message: "Invalid API response" };

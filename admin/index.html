@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Umusare Admin Login</title>
-  <link rel="stylesheet" href="../frontend/styles.css">
-  <link rel="icon" type="image/png" href="../frontend/assets/images/logo.png">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" type="image/png" href="/assets/images/logo.png">
 </head>
 <body class="admin-body">
   <!-- Admin portal area - protected routes will be added later. -->
@@ -13,8 +13,8 @@
   <!-- Admin API calls are routed through admin-api.js and will connect to protected backend admin endpoints later. -->
   <main class="admin-auth-main">
     <section class="auth-panel admin-login-panel" aria-labelledby="admin-login-title">
-      <a class="site-logo nav-logo admin-login-logo" href="../frontend/index.html" aria-label="Umusare public website">
-        <span class="brand-badge"><img src="../frontend/assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
+      <a class="site-logo nav-logo admin-login-logo" href="https://umusare.com/" aria-label="Umusare public website">
+        <span class="brand-badge"><img src="/assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
         <span class="brand-name">Umusare Admin</span>
       </a>
 
@@ -41,12 +41,13 @@
       </form>
 
       <p class="contact-safety-note">Admin accounts cannot be created from public signup. Create an admin user manually or with a seed script in a later backend step.</p>
-      <a class="auth-link" href="../frontend/index.html">Return to public website</a>
+      <a class="auth-link" href="https://umusare.com/">Return to public website</a>
     </section>
   </main>
 
-  <script src="admin-api.js"></script>
-  <script>
+  <script type="module">
+    import "./admin-api.js";
+
     const adminLoginForm = document.getElementById("adminLoginForm");
     const adminLoginError = document.getElementById("adminLoginError");
 
@@ -64,6 +65,9 @@
       const password = String(formData.get("password") || "");
 
       try {
+        if (!window.UmusareAdminAuth || typeof window.UmusareAdminAuth.loginAdmin !== "function") {
+          throw new Error("Admin login service is not available. Please refresh and try again.");
+        }
         await window.UmusareAdminAuth.loginAdmin({ identifier, password });
         window.location.href = "admin-dashboard.html";
       } catch (error) {

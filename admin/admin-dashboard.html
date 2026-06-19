@@ -4,9 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard | Umusare</title>
-  <link rel="stylesheet" href="../frontend/styles.css">
-  <link rel="icon" type="image/png" href="../frontend/assets/images/logo.png">
-  <script src="admin-api.js"></script>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" type="image/png" href="/assets/images/logo.png">
 </head>
 <body class="admin-body admin-protected-page">
   <!-- Admin portal area - protected routes and admin authentication will be added later. -->
@@ -14,8 +13,8 @@
   <!-- Admin API calls will be connected to the backend later. -->
   <div class="admin-layout">
     <aside class="admin-sidebar">
-      <a class="site-logo nav-logo admin-logo" href="../frontend/index.html" aria-label="Umusare home">
-        <span class="brand-badge"><img src="../frontend/assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
+      <a class="site-logo nav-logo admin-logo" href="https://umusare.com/" aria-label="Umusare home">
+        <span class="brand-badge"><img src="/assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
         <span class="brand-name">Umusare Admin</span>
       </a>
       <nav class="admin-menu" aria-label="Admin navigation">
@@ -40,7 +39,7 @@
           <p class="admin-session-label" id="adminSessionLabel">Verifying admin session...</p>
         </div>
         <div class="admin-topbar-actions">
-          <a class="btn btn-secondary" href="../frontend/index.html">View Site</a>
+          <a class="btn btn-secondary" href="https://umusare.com/">View Site</a>
           <button class="btn btn-primary" type="button" id="adminLogoutButton">Logout</button>
         </div>
       </header>
@@ -446,8 +445,10 @@
     </main>
   </div>
 
-  <script src="../frontend/site.js"></script>
-  <script>
+  <script src="/site.js"></script>
+  <script type="module">
+    import "./admin-api.js";
+
     const adminLogoutButton = document.getElementById("adminLogoutButton");
     const adminSessionLabel = document.getElementById("adminSessionLabel");
 
@@ -818,7 +819,7 @@
           + '<td><span class="availability-badge ' + availabilityBadgeClass(driver.availability) + '">' + escapeHtml(driver.availability) + '</span></td>'
           + '<td>' + escapeHtml(driver.completedTrips || 0) + '</td>'
           + '<td class="table-actions">'
-          + '<a class="action-btn" href="../frontend/driver-profile.html?driver=' + escapeHtml(driver.publicDriverId) + '">View Profile</a>'
+          + '<a class="action-btn" href="https://umusare.com/driver-profile?driver=' + escapeHtml(driver.publicDriverId) + '">View Profile</a>'
           + '<button class="action-btn toggle-driver-visibility" type="button" data-driver-id="' + escapeHtml(driver.id) + '" data-next-visibility="' + visibilityAction + '">' + (visibilityAction === "Visible" ? "Show" : "Hide") + '</button>'
           + '<button class="action-btn reject suspend-admin-driver" type="button" data-driver-id="' + escapeHtml(driver.id) + '">Suspend</button>'
           + '</td>'
