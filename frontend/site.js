@@ -1,3 +1,5 @@
+document.documentElement.classList.add("umusare-js");
+
 function getRuntimeFlag(flagName, defaultValue) {
   const directValue = window[flagName];
   const storedValue = window.localStorage ? window.localStorage.getItem(flagName) : null;
@@ -98,6 +100,12 @@ function initUmusareIntro() {
   let fallbackTimer;
   let maxTimer;
 
+  function dispatchIntroComplete() {
+    window.setTimeout(function notifyHero() {
+      window.dispatchEvent(new CustomEvent("umusare:intro-complete"));
+    }, 0);
+  }
+
   function markSeen() {
     try {
       window.sessionStorage.setItem(storageKey, "true");
@@ -118,6 +126,7 @@ function initUmusareIntro() {
     markSeen();
     unlockPage();
     intro.classList.add("is-hidden");
+    dispatchIntroComplete();
     window.setTimeout(function removeIntro() {
       if (intro.parentNode) intro.parentNode.removeChild(intro);
     }, prefersReducedMotion ? 180 : 760);
@@ -141,6 +150,7 @@ function initUmusareIntro() {
     if (!shouldReplay && window.sessionStorage.getItem(storageKey) === "true") {
       intro.remove();
       unlockPage();
+      dispatchIntroComplete();
       return;
     }
   } catch (error) {
@@ -185,6 +195,60 @@ function initUmusareIntro() {
 }
 
 initUmusareIntro();
+
+function initUmusareHero() {
+  const hero = document.querySelector(".u-home-hero");
+  if (!hero || document.body.dataset.page !== "home") return;
+
+  const prefersReducedMotion = window.matchMedia
+    && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const hasIntro = Boolean(document.querySelector("[data-umusare-intro]"));
+  let hasStarted = false;
+  let pointerFrame;
+
+  function startHero() {
+    if (hasStarted) return;
+    hasStarted = true;
+    hero.classList.add("is-hero-ready");
+  }
+
+  function resetDepth() {
+    hero.style.setProperty("--hero-depth-x", "0px");
+    hero.style.setProperty("--hero-depth-y", "0px");
+  }
+
+  function bindDepthEffect() {
+    if (prefersReducedMotion || !window.matchMedia("(pointer: fine)").matches) return;
+
+    hero.addEventListener("pointermove", function handlePointerMove(event) {
+      if (pointerFrame) return;
+      pointerFrame = window.requestAnimationFrame(function updateDepth() {
+        pointerFrame = null;
+        const bounds = hero.getBoundingClientRect();
+        const x = ((event.clientX - bounds.left) / bounds.width - 0.5) * 18;
+        const y = ((event.clientY - bounds.top) / bounds.height - 0.5) * 12;
+        hero.style.setProperty("--hero-depth-x", x.toFixed(2) + "px");
+        hero.style.setProperty("--hero-depth-y", y.toFixed(2) + "px");
+      });
+    });
+
+    hero.addEventListener("pointerleave", resetDepth);
+  }
+
+  window.addEventListener("umusare:intro-complete", startHero, { once: true });
+
+  if (!hasIntro || !document.body.classList.contains("umusare-intro-lock")) {
+    window.setTimeout(startHero, 80);
+  }
+
+  window.addEventListener("scroll", function handleHeroScroll() {
+    document.body.classList.toggle("hero-has-scrolled", window.scrollY > 40);
+  }, { passive: true });
+
+  bindDepthEffect();
+}
+
+initUmusareHero();
 
 const revealTargets = document.querySelectorAll(
   ".hero-content, .hero-visual, .editorial-section, .page-intro, .driver-card, .form-panel, .profile-header, .profile-panel, .admin-section, .quick-book-shell"
