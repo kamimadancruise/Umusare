@@ -174,6 +174,9 @@ function initUmusareIntro() {
   }, 6000);
 
   const playResult = video.play();
+  if (video.readyState >= 2) {
+    showVideo();
+  }
   if (playResult && typeof playResult.catch === "function") {
     playResult.catch(function () {
       showFallbackThenClose(1400);
