@@ -91,6 +91,9 @@ function initUmusareIntro() {
   const skipButton = intro.querySelector("[data-umusare-intro-skip]");
   const prefersReducedMotion = window.matchMedia
     && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const shouldReplay = window.location.search.includes("intro=1");
+  const startedAt = Date.now();
+  const minimumVisibleMs = prefersReducedMotion ? 700 : 1800;
   let isClosing = false;
   let fallbackTimer;
   let maxTimer;
@@ -120,13 +123,22 @@ function initUmusareIntro() {
     }, prefersReducedMotion ? 180 : 760);
   }
 
+  function completeIntro() {
+    const elapsed = Date.now() - startedAt;
+    window.setTimeout(closeIntro, Math.max(0, minimumVisibleMs - elapsed));
+  }
+
   function showFallbackThenClose(delay) {
     intro.classList.add("use-fallback");
     fallbackTimer = window.setTimeout(closeIntro, delay);
   }
 
+  function showVideo() {
+    intro.classList.add("video-ready");
+  }
+
   try {
-    if (window.sessionStorage.getItem(storageKey) === "true") {
+    if (!shouldReplay && window.sessionStorage.getItem(storageKey) === "true") {
       intro.remove();
       unlockPage();
       return;
@@ -143,7 +155,10 @@ function initUmusareIntro() {
     return;
   }
 
-  video.addEventListener("ended", closeIntro, { once: true });
+  video.addEventListener("loadeddata", showVideo, { once: true });
+  video.addEventListener("canplay", showVideo, { once: true });
+  video.addEventListener("playing", showVideo, { once: true });
+  video.addEventListener("ended", completeIntro, { once: true });
   video.addEventListener("error", function () {
     if (window.console && window.console.warn) {
       window.console.warn("Umusare intro video could not be loaded; showing fallback logo.");

@@ -106,8 +106,13 @@ body.umusare-intro-lock {
 }
 
 .umusare-intro__video,
-.umusare-intro__fallback {
+.umusare-intro__fallback,
+.umusare-intro__wordmark {
   grid-area: 1 / 1;
+}
+
+.umusare-intro__video,
+.umusare-intro__fallback {
   width: 100%;
   max-height: 72vh;
   max-height: 72svh;
@@ -115,16 +120,38 @@ body.umusare-intro-lock {
   border-radius: 6px;
 }
 
+.umusare-intro__video {
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 240ms ease;
+}
+
 .umusare-intro__fallback {
-  display: none;
+  position: relative;
+  z-index: 1;
+  display: block;
+  opacity: 1;
+}
+
+.umusare-intro__wordmark {
+  z-index: 0;
+  color: var(--color-cream);
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 13vw, 8rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: 0;
+  opacity: 0.2;
+}
+
+.umusare-intro.video-ready .umusare-intro__video {
+  opacity: 1;
 }
 
 .umusare-intro.use-fallback .umusare-intro__video {
-  display: none;
-}
-
-.umusare-intro.use-fallback .umusare-intro__fallback {
-  display: block;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .umusare-intro__skip {
