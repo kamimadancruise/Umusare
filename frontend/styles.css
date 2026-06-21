@@ -100,8 +100,8 @@ body.umusare-intro-lock {
   max-height: 72svh;
   display: grid;
   place-items: center;
-  opacity: 0;
-  transform: scale(0.98);
+  opacity: 1;
+  transform: scale(1);
   animation: umusareIntroMediaIn 720ms ease forwards;
 }
 
@@ -188,6 +188,11 @@ body.umusare-intro-lock .u-home {
 }
 
 @keyframes umusareIntroMediaIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -201,6 +206,10 @@ body.umusare-intro-lock .u-home {
     animation: none;
     transition-duration: 160ms;
     transform: none;
+  }
+
+  .umusare-intro__media {
+    opacity: 1;
   }
 }
 
