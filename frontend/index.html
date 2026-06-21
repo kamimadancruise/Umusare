@@ -9,6 +9,17 @@
 </head>
 <body data-page="home" class="u-home-page">
   <!-- Public website area: client and driver-facing pages live in /frontend. -->
+  <div id="umusare-intro" class="umusare-intro" role="dialog" aria-label="Umusare introduction" data-umusare-intro>
+    <button type="button" class="umusare-intro__skip" aria-label="Skip introduction" data-umusare-intro-skip>
+      Skip
+    </button>
+    <div class="umusare-intro__media">
+      <video class="umusare-intro__video" muted autoplay playsinline preload="auto" poster="/assets/intro/umusare-logo-fallback.png" data-umusare-intro-video>
+        <source src="/assets/intro/umusare-logo-intro.mp4" type="video/mp4">
+      </video>
+      <img class="umusare-intro__fallback" src="/assets/intro/umusare-logo-fallback.png" alt="Umusare" data-umusare-intro-fallback>
+    </div>
+  </div>
   <main class="u-home">
     <section class="u-home-panel u-home-hero" id="home">
       <!-- Phase 1 image: assets/images/umusare-hero-1.png -->

@@ -68,6 +68,131 @@ body {
   overflow-x: hidden;
 }
 
+body.umusare-intro-lock {
+  overflow: hidden;
+}
+
+.umusare-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: clamp(24px, 5vw, 72px);
+  background: var(--color-espresso);
+  color: var(--color-cream);
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 680ms ease, visibility 680ms ease;
+}
+
+.umusare-intro.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.umusare-intro__media {
+  width: min(76vw, 680px);
+  max-height: 72vh;
+  max-height: 72svh;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transform: scale(0.98);
+  animation: umusareIntroMediaIn 720ms ease forwards;
+}
+
+.umusare-intro__video,
+.umusare-intro__fallback {
+  grid-area: 1 / 1;
+  width: 100%;
+  max-height: 72vh;
+  max-height: 72svh;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+.umusare-intro__fallback {
+  display: none;
+}
+
+.umusare-intro.use-fallback .umusare-intro__video {
+  display: none;
+}
+
+.umusare-intro.use-fallback .umusare-intro__fallback {
+  display: block;
+}
+
+.umusare-intro__skip {
+  position: fixed;
+  top: max(18px, env(safe-area-inset-top));
+  right: max(18px, env(safe-area-inset-right));
+  min-width: 64px;
+  min-height: 42px;
+  border: 1px solid rgba(245, 232, 210, 0.42);
+  border-radius: 999px;
+  background: rgba(43, 22, 13, 0.72);
+  color: var(--color-cream);
+  font: inherit;
+  font-size: 0.88rem;
+  letter-spacing: 0;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+}
+
+.umusare-intro__skip:focus-visible {
+  outline: 3px solid var(--color-caramel);
+  outline-offset: 3px;
+}
+
+.u-home {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 700ms ease, transform 700ms ease;
+}
+
+body.umusare-intro-lock .u-home {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+@keyframes umusareIntroMediaIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .umusare-intro,
+  .umusare-intro__media,
+  .u-home {
+    animation: none;
+    transition-duration: 160ms;
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .umusare-intro {
+    padding: 24px;
+  }
+
+  .umusare-intro__media {
+    width: min(88vw, 420px);
+    max-height: 66svh;
+  }
+
+  .umusare-intro__video,
+  .umusare-intro__fallback {
+    max-height: 66svh;
+  }
+}
+
 body::before {
   content: "";
   position: fixed;

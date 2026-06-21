@@ -82,6 +82,92 @@ function updateDemoAccessVisibility() {
 updateDemoAccessVisibility();
 window.UmusareUpdateDemoAccessVisibility = updateDemoAccessVisibility;
 
+function initUmusareIntro() {
+  const intro = document.querySelector("[data-umusare-intro]");
+  if (!intro || document.body.dataset.page !== "home") return;
+
+  const storageKey = "umusareIntroSeen";
+  const video = intro.querySelector("[data-umusare-intro-video]");
+  const skipButton = intro.querySelector("[data-umusare-intro-skip]");
+  const prefersReducedMotion = window.matchMedia
+    && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let isClosing = false;
+  let fallbackTimer;
+  let maxTimer;
+
+  function markSeen() {
+    try {
+      window.sessionStorage.setItem(storageKey, "true");
+    } catch (error) {
+      // Session storage may be unavailable in private or restricted contexts.
+    }
+  }
+
+  function unlockPage() {
+    document.body.classList.remove("umusare-intro-lock");
+  }
+
+  function closeIntro() {
+    if (isClosing) return;
+    isClosing = true;
+    window.clearTimeout(fallbackTimer);
+    window.clearTimeout(maxTimer);
+    markSeen();
+    unlockPage();
+    intro.classList.add("is-hidden");
+    window.setTimeout(function removeIntro() {
+      if (intro.parentNode) intro.parentNode.removeChild(intro);
+    }, prefersReducedMotion ? 180 : 760);
+  }
+
+  function showFallbackThenClose(delay) {
+    intro.classList.add("use-fallback");
+    fallbackTimer = window.setTimeout(closeIntro, delay);
+  }
+
+  try {
+    if (window.sessionStorage.getItem(storageKey) === "true") {
+      intro.remove();
+      unlockPage();
+      return;
+    }
+  } catch (error) {
+    // Continue without session persistence if storage is unavailable.
+  }
+
+  document.body.classList.add("umusare-intro-lock");
+  skipButton?.addEventListener("click", closeIntro);
+
+  if (prefersReducedMotion || !video || !video.canPlayType || !video.canPlayType("video/mp4")) {
+    showFallbackThenClose(prefersReducedMotion ? 900 : 1400);
+    return;
+  }
+
+  video.addEventListener("ended", closeIntro, { once: true });
+  video.addEventListener("error", function () {
+    if (window.console && window.console.warn) {
+      window.console.warn("Umusare intro video could not be loaded; showing fallback logo.");
+    }
+    showFallbackThenClose(1400);
+  }, { once: true });
+  video.addEventListener("stalled", function () {
+    showFallbackThenClose(1400);
+  }, { once: true });
+
+  maxTimer = window.setTimeout(function introTimeout() {
+    if (!isClosing) closeIntro();
+  }, 6000);
+
+  const playResult = video.play();
+  if (playResult && typeof playResult.catch === "function") {
+    playResult.catch(function () {
+      showFallbackThenClose(1400);
+    });
+  }
+}
+
+initUmusareIntro();
+
 const revealTargets = document.querySelectorAll(
   ".hero-content, .hero-visual, .editorial-section, .page-intro, .driver-card, .form-panel, .profile-header, .profile-panel, .admin-section, .quick-book-shell"
 );

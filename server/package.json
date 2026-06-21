@@ -9,6 +9,7 @@
     "start": "node src/server.js",
     "test:db": "node src/seed/testDbConnection.js",
     "seed:admin": "node src/seed/seedAdmin.js",
+    "reset:admin-password": "node src/scripts/resetAdminPassword.js",
     "seed:demo": "node src/seed/seedDemoData.js",
     "seed:clear-demo": "node src/seed/clearDemoData.js",
     "clear:demo": "node src/seed/clearDemoData.js"
