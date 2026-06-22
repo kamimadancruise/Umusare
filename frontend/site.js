@@ -250,6 +250,43 @@ function initUmusareHero() {
 
 initUmusareHero();
 
+function initUmusareCurtainScroll() {
+  const sections = Array.from(document.querySelectorAll("[data-curtain-section]"));
+  if (!sections.length || document.body.dataset.page !== "home") return;
+
+  const prefersReducedMotion = window.matchMedia
+    && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function revealSection(section) {
+    section.classList.add("is-curtain-visible");
+  }
+
+  if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+    sections.forEach(revealSection);
+    return;
+  }
+
+  const curtainObserver = new IntersectionObserver(
+    function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        revealSection(entry.target);
+        curtainObserver.unobserve(entry.target);
+      });
+    },
+    {
+      threshold: 0.24,
+      rootMargin: "0px 0px -10% 0px"
+    }
+  );
+
+  sections.forEach(function (section) {
+    curtainObserver.observe(section);
+  });
+}
+
+initUmusareCurtainScroll();
+
 const revealTargets = document.querySelectorAll(
   ".hero-content, .hero-visual, .editorial-section, .page-intro, .driver-card, .form-panel, .profile-header, .profile-panel, .admin-section, .quick-book-shell"
 );

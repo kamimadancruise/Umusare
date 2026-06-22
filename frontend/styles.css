@@ -4108,6 +4108,19 @@ textarea:focus {
   .u-home-hero-bg {
     transform: scale(1.03);
   }
+
+  .u-home-curtain-section::after {
+    display: none;
+  }
+
+  .umusare-js .u-home-curtain-section:not(.is-curtain-visible) .u-home-bg,
+  .umusare-js .u-home-curtain-section:not(.is-curtain-visible) .u-home-handoff-copy,
+  .umusare-js .u-home-curtain-section:not(.is-curtain-visible) .u-home-handoff-card,
+  .umusare-js .u-home-curtain-section:not(.is-curtain-visible) .u-home-feature-intro,
+  .umusare-js .u-home-curtain-section:not(.is-curtain-visible) .u-home-sticker {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .u-home-handoff {
@@ -4116,6 +4129,69 @@ textarea:focus {
   gap: clamp(24px, 6vw, 86px);
   align-items: center;
   padding: clamp(80px, 12vw, 150px) clamp(20px, 6vw, 96px);
+}
+
+.u-home-curtain-section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 72% 22%, rgba(193, 138, 85, 0.24), transparent 28%),
+    linear-gradient(115deg, var(--color-espresso), var(--color-deep-chocolate) 58%, rgba(58, 33, 20, 0.96));
+  transform: translateY(0);
+}
+
+.umusare-js .u-home-curtain-section::after {
+  transition: transform 980ms var(--ease), opacity 980ms var(--ease);
+}
+
+.umusare-js .u-home-curtain-section.is-curtain-visible::after {
+  opacity: 0;
+  transform: translateY(-105%);
+}
+
+.umusare-js .u-home-curtain-section:not(.is-curtain-visible) .u-home-bg {
+  opacity: 0.72;
+  transform: scale(1.08);
+}
+
+.umusare-js .u-home-curtain-section .u-home-bg {
+  transition: opacity 900ms var(--ease), transform 1600ms var(--ease);
+}
+
+.umusare-js .u-home-curtain-section:not(.is-curtain-visible) .u-home-handoff-copy,
+.umusare-js .u-home-curtain-section:not(.is-curtain-visible) .u-home-handoff-card,
+.umusare-js .u-home-curtain-section:not(.is-curtain-visible) .u-home-feature-intro,
+.umusare-js .u-home-curtain-section:not(.is-curtain-visible) .u-home-sticker {
+  opacity: 0;
+  transform: translateY(34px);
+}
+
+.umusare-js .u-home-curtain-section .u-home-handoff-copy,
+.umusare-js .u-home-curtain-section .u-home-handoff-card,
+.umusare-js .u-home-curtain-section .u-home-feature-intro,
+.umusare-js .u-home-curtain-section .u-home-sticker {
+  transition: opacity 720ms var(--ease), transform 720ms var(--ease);
+}
+
+.umusare-js .u-home-curtain-section.is-curtain-visible .u-home-handoff-copy,
+.umusare-js .u-home-curtain-section.is-curtain-visible .u-home-feature-intro {
+  transition-delay: 180ms;
+}
+
+.umusare-js .u-home-curtain-section.is-curtain-visible .u-home-handoff-card,
+.umusare-js .u-home-curtain-section.is-curtain-visible .u-home-sticker:nth-child(1) {
+  transition-delay: 320ms;
+}
+
+.umusare-js .u-home-curtain-section.is-curtain-visible .u-home-sticker:nth-child(2) {
+  transition-delay: 440ms;
+}
+
+.umusare-js .u-home-curtain-section.is-curtain-visible .u-home-sticker:nth-child(3) {
+  transition-delay: 560ms;
 }
 
 .u-home-handoff-copy {
