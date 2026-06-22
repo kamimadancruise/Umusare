@@ -7,23 +7,12 @@
   <link rel="stylesheet" href="styles.css?v=umusare-home-no-brown-1">
   <link rel="icon" type="image/png" href="assets/images/logo.png">
 </head>
-<body data-page="home" class="u-home-page umusare-intro-lock">
+<body data-page="home" class="u-home-page">
   <!-- Public website area: client and driver-facing pages live in /frontend. -->
-  <div id="umusare-intro" class="umusare-intro" role="dialog" aria-label="Umusare introduction" data-umusare-intro>
-    <button type="button" class="umusare-intro__skip" aria-label="Skip introduction" data-umusare-intro-skip>
-      Skip
-    </button>
-    <div class="umusare-intro__media">
-      <video class="umusare-intro__video" muted autoplay playsinline preload="auto" poster="/assets/intro/umusare-logo-fallback.png" data-umusare-intro-video>
-        <source src="/assets/intro/umusare-logo-intro.mp4" type="video/mp4">
-      </video>
-      <img class="umusare-intro__fallback" src="/assets/intro/umusare-logo-fallback.png" alt="Umusare" data-umusare-intro-fallback>
-      <span class="umusare-intro__wordmark" aria-hidden="true">Umusare</span>
-    </div>
-  </div>
   <main class="u-home">
     <section class="u-home-panel u-home-hero" id="home">
-      <img class="u-home-bg u-home-hero-bg" src="/assets/hero/umusare-hero.png" alt="">
+      <!-- Phase 1 image: assets/images/umusare-hero-1.png -->
+      <img class="u-home-bg" src="assets/images/umusare-hero-1.png" alt="">
       <div class="u-home-overlay"></div>
 
       <header class="u-home-topbar">
@@ -62,23 +51,18 @@
 
       <div class="u-home-headline">
         <p>Verified designated drivers in Rwanda</p>
-        <h1>
-          <span class="u-home-title-line"><span>Your car.</span></span>
-          <span class="u-home-title-line"><span>Your destination.</span></span>
-          <span class="u-home-title-line"><span>Our trusted driver.</span></span>
-        </h1>
-        <p class="u-home-description">Book a verified driver to take you where you need to go in your own vehicle.</p>
+        <h1>Your car. Your destination. Our trusted driver.</h1>
       </div>
 
       <div class="u-home-actions">
         <a class="u-home-pill primary" href="quick-book.html">Quick Book</a>
-        <a class="u-home-pill secondary" href="plan-ahead.html">Plan Ahead</a>
+        <a class="u-home-pill secondary" href="find-driver.html">Find a Driver</a>
       </div>
 
-      <a class="u-home-scroll" href="#homepage-story"><span>Scroll to explore</span></a>
+      <p class="u-home-scroll">Scroll to explore</p>
     </section>
 
-    <section class="u-home-panel u-home-handoff u-home-curtain-section" id="homepage-story" data-curtain-section>
+    <section class="u-home-panel u-home-handoff">
       <!-- Phase 2 image: assets/images/umusare-hero-2.png -->
       <img class="u-home-bg" src="assets/images/umusare-hero-2.png" alt="">
       <div class="u-home-overlay softer"></div>
@@ -92,7 +76,7 @@
       </figure>
     </section>
 
-    <section class="u-home-panel u-home-features u-home-curtain-section" data-curtain-section>
+    <section class="u-home-panel u-home-features">
       <!-- Phase 3 image: assets/images/umusare-hero-3.png -->
       <img class="u-home-bg" src="assets/images/umusare-hero-3.png" alt="">
       <div class="u-home-overlay"></div>
@@ -170,7 +154,7 @@
     <button class="mobile-quick-book-close" type="button" aria-label="Hide quick book button" data-mobile-quick-book-close>&times;</button>
   </div>
 
-  <script src="site.js?v=umusare-intro-3"></script>
+  <script src="site.js"></script>
   <script>
     const homeMenu = document.querySelector("[data-home-menu]");
     const homeNav = document.querySelector("[data-home-nav]");
