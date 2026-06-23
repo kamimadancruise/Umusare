@@ -4,21 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Umusare Rwanda</title>
-  <link rel="stylesheet" href="styles.css?v=umusare-home-no-brown-1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="styles.css?v=umusare-progress-2">
   <link rel="icon" type="image/png" href="assets/images/logo.png">
+  <link rel="preload" as="image" href="assets/images/homepage/hero/hero-01.webp?v=umusare-hero-2">
+  <link rel="preload" as="image" href="assets/images/homepage/hero/hero-04.webp?v=umusare-hero-2">
 </head>
 <body data-page="home" class="u-home-page">
   <!-- Public website area: client and driver-facing pages live in /frontend. -->
   <main class="u-home">
-    <section class="u-home-panel u-home-hero" id="home">
-      <!-- Phase 1 image: assets/images/umusare-hero-1.png -->
-      <img class="u-home-bg" src="assets/images/umusare-hero-1.png" alt="">
-      <div class="u-home-overlay"></div>
-
+    <section
+      class="cinematic-hero"
+      id="home"
+      aria-label="Umusare designated driver story"
+      data-cinematic-hero
+      data-progress-section
+      data-progress-label="Hero"
+      data-progress-theme="light"
+    >
       <header class="u-home-topbar">
         <a class="u-home-brand" href="index.html" aria-label="Umusare home">
-          <img src="assets/images/logo.png" alt="">
-          <span>Umusare</span>
+          <span class="umusare-brand-mark" aria-hidden="true"></span>
+          <span class="umusare-brand-wordmark">UMUSARE</span>
         </a>
 
         <button class="u-home-menu-button" type="button" aria-expanded="false" aria-controls="uHomeNav" data-home-menu>
@@ -49,56 +57,135 @@
         </nav>
       </header>
 
-      <div class="u-home-headline">
-        <p>Verified designated drivers in Rwanda</p>
-        <h1>Your car. Your destination. Our trusted driver.</h1>
-      </div>
+      <div class="cinematic-hero__stage" data-cinematic-stage>
+        <article
+          class="cinematic-hero__scene cinematic-hero__scene--one is-active"
+          data-cinematic-scene
+          data-scene-index="0"
+          style="--scene-background: #0a0a0a; --scene-text: #ffffff; --scene-secondary-text: #dce5f0; --scene-accent: #2f6bff; --scene-highlight: #ffe88a;"
+        >
+          <img
+            class="cinematic-hero__image"
+            src="assets/images/homepage/hero/hero-01.webp?v=umusare-hero-2"
+            alt="A client handing car keys to a designated driver beside a car."
+            width="1680"
+            height="945"
+            loading="eager"
+            fetchpriority="high"
+          >
+          <div class="cinematic-hero__overlay" aria-hidden="true"></div>
+          <div class="cinematic-hero__content cinematic-hero__content--left" data-scene-content>
+            <p class="cinematic-hero__eyebrow">RWANDA&rsquo;S DESIGNATED DRIVER PLATFORM</p>
+            <h1 class="cinematic-hero__title cinematic-hero__title--brand" data-hero-headline data-mask-reveal="lines" data-mask-trigger="timeline" aria-label="Your car. Our driver.">Your car.<br>Our driver.</h1>
+            <p class="cinematic-hero__copy">A verified driver comes to you and safely drives your own car.</p>
+          </div>
+          <div class="cinematic-hero__actions cinematic-hero__actions--scene-one" data-scene-actions>
+            <a class="u-home-pill primary cinematic-hero__button" href="quick-book.html">Quick Book</a>
+            <a class="u-home-pill secondary cinematic-hero__button" href="plan-ahead.html">Plan Ahead</a>
+          </div>
+        </article>
 
-      <div class="u-home-actions">
-        <a class="u-home-pill primary" href="quick-book.html">Quick Book</a>
-        <a class="u-home-pill secondary" href="find-driver.html">Find a Driver</a>
-      </div>
+        <article
+          class="cinematic-hero__scene cinematic-hero__scene--two"
+          data-cinematic-scene
+          data-scene-index="1"
+          style="--scene-background: #100f0d; --scene-text: #fffdf4; --scene-secondary-text: #f2e7cf; --scene-accent: #ffe88a; --scene-button: #2f6bff; --scene-urgent-accent: #f05252;"
+        >
+          <img
+            class="cinematic-hero__image"
+            src="assets/images/homepage/hero/hero-04.webp?v=umusare-hero-2"
+            alt="A nightlife guest handing car keys to a designated driver outside a club."
+            width="1792"
+            height="1024"
+            loading="eager"
+          >
+          <div class="cinematic-hero__overlay" aria-hidden="true"></div>
+          <div class="cinematic-hero__content cinematic-hero__content--upper-left" data-scene-content>
+            <p class="cinematic-hero__eyebrow">HAND OVER THE KEYS</p>
+            <h2 class="cinematic-hero__title" data-hero-headline data-mask-reveal="lines" data-mask-trigger="timeline">Enjoy the night.<br><span>Leave the drive to us.</span></h2>
+            <p class="cinematic-hero__copy">Book a verified Umusare driver to get you and your car home safely.</p>
+            <div class="cinematic-hero__actions">
+              <a class="u-home-pill primary cinematic-hero__button" href="quick-book.html">Quick Book</a>
+            </div>
+          </div>
+        </article>
 
-      <p class="u-home-scroll">Scroll to explore</p>
-    </section>
+        <article
+          class="cinematic-hero__scene cinematic-hero__scene--three"
+          data-cinematic-scene
+          data-scene-index="2"
+          style="--scene-light-background: #ffffff; --scene-dark-background: #0a0a0a; --scene-dark-text: #0e2947; --scene-light-text: #ffffff; --scene-accent: #2f6bff; --scene-highlight: #ffe88a;"
+        >
+          <img
+            class="cinematic-hero__image"
+            src="assets/images/homepage/hero/hero-03.webp?v=umusare-hero-2"
+            alt="Illustration warning against drinking and driving without a designated driver."
+            width="1920"
+            height="1080"
+            loading="lazy"
+          >
+          <div class="cinematic-hero__overlay" aria-hidden="true"></div>
+          <div class="cinematic-hero__content cinematic-hero__content--safety" data-scene-content>
+            <p class="cinematic-hero__eyebrow">ONE SMART DECISION</p>
+            <p class="cinematic-hero__copy">Book before you drink&mdash;or the moment you know you should not drive.</p>
+            <div class="cinematic-hero__actions">
+              <a class="u-home-pill primary cinematic-hero__button" href="plan-ahead.html">Plan Ahead</a>
+            </div>
+          </div>
+        </article>
 
-    <section class="u-home-panel u-home-handoff">
-      <!-- Phase 2 image: assets/images/umusare-hero-2.png -->
-      <img class="u-home-bg" src="assets/images/umusare-hero-2.png" alt="">
-      <div class="u-home-overlay softer"></div>
-      <div class="u-home-handoff-copy">
-        <p>02 / verified handoff</p>
-        <h2>Share the keys with confidence.</h2>
-        <span>Umusare connects you with a verified independent driver who drives your own vehicle while you stay in control of the trip.</span>
-      </div>
-      <figure class="u-home-handoff-card">
-        <img src="assets/images/umusare-hero-2.png" alt="A car key being handed to a verified Umusare driver">
-      </figure>
-    </section>
+        <article
+          class="cinematic-hero__scene cinematic-hero__scene--four"
+          data-cinematic-scene
+          data-scene-index="3"
+          style="--scene-background: #080b12; --scene-text: #ffffff; --scene-secondary-text: #e2e9f3; --scene-accent: #ffe88a; --scene-button: #2f6bff; --scene-small-accent: #f05252;"
+        >
+          <img
+            class="cinematic-hero__image"
+            src="assets/images/homepage/hero/hero-02.webp?v=umusare-hero-2"
+            alt="Busy Kigali nightlife parking area filled with vehicles and visitors."
+            width="1792"
+            height="1024"
+            loading="lazy"
+          >
+          <div class="cinematic-hero__overlay" aria-hidden="true"></div>
+          <div class="cinematic-hero__content cinematic-hero__content--top" data-scene-content>
+            <p class="cinematic-hero__eyebrow">BUILT FOR KIGALI NIGHTS</p>
+            <h2 class="cinematic-hero__title" data-hero-headline data-mask-reveal="lines" data-mask-trigger="timeline">When the city is moving,<br><span>Umusare is ready.</span></h2>
+            <p class="cinematic-hero__copy">Quick Book for now. Plan Ahead for later.</p>
+            <div class="cinematic-hero__actions">
+              <a class="u-home-pill primary cinematic-hero__button" href="quick-book.html">Quick Book</a>
+              <a class="cinematic-hero__text-link" href="plan-ahead.html">Plan Ahead</a>
+            </div>
+          </div>
+        </article>
 
-    <section class="u-home-panel u-home-features">
-      <!-- Phase 3 image: assets/images/umusare-hero-3.png -->
-      <img class="u-home-bg" src="assets/images/umusare-hero-3.png" alt="">
-      <div class="u-home-overlay"></div>
-      <div class="u-home-feature-intro">
-        <p>03 / choose your path</p>
-        <h2>Move fast now, schedule later, or choose your driver.</h2>
-      </div>
-      <div class="u-home-stickers">
-        <a class="u-home-sticker" href="quick-book.html"><span>01</span><strong>Quick Book</strong><small>Get a driver fast</small></a>
-        <a class="u-home-sticker" href="plan-ahead.html"><span>02</span><strong>Plan Ahead</strong><small>Schedule your trip in advance</small></a>
-        <a class="u-home-sticker" href="find-driver.html"><span>03</span><strong>Find a Driver</strong><small>Browse verified drivers</small></a>
+        <div class="cinematic-hero__indicator" aria-hidden="true">
+          <span data-hero-current>01</span>
+          <span class="cinematic-hero__indicator-divider"></span>
+          <span>04</span>
+        </div>
+
+        <p class="cinematic-hero__continue" data-hero-continue>Continue to explore</p>
       </div>
     </section>
   </main>
 
-  <section class="u-home-followup" aria-label="Explore Umusare">
-    <p>Umusare platform</p>
-    <h2>A calm front door into every trip, driver, and safety tool.</h2>
-    <div>
-      <a href="quick-book.html">Quick Book</a>
-      <a href="plan-ahead.html">Plan Ahead</a>
-      <a href="become-driver.html">Become a Driver</a>
+  <section
+    class="u-home-followup"
+    aria-label="Explore Umusare"
+    data-reveal-group
+    data-progress-section
+    data-progress-label="Explore Umusare"
+    data-progress-theme="light"
+  >
+    <p data-reveal="eyebrow">Umusare platform</p>
+    <h2 data-mask-reveal="lines" data-mask-trigger="scroll">A calm front door into every trip, driver, and safety tool.</h2>
+    <div data-reveal="cta">
+      <a href="quick-book.html" data-mask-reveal="words" data-mask-trigger="scroll">Quick Book</a>
+      <a href="plan-ahead.html" data-mask-reveal="words" data-mask-trigger="scroll">Plan Ahead</a>
+      <a href="find-driver.html" data-mask-reveal="words" data-mask-trigger="scroll" data-mask-direction="left">Find a Driver</a>
+      <a href="become-driver.html" data-mask-reveal="words" data-mask-trigger="scroll" data-mask-direction="right">Become a Driver</a>
       <a href="client-dashboard.html">Client Dashboard</a>
       <a href="driver-dashboard.html">Driver Dashboard</a>
       <!-- Admin portal access is separated and will be protected by admin authentication later. -->
@@ -107,7 +194,7 @@
     </div>
   </section>
 
-  <footer class="site-footer" id="contact">
+  <footer class="site-footer" id="contact" data-progress-section data-progress-label="Contact" data-progress-theme="light">
     <div class="footer-brand">
       <a class="site-logo footer-logo" href="index.html" aria-label="Umusare home">
         <span class="brand-badge"><img src="assets/images/logo.png" alt="" onerror="this.hidden=true"></span>
@@ -154,35 +241,19 @@
     <button class="mobile-quick-book-close" type="button" aria-label="Hide quick book button" data-mobile-quick-book-close>&times;</button>
   </div>
 
-  <script src="site.js"></script>
-  <script>
-    const homeMenu = document.querySelector("[data-home-menu]");
-    const homeNav = document.querySelector("[data-home-nav]");
-    const featureMenuButton = document.querySelector("[data-feature-menu-button]");
-    const featureMenu = document.querySelector("[data-feature-menu]");
+  <div class="u-home-progress" data-home-progress aria-hidden="true">
+    <span class="u-home-progress__number" data-progress-number>01 / 03</span>
+    <span class="u-home-progress__track">
+      <span class="u-home-progress__fill" data-progress-fill></span>
+    </span>
+    <span class="u-home-progress__label" data-progress-active-label>HERO · 1 / 4</span>
+  </div>
 
-    function closeHomeMenus() {
-      homeNav?.classList.remove("is-open");
-      featureMenu?.classList.remove("is-open");
-      homeMenu?.setAttribute("aria-expanded", "false");
-      featureMenuButton?.setAttribute("aria-expanded", "false");
-    }
-
-    homeMenu?.addEventListener("click", function () {
-      const isOpen = homeNav.classList.toggle("is-open");
-      homeMenu.setAttribute("aria-expanded", String(isOpen));
-    });
-
-    featureMenuButton?.addEventListener("click", function () {
-      const isOpen = featureMenu.classList.toggle("is-open");
-      featureMenuButton.setAttribute("aria-expanded", String(isOpen));
-    });
-
-    homeNav?.addEventListener("click", function (event) {
-      if (event.target.closest("a")) {
-        closeHomeMenus();
-      }
-    });
+  <script src="site.js?v=umusare-progress-2"></script>
+  <script type="module" src="/home-hero.js?v=umusare-progress-2"></script>
+  <script type="module">
+    import { initUmusareHomepageAnimations } from "/home-hero.js?v=umusare-progress-2";
+    initUmusareHomepageAnimations();
   </script>
 </body>
 </html>
