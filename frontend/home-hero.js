@@ -5,17 +5,6 @@ import { SplitText } from "gsap/SplitText";
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 function getMotionPreference() {
-  const parameters = new URLSearchParams(window.location.search);
-  const override = parameters.get("motion");
-
-  if (override === "full") {
-    return { reduceMotion: false, forced: true, mode: "full" };
-  }
-
-  if (override === "reduce") {
-    return { reduceMotion: true, forced: true, mode: "reduce" };
-  }
-
   return {
     reduceMotion: false,
     forced: false,
