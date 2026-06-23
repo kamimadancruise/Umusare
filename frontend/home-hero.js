@@ -361,7 +361,6 @@ const revealGroups = Array.from(document.querySelectorAll("body.u-home-page [dat
 if (revealGroups.length && !window.__UMUSARE_HOMEPAGE_REVEALS__) {
   window.__UMUSARE_HOMEPAGE_REVEALS__ = true;
 
-  const reduceMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
   const revealSplits = [];
   const revealTimelines = [];
   let resizeTimer = 0;
@@ -554,12 +553,6 @@ if (revealGroups.length && !window.__UMUSARE_HOMEPAGE_REVEALS__) {
     window.clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(buildHomepageReveals, 180);
   }, { passive: true });
-
-  if (!motionPreference.forced && reduceMotionQuery.addEventListener) {
-    reduceMotionQuery.addEventListener("change", buildHomepageReveals);
-  } else if (!motionPreference.forced && reduceMotionQuery.addListener) {
-    reduceMotionQuery.addListener(buildHomepageReveals);
-  }
 
   initHomepageReveals().catch((error) => {
     console.warn("Umusare homepage text reveals failed to initialize.", error);
