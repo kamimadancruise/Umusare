@@ -5,10 +5,31 @@ import { SplitText } from "gsap/SplitText";
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 function getMotionPreference() {
+  const parameters = new URLSearchParams(window.location.search);
+  const override = parameters.get("motion");
+
+  if (override === "full") {
+    return {
+      reduceMotion: false,
+      forced: true,
+      mode: "full"
+    };
+  }
+
+  if (override === "reduce") {
+    return {
+      reduceMotion: true,
+      forced: true,
+      mode: "reduce"
+    };
+  }
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   return {
-    reduceMotion: false,
+    reduceMotion,
     forced: false,
-    mode: "full"
+    mode: reduceMotion ? "reduce" : "full"
   };
 }
 
@@ -156,13 +177,15 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
     const content = scene.querySelector("[data-scene-content]");
     const headline = scene.querySelector("[data-hero-headline]");
     const image = scene.querySelector(".cinematic-hero__image");
+    const curtain = scene.querySelector("[data-curtain-mask]");
+    const media = scene.querySelector("[data-scene-media]");
     const bodyItems = [
       ...(content
         ? Array.from(content.querySelectorAll(".cinematic-hero__eyebrow, .cinematic-hero__support-line, .cinematic-hero__copy"))
         : []),
       ...Array.from(scene.querySelectorAll("[data-scene-actions], [data-scene-content] .cinematic-hero__actions"))
     ];
-    return { content, headline, image, bodyItems };
+    return { content, headline, image, curtain, media, bodyItems };
   }
 
   function prepareScene(scene) {
@@ -196,43 +219,38 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
   }
 
   function revealScene(timeline, scene, prepared, at) {
-    const { image } = getSceneParts(scene);
+    const { curtain, media, image } = getSceneParts(scene);
     const parallaxY = numberFromData(image, "parallaxY", -3);
     const parallaxScale = numberFromData(image, "parallaxScale", 1.04);
+    const curtainOpenAt = at + 0.84;
 
-    timeline.to(scene, { autoAlpha: 1, clipPath: "inset(0% 0% 0% 0%)", duration: 0.62, ease: "none" }, at);
-    if (image) {
+    if (curtain) {
+      timeline.to(curtain, {
+        clipPath: "inset(0% 0% 0% 0% round 0rem)",
+        duration: 0.84,
+        ease: "none"
+      }, at);
+    }
+
+    if (media) {
       timeline.fromTo(
-        image,
+        media,
         { scale: Math.max(1.04, parallaxScale + 0.02), yPercent: Math.abs(parallaxY) * 0.35 },
-        { scale: Math.max(1.01, parallaxScale - 0.02), yPercent: 0, duration: 0.9, ease: "none" },
+        { scale: Math.max(1.005, parallaxScale - 0.03), yPercent: 0, duration: 0.84, ease: "none" },
         at
       );
     }
-    revealHeroHeadline(timeline, prepared, at + 0.12);
+
+    revealHeroHeadline(timeline, prepared, curtainOpenAt + 0.03);
     if (prepared.bodyItems.length) {
       timeline.to(prepared.bodyItems, {
         y: 0,
         autoAlpha: 1,
-        duration: 0.34,
-        stagger: 0.012,
-        ease: "none"
-      }, at + 0.22);
+        duration: 0.28,
+        stagger: 0.01,
+        ease: "power3.out"
+      }, curtainOpenAt + 0.12);
     }
-  }
-
-  function exitScene(timeline, scene, at) {
-    const { content, image } = getSceneParts(scene);
-    const parallaxY = numberFromData(image, "parallaxY", -3);
-    const parallaxScale = numberFromData(image, "parallaxScale", 1.04);
-
-    if (content) {
-      timeline.to(content, { y: -20, autoAlpha: 0, duration: 0.36, ease: "none" }, at);
-    }
-    if (image) {
-      timeline.to(image, { scale: parallaxScale, yPercent: parallaxY, duration: 0.62, ease: "none" }, at);
-    }
-    timeline.to(scene, { autoAlpha: 0, clipPath: "inset(0% 0% 100% 0%)", duration: 0.58, ease: "none" }, at + 0.2);
   }
 
   function clearSplits() {
@@ -251,16 +269,36 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
 
       const preparedScenes = scenes.map(prepareScene);
       const sceneImages = scenes.map((scene) => scene.querySelector(".cinematic-hero__image"));
+      const sceneCurtains = scenes.map((scene) => scene.querySelector("[data-curtain-mask]"));
+      const sceneMedia = scenes.map((scene) => scene.querySelector("[data-scene-media]"));
+      const closedCurtain = "inset(100% 0% 0% 0% round 1.5rem 1.5rem 0 0)";
+      const openCurtain = "inset(0% 0% 0% 0% round 0rem)";
+      const sceneActivationTimes = [0];
 
-      gsap.set(scenes, { autoAlpha: 0, clipPath: "inset(100% 0% 0% 0%)" });
-      gsap.set(scenes[0], { autoAlpha: 1, clipPath: "inset(0% 0% 0% 0%)" });
-      gsap.set(sceneImages.filter(Boolean), (index, image) => ({
-        scale: Math.max(1.04, numberFromData(image, "parallaxScale", 1.04) + 0.02),
-        yPercent: Math.abs(numberFromData(image, "parallaxY", -3)) * 0.35
-      }));
-      if (sceneImages[0]) {
-        gsap.set(sceneImages[0], {
-          scale: Math.max(1.01, numberFromData(sceneImages[0], "parallaxScale", 1.035) - 0.02),
+      scenes.forEach((scene, index) => {
+        gsap.set(scene, {
+          autoAlpha: 1,
+          clipPath: "none",
+          zIndex: index + 1,
+          clearProps: "transform"
+        });
+      });
+
+      gsap.set(sceneCurtains.filter(Boolean), { clipPath: closedCurtain });
+      if (sceneCurtains[0]) {
+        gsap.set(sceneCurtains[0], { clipPath: openCurtain });
+      }
+      gsap.set(sceneImages.filter(Boolean), { clearProps: "transform" });
+      sceneMedia.filter(Boolean).forEach((mediaElement, index) => {
+        const image = sceneImages[index];
+        gsap.set(mediaElement, {
+          scale: Math.max(1.04, numberFromData(image, "parallaxScale", 1.04) + 0.02),
+          yPercent: Math.abs(numberFromData(image, "parallaxY", -3)) * 0.35
+        });
+      });
+      if (sceneMedia[0]) {
+        gsap.set(sceneMedia[0], {
+          scale: Math.max(1.005, numberFromData(sceneImages[0], "parallaxScale", 1.035) - 0.03),
           yPercent: 0
         });
       }
@@ -287,12 +325,16 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
           pin: true,
           scrub: 0.8,
           invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            setActiveScene(Math.round(self.progress * (scenes.length - 1)));
+          onUpdate: () => {
+            const currentTime = timeline.time();
+            const currentScene = sceneActivationTimes.reduce((activeIndex, activationTime, index) => (
+              currentTime >= activationTime ? index : activeIndex
+            ), 0);
+            setActiveScene(currentScene);
             if (continuePrompt) {
               gsap.to(continuePrompt, {
-                autoAlpha: self.progress > 0.92 ? 1 : 0,
-                y: self.progress > 0.92 ? 0 : 12,
+                autoAlpha: timeline.progress() > 0.92 ? 1 : 0,
+                y: timeline.progress() > 0.92 ? 0 : 12,
                 duration: 0.18,
                 overwrite: true
               });
@@ -302,11 +344,10 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
       });
 
       scenes.slice(1).forEach((scene, index) => {
-        const previousScene = scenes[index];
-        const position = index + 0.72;
-        exitScene(timeline, previousScene, position);
+        const position = index * 1.34 + 0.82;
+        sceneActivationTimes[index + 1] = position + 0.7;
         revealScene(timeline, scene, preparedScenes[index + 1], position + 0.12);
-        timeline.to({}, { duration: 0.32 });
+        timeline.to({}, { duration: 0.34 });
       });
 
       sceneImages.forEach((image) => {
@@ -323,7 +364,13 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
         timeline.kill();
         clearSplits();
         hero.classList.remove("is-animated");
-        gsap.set([...scenes, ...sceneImages.filter(Boolean), continuePrompt].filter(Boolean), { clearProps: "all" });
+        gsap.set([
+          ...scenes,
+          ...sceneCurtains.filter(Boolean),
+          ...sceneMedia.filter(Boolean),
+          ...sceneImages.filter(Boolean),
+          continuePrompt
+        ].filter(Boolean), { clearProps: "all" });
       };
     });
     }
@@ -331,6 +378,10 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
     media.add(motionPreference.reduceMotion ? "all" : "(max-width: 768px)", () => {
       hero.classList.remove("is-animated");
       setActiveScene(0);
+      const sceneCurtains = scenes.map((scene) => scene.querySelector("[data-curtain-mask]")).filter(Boolean);
+      const sceneMedia = scenes.map((scene) => scene.querySelector("[data-scene-media]")).filter(Boolean);
+      const sceneImages = scenes.map((scene) => scene.querySelector(".cinematic-hero__image")).filter(Boolean);
+      gsap.set([...scenes, ...sceneCurtains, ...sceneMedia, ...sceneImages], { clearProps: "all" });
       updateMotionDebug(motionDebug, motionPreference);
 
       const observer = new IntersectionObserver((entries) => {

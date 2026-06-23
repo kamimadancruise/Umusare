@@ -6,12 +6,12 @@
   <title>Umusare Rwanda</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=umusare-motion-full-2">
+  <link rel="stylesheet" href="styles.css?v=umusare-curtain-1">
   <link rel="icon" type="image/png" href="assets/images/logo.png">
   <link rel="preload" as="image" href="assets/images/homepage/hero/hero-01.webp?v=umusare-hero-2">
   <link rel="preload" as="image" href="assets/images/homepage/hero/hero-04.webp?v=umusare-hero-2">
 </head>
-<body data-page="home" class="u-home-page u-motion-full">
+<body data-page="home" class="u-home-page">
   <!-- Public website area: client and driver-facing pages live in /frontend. -->
   <main class="u-home">
     <section
@@ -64,19 +64,23 @@
           data-scene-index="0"
           style="--scene-background: #0a0a0a; --scene-text: #ffffff; --scene-secondary-text: #dce5f0; --scene-accent: #2f6bff; --scene-highlight: #ffe88a;"
         >
-          <img
-            class="cinematic-hero__image"
-            data-parallax
-            data-parallax-y="-3"
-            data-parallax-scale="1.035"
-            src="assets/images/homepage/hero/hero-01.webp?v=umusare-hero-2"
-            alt="A client handing car keys to a designated driver beside a car."
-            width="1680"
-            height="945"
-            loading="eager"
-            fetchpriority="high"
-          >
-          <div class="cinematic-hero__overlay" aria-hidden="true"></div>
+          <div class="cinematic-hero__curtain-mask" data-curtain-mask>
+            <div class="cinematic-hero__media" data-scene-media>
+              <img
+                class="cinematic-hero__image"
+                data-parallax
+                data-parallax-y="-3"
+                data-parallax-scale="1.035"
+                src="assets/images/homepage/hero/hero-01.webp?v=umusare-hero-2"
+                alt="A client handing car keys to a designated driver beside a car."
+                width="1680"
+                height="945"
+                loading="eager"
+                fetchpriority="high"
+              >
+            </div>
+            <div class="cinematic-hero__overlay" aria-hidden="true"></div>
+          </div>
           <div class="cinematic-hero__content cinematic-hero__content--left" data-scene-content>
             <p class="cinematic-hero__eyebrow">RWANDA&rsquo;S DESIGNATED DRIVER PLATFORM</p>
             <h1 class="cinematic-hero__title cinematic-hero__title--brand" data-hero-headline data-mask-reveal="lines" data-mask-trigger="timeline" aria-label="Your car. Our driver.">Your car.<br>Our driver.</h1>
@@ -94,18 +98,22 @@
           data-scene-index="1"
           style="--scene-background: #100f0d; --scene-text: #fffdf4; --scene-secondary-text: #f2e7cf; --scene-accent: #ffe88a; --scene-button: #2f6bff; --scene-urgent-accent: #f05252;"
         >
-          <img
-            class="cinematic-hero__image"
-            data-parallax
-            data-parallax-y="-4"
-            data-parallax-scale="1.045"
-            src="assets/images/homepage/hero/hero-04.webp?v=umusare-hero-2"
-            alt="A nightlife guest handing car keys to a designated driver outside a club."
-            width="1792"
-            height="1024"
-            loading="eager"
-          >
-          <div class="cinematic-hero__overlay" aria-hidden="true"></div>
+          <div class="cinematic-hero__curtain-mask" data-curtain-mask>
+            <div class="cinematic-hero__media" data-scene-media>
+              <img
+                class="cinematic-hero__image"
+                data-parallax
+                data-parallax-y="-4"
+                data-parallax-scale="1.045"
+                src="assets/images/homepage/hero/hero-04.webp?v=umusare-hero-2"
+                alt="A nightlife guest handing car keys to a designated driver outside a club."
+                width="1792"
+                height="1024"
+                loading="eager"
+              >
+            </div>
+            <div class="cinematic-hero__overlay" aria-hidden="true"></div>
+          </div>
           <div class="cinematic-hero__content cinematic-hero__content--upper-left" data-scene-content>
             <p class="cinematic-hero__eyebrow">HAND OVER THE KEYS</p>
             <h2 class="cinematic-hero__title" data-hero-headline data-mask-reveal="lines" data-mask-trigger="timeline">Enjoy the night.<br><span>Leave the drive to us.</span></h2>
@@ -122,18 +130,22 @@
           data-scene-index="2"
           style="--scene-light-background: #ffffff; --scene-dark-background: #0a0a0a; --scene-dark-text: #0e2947; --scene-light-text: #ffffff; --scene-accent: #2f6bff; --scene-highlight: #ffe88a;"
         >
-          <img
-            class="cinematic-hero__image"
-            data-parallax
-            data-parallax-y="-2"
-            data-parallax-scale="1.025"
-            src="assets/images/homepage/hero/hero-03.webp?v=umusare-hero-2"
-            alt="Illustration warning against drinking and driving without a designated driver."
-            width="1920"
-            height="1080"
-            loading="lazy"
-          >
-          <div class="cinematic-hero__overlay" aria-hidden="true"></div>
+          <div class="cinematic-hero__curtain-mask" data-curtain-mask>
+            <div class="cinematic-hero__media" data-scene-media>
+              <img
+                class="cinematic-hero__image"
+                data-parallax
+                data-parallax-y="-2"
+                data-parallax-scale="1.025"
+                src="assets/images/homepage/hero/hero-03.webp?v=umusare-hero-2"
+                alt="Illustration warning against drinking and driving without a designated driver."
+                width="1920"
+                height="1080"
+                loading="lazy"
+              >
+            </div>
+            <div class="cinematic-hero__overlay" aria-hidden="true"></div>
+          </div>
           <div class="cinematic-hero__content cinematic-hero__content--safety" data-scene-content>
             <p class="cinematic-hero__eyebrow">ONE SMART DECISION</p>
             <p class="cinematic-hero__copy">Book before you drink&mdash;or the moment you know you should not drive.</p>
@@ -149,18 +161,22 @@
           data-scene-index="3"
           style="--scene-background: #080b12; --scene-text: #ffffff; --scene-secondary-text: #e2e9f3; --scene-accent: #ffe88a; --scene-button: #2f6bff; --scene-small-accent: #f05252;"
         >
-          <img
-            class="cinematic-hero__image"
-            data-parallax
-            data-parallax-y="-4"
-            data-parallax-scale="1.04"
-            src="assets/images/homepage/hero/hero-02.webp?v=umusare-hero-2"
-            alt="Busy Kigali nightlife parking area filled with vehicles and visitors."
-            width="1792"
-            height="1024"
-            loading="lazy"
-          >
-          <div class="cinematic-hero__overlay" aria-hidden="true"></div>
+          <div class="cinematic-hero__curtain-mask" data-curtain-mask>
+            <div class="cinematic-hero__media" data-scene-media>
+              <img
+                class="cinematic-hero__image"
+                data-parallax
+                data-parallax-y="-4"
+                data-parallax-scale="1.04"
+                src="assets/images/homepage/hero/hero-02.webp?v=umusare-hero-2"
+                alt="Busy Kigali nightlife parking area filled with vehicles and visitors."
+                width="1792"
+                height="1024"
+                loading="lazy"
+              >
+            </div>
+            <div class="cinematic-hero__overlay" aria-hidden="true"></div>
+          </div>
           <div class="cinematic-hero__content cinematic-hero__content--top" data-scene-content>
             <p class="cinematic-hero__eyebrow">BUILT FOR KIGALI NIGHTS</p>
             <h2 class="cinematic-hero__title" data-hero-headline data-mask-reveal="lines" data-mask-trigger="timeline">When the city is moving,<br><span>Umusare is ready.</span></h2>
@@ -270,10 +286,10 @@
     <span class="u-home-progress__label" data-progress-active-label>HERO · 1 / 4</span>
   </div>
 
-  <script src="site.js?v=umusare-motion-full-2"></script>
-  <script type="module" src="/home-hero.js?v=umusare-motion-full-2"></script>
+  <script src="site.js?v=umusare-curtain-1"></script>
+  <script type="module" src="/home-hero.js?v=umusare-curtain-1"></script>
   <script type="module">
-    import { initUmusareHomepageAnimations } from "/home-hero.js?v=umusare-motion-full-2";
+    import { initUmusareHomepageAnimations } from "/home-hero.js?v=umusare-curtain-1";
     initUmusareHomepageAnimations();
   </script>
 </body>

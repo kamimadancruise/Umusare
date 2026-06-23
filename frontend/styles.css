@@ -7388,6 +7388,47 @@ body.u-home-page .mask-line {
   }
 }
 
+/* Hero curtain separation: scene stacking, curtain clipping, and text movement are independent. */
+body.u-home-page .cinematic-hero__curtain-mask,
+body.u-home-page .cinematic-hero__media {
+  position: absolute;
+  inset: 0;
+}
+
+body.u-home-page .cinematic-hero__curtain-mask {
+  z-index: 0;
+  overflow: hidden;
+  overflow: clip;
+  background: var(--scene-background, #080b12);
+  will-change: clip-path;
+}
+
+body.u-home-page .cinematic-hero__media {
+  transform-origin: center;
+  will-change: transform;
+}
+
+body.u-home-page .cinematic-hero__curtain-mask .cinematic-hero__image,
+body.u-home-page .cinematic-hero__curtain-mask .cinematic-hero__overlay {
+  position: absolute;
+  inset: 0;
+}
+
+body.u-home-page .cinematic-hero__curtain-mask .cinematic-hero__image {
+  transform: none;
+}
+
+body.u-home-page .cinematic-hero.is-animated .cinematic-hero__scene {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (max-width: 768px) {
+  body.u-home-page .cinematic-hero__curtain-mask {
+    clip-path: none !important;
+  }
+}
+
 @media (max-width: 768px) {
   body.u-home-page .u-home-progress {
     top: 0 !important;
