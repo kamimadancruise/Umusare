@@ -17,6 +17,11 @@ function getRuntimeEnvironment() {
     || (isLocalHost ? "development" : "production");
 }
 
+function getUmusareMotionMode() {
+  const requestedMode = new URLSearchParams(window.location.search).get("motion");
+  return requestedMode === "reduce" ? "reduce" : "full";
+}
+
 function addTestModeBanner() {
   const environment = getRuntimeEnvironment();
   const hasExplicitTestMode = window.VITE_ENABLE_TEST_MODE !== undefined
@@ -103,7 +108,7 @@ function initPublicNavigation() {
   const featurePanel = document.querySelector("[data-feature-menu]");
   const menuToggle = homeToggle || standardToggle;
   const menuPanel = homePanel || standardPanel;
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduceMotion = getUmusareMotionMode() === "reduce";
   let lastScrollY = window.scrollY || 0;
   let ticking = false;
   let isMenuOpen = false;
@@ -205,7 +210,7 @@ function initPublicNavigation() {
 
   window.requestAnimationFrame(function () {
     navRoot.classList.add("is-nav-ready");
-    if (!prefersReducedMotion) {
+    if (!reduceMotion) {
       navRoot.classList.add("is-nav-entered");
     }
   });
@@ -310,7 +315,7 @@ function initPublicFeatureCardLighting() {
   if (document.body.classList.contains("admin-body")) return;
 
   const canUsePointerLight = window.matchMedia("(hover: hover) and (pointer: fine)").matches
-    && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    && getUmusareMotionMode() !== "reduce";
   const featureCards = document.querySelectorAll(".u-home-feature-menu a, .u-home-sticker, .u-home-followup a");
 
   featureCards.forEach(function (card) {

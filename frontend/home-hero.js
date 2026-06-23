@@ -4,32 +4,26 @@ import { SplitText } from "gsap/SplitText";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
-function getMotionPreference() {
+function getUmusareMotionMode() {
   const parameters = new URLSearchParams(window.location.search);
-  const override = parameters.get("motion");
+  const requestedMode = parameters.get("motion");
 
-  if (override === "full") {
+  if (requestedMode === "reduce") {
     return {
-      reduceMotion: false,
-      forced: true,
-      mode: "full"
-    };
-  }
-
-  if (override === "reduce") {
-    return {
+      mode: "reduce",
+      fullMotion: false,
       reduceMotion: true,
-      forced: true,
-      mode: "reduce"
+      developerOverride: true,
+      forced: true
     };
   }
-
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   return {
-    reduceMotion,
-    forced: false,
-    mode: reduceMotion ? "reduce" : "full"
+    mode: "full",
+    fullMotion: true,
+    reduceMotion: false,
+    developerOverride: requestedMode === "full",
+    forced: requestedMode === "full"
   };
 }
 
@@ -38,9 +32,16 @@ function createMotionDebug(motionPreference) {
   if (!import.meta.env.DEV && !hasMotionOverride) return null;
 
   const debug = {
+    mode: motionPreference.mode,
     motionMode: motionPreference.mode,
+    normalUrlUsesFullMotion: motionPreference.fullMotion,
+    osReducedMotionIgnored: true,
+    developerOverride: motionPreference.developerOverride,
     forcedMotionMode: motionPreference.forced,
     gsapVersion: gsap.version,
+    heroInitialized: false,
+    splitTextInitialized: false,
+    lenisInitialized: Boolean(window.lenis || window.Lenis || window.__lenis),
     splitTargets: 0,
     successfulSplits: 0,
     generatedMasks: 0,
@@ -59,12 +60,18 @@ function updateMotionDebug(debugState, motionPreference) {
   if (!debugState) return;
 
   debugState.debug.motionMode = motionPreference.mode;
+  debugState.debug.mode = motionPreference.mode;
+  debugState.debug.normalUrlUsesFullMotion = motionPreference.fullMotion;
+  debugState.debug.osReducedMotionIgnored = true;
+  debugState.debug.developerOverride = motionPreference.developerOverride;
   debugState.debug.forcedMotionMode = motionPreference.forced;
   debugState.debug.gsapVersion = gsap.version;
   debugState.debug.splitTargets = debugState.splitTargets.size;
   debugState.debug.successfulSplits = debugState.successfulSplits.size;
   debugState.debug.generatedMasks = document.querySelectorAll("body.u-home-page .mask-line-mask, body.u-home-page .mask-word-mask").length;
   debugState.debug.scrollTriggers = ScrollTrigger.getAll().length;
+  debugState.debug.splitTextInitialized = debugState.successfulSplits.size > 0;
+  debugState.debug.lenisInitialized = Boolean(window.lenis || window.Lenis || window.__lenis);
   document.documentElement.dataset.umusareMotionDebug = JSON.stringify(debugState.debug);
 }
 
@@ -96,9 +103,12 @@ function numberFromData(element, name, fallback) {
 
 export function initUmusareHomepageAnimations() {
 const hero = document.querySelector("[data-cinematic-hero]");
-const motionPreference = getMotionPreference();
+const motionPreference = getUmusareMotionMode();
 const motionDebug = createMotionDebug(motionPreference);
 
+document.documentElement.dataset.motion = motionPreference.mode;
+document.documentElement.classList.toggle("umusare-full-motion", motionPreference.fullMotion);
+document.documentElement.classList.toggle("umusare-reduce-motion", !motionPreference.fullMotion);
 document.body.classList.toggle("u-motion-full", motionPreference.mode === "full");
 document.body.classList.toggle("u-motion-reduce", motionPreference.mode === "reduce");
 
@@ -222,12 +232,13 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
     const { curtain, media, image } = getSceneParts(scene);
     const parallaxY = numberFromData(image, "parallaxY", -3);
     const parallaxScale = numberFromData(image, "parallaxScale", 1.04);
-    const curtainOpenAt = at + 0.84;
+    const curtainDuration = 1.08;
+    const curtainOpenAt = at + curtainDuration;
 
     if (curtain) {
       timeline.to(curtain, {
         clipPath: "inset(0% 0% 0% 0% round 0rem)",
-        duration: 0.84,
+        duration: curtainDuration,
         ease: "none"
       }, at);
     }
@@ -236,20 +247,20 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
       timeline.fromTo(
         media,
         { scale: Math.max(1.04, parallaxScale + 0.02), yPercent: Math.abs(parallaxY) * 0.35 },
-        { scale: Math.max(1.005, parallaxScale - 0.03), yPercent: 0, duration: 0.84, ease: "none" },
+        { scale: Math.max(1.005, parallaxScale - 0.03), yPercent: 0, duration: curtainDuration, ease: "none" },
         at
       );
     }
 
-    revealHeroHeadline(timeline, prepared, curtainOpenAt + 0.03);
+    revealHeroHeadline(timeline, prepared, curtainOpenAt + 0.08);
     if (prepared.bodyItems.length) {
       timeline.to(prepared.bodyItems, {
         y: 0,
         autoAlpha: 1,
-        duration: 0.28,
-        stagger: 0.01,
+        duration: 0.38,
+        stagger: 0.018,
         ease: "power3.out"
-      }, curtainOpenAt + 0.12);
+      }, curtainOpenAt + 0.48);
     }
   }
 
@@ -266,6 +277,10 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
     media.add("(min-width: 769px)", () => {
       hero.classList.add("is-animated");
       setActiveScene(0);
+      if (motionDebug) {
+        motionDebug.debug.heroInitialized = true;
+        updateMotionDebug(motionDebug, motionPreference);
+      }
 
       const preparedScenes = scenes.map(prepareScene);
       const sceneImages = scenes.map((scene) => scene.querySelector(".cinematic-hero__image"));
@@ -321,9 +336,9 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
         scrollTrigger: {
           trigger: hero,
           start: "top top",
-          end: "+=360%",
+          end: "+=540%",
           pin: true,
-          scrub: 0.8,
+          scrub: 1.05,
           invalidateOnRefresh: true,
           onUpdate: () => {
             const currentTime = timeline.time();
@@ -343,11 +358,13 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
         }
       });
 
+      let nextSceneStart = 0.96;
       scenes.slice(1).forEach((scene, index) => {
-        const position = index * 1.34 + 0.82;
-        sceneActivationTimes[index + 1] = position + 0.7;
-        revealScene(timeline, scene, preparedScenes[index + 1], position + 0.12);
-        timeline.to({}, { duration: 0.34 });
+        const position = nextSceneStart;
+        sceneActivationTimes[index + 1] = position + 0.86;
+        revealScene(timeline, scene, preparedScenes[index + 1], position);
+        timeline.to({}, { duration: 0.01 }, position + 2.34);
+        nextSceneStart += 2.42;
       });
 
       sceneImages.forEach((image) => {
@@ -494,7 +511,7 @@ if (revealGroups.length && !window.__UMUSARE_HOMEPAGE_REVEALS__) {
   function buildHomepageReveals() {
     clearHomepageReveals();
 
-    const currentMotionPreference = motionPreference.forced ? motionPreference : getMotionPreference();
+    const currentMotionPreference = motionPreference.developerOverride ? motionPreference : getUmusareMotionMode();
     updateMotionDebug(motionDebug, currentMotionPreference);
 
     if (currentMotionPreference.reduceMotion) {
@@ -600,7 +617,7 @@ if (revealGroups.length && !window.__UMUSARE_HOMEPAGE_REVEALS__) {
   }
 
   window.addEventListener("resize", () => {
-    if ((motionPreference.forced ? motionPreference : getMotionPreference()).reduceMotion) return;
+    if ((motionPreference.developerOverride ? motionPreference : getUmusareMotionMode()).reduceMotion) return;
     window.clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(buildHomepageReveals, 180);
   }, { passive: true });

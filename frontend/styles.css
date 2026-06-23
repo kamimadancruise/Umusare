@@ -3479,23 +3479,21 @@ textarea:focus {
   transform: translateY(0);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+html[data-motion="reduce"] {
+  scroll-behavior: auto;
+}
 
-  *,
-  *::before,
-  *::after {
-    transition-duration: 1ms !important;
-    animation-duration: 1ms !important;
-    scroll-behavior: auto !important;
-  }
+html[data-motion="reduce"] *,
+html[data-motion="reduce"] *::before,
+html[data-motion="reduce"] *::after {
+  transition-duration: 1ms !important;
+  animation-duration: 1ms !important;
+  scroll-behavior: auto !important;
+}
 
-  .reveal {
-    opacity: 1;
-    transform: none;
-  }
+html[data-motion="reduce"] .reveal {
+  opacity: 1;
+  transform: none;
 }
 
 /* Umusare homepage no-brown rebuild: three real visual panels, each with its own image. */
@@ -4490,36 +4488,32 @@ body.u-home-page .cinematic-hero__depth-mark::after {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  body.u-home-page:not(.u-motion-full) [data-parallax],
-  body.u-home-page:not(.u-motion-full) [data-larp] {
-    transform: none !important;
-  }
+html[data-motion="reduce"] body.u-home-page [data-parallax],
+html[data-motion="reduce"] body.u-home-page [data-larp] {
+  transform: none !important;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  body.u-home-page .u-home-progress {
-    transition-duration: 1ms;
-  }
+html[data-motion="reduce"] body.u-home-page .u-home-progress {
+  transition-duration: 1ms;
+}
 
-  body.u-home-page:not(.u-motion-full) .cinematic-hero,
-  body.u-home-page:not(.u-motion-full) .cinematic-hero__stage {
-    overflow: visible;
-  }
+html[data-motion="reduce"] body.u-home-page .cinematic-hero,
+html[data-motion="reduce"] body.u-home-page .cinematic-hero__stage {
+  overflow: visible;
+}
 
-  body.u-home-page:not(.u-motion-full) .cinematic-hero__scene {
-    position: relative;
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: none !important;
-    clip-path: none !important;
-  }
+html[data-motion="reduce"] body.u-home-page .cinematic-hero__scene {
+  position: relative;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  clip-path: none !important;
+}
 
-  body.u-home-page:not(.u-motion-full) .cinematic-hero__image,
-  body.u-home-page:not(.u-motion-full) .cinematic-hero__content,
-  body.u-home-page:not(.u-motion-full) .cinematic-hero__continue {
-    transform: none !important;
-  }
+html[data-motion="reduce"] body.u-home-page .cinematic-hero__image,
+html[data-motion="reduce"] body.u-home-page .cinematic-hero__content,
+html[data-motion="reduce"] body.u-home-page .cinematic-hero__continue {
+  transform: none !important;
 }
 
 /* Hero composition correction: spacious 12-column scene system. */
@@ -6470,8 +6464,7 @@ body:not(.admin-body) :where(
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  body:not(.admin-body) :where(
+html[data-motion="reduce"] body:not(.admin-body) :where(
     .btn,
     .action-btn,
     .nav-cta,
@@ -6488,10 +6481,10 @@ body:not(.admin-body) :where(
     .back-link,
     button
   ) {
-    transition-duration: 1ms !important;
-  }
+  transition-duration: 1ms !important;
+}
 
-  body:not(.admin-body) :where(
+html[data-motion="reduce"] body:not(.admin-body) :where(
     .btn,
     .action-btn,
     .nav-cta,
@@ -6504,7 +6497,7 @@ body:not(.admin-body) :where(
     .contact-btn,
     button
   ):hover,
-  body:not(.admin-body) :where(
+html[data-motion="reduce"] body:not(.admin-body) :where(
     .btn,
     .action-btn,
     .nav-cta,
@@ -6517,10 +6510,10 @@ body:not(.admin-body) :where(
     .contact-btn,
     button
   ):active {
-    transform: none !important;
-  }
+  transform: none !important;
+}
 
-  body:not(.admin-body) :where(
+html[data-motion="reduce"] body:not(.admin-body) :where(
     .btn-primary,
     .btn-urgent,
     .submit-btn,
@@ -6529,35 +6522,34 @@ body:not(.admin-body) :where(
     .mobile-quick-book-link,
     button[type="submit"]
   )::before {
-    display: none;
-  }
+  display: none;
+}
 
-  body:not(.admin-body) :where(
+html[data-motion="reduce"] body:not(.admin-body) :where(
     .u-home-feature-menu a,
     .u-home-sticker,
     .u-home-followup a
   ) {
-    transition-duration: 1ms !important;
-    transform: none !important;
-  }
+  transition-duration: 1ms !important;
+  transform: none !important;
+}
 
-  body:not(.admin-body) :where(
+html[data-motion="reduce"] body:not(.admin-body) :where(
     .u-home-feature-menu a,
     .u-home-sticker,
     .u-home-followup a
   )::before {
-    display: none;
-  }
+  display: none;
+}
 
-  body:not(.admin-body) :where(
+html[data-motion="reduce"] body:not(.admin-body) :where(
     .u-home-feature-menu a,
     .u-home-sticker,
     .u-home-followup a
   ) :where(strong, small, span),
-  body:not(.admin-body) .u-home-sticker::after {
-    transition-duration: 1ms !important;
-    transform: none !important;
-  }
+html[data-motion="reduce"] body:not(.admin-body) .u-home-sticker::after {
+  transition-duration: 1ms !important;
+  transform: none !important;
 }
 
 /* Public animated navigation. Base navigation remains visible without JavaScript. */
@@ -6858,26 +6850,24 @@ body.public-nav-enhanced:not(.admin-body).is-public-menu-open {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  body.public-nav-enhanced:not(.admin-body) .public-nav,
-  body.public-nav-enhanced:not(.admin-body) .public-nav *,
-  body.public-nav-enhanced:not(.admin-body) .nav-panel,
-  body.public-nav-enhanced:not(.admin-body) .u-home-nav {
-    transition-duration: 1ms !important;
-  }
+html[data-motion="reduce"] body.public-nav-enhanced:not(.admin-body) .public-nav,
+html[data-motion="reduce"] body.public-nav-enhanced:not(.admin-body) .public-nav *,
+html[data-motion="reduce"] body.public-nav-enhanced:not(.admin-body) .nav-panel,
+html[data-motion="reduce"] body.public-nav-enhanced:not(.admin-body) .u-home-nav {
+  transition-duration: 1ms !important;
+}
 
-  body.public-nav-enhanced:not(.admin-body) .public-nav:not(.is-nav-entered) :where(
-    .u-home-brand,
-    .u-home-nav-link,
-    .u-home-contact,
-    .nav-logo,
-    .nav-link,
-    .nav-login,
-    .nav-cta
-  ) {
-    opacity: 1;
-    transform: none;
-  }
+html[data-motion="reduce"] body.public-nav-enhanced:not(.admin-body) .public-nav:not(.is-nav-entered) :where(
+  .u-home-brand,
+  .u-home-nav-link,
+  .u-home-contact,
+  .nav-logo,
+  .nav-link,
+  .nav-login,
+  .nav-cta
+) {
+  opacity: 1;
+  transform: none;
 }
 
 /* Scene 1 reference-style composition and public brand lockup. */
@@ -7376,16 +7366,14 @@ body.u-home-page .mask-line {
   display: block;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  body.u-home-page:not(.u-motion-full) .mask-line-mask,
-  body.u-home-page:not(.u-motion-full) .mask-word-mask,
-  body.u-home-page:not(.u-motion-full) .mask-line,
-  body.u-home-page:not(.u-motion-full) .mask-word {
-    overflow: visible;
-    transform: none !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-  }
+html[data-motion="reduce"] body.u-home-page .mask-line-mask,
+html[data-motion="reduce"] body.u-home-page .mask-word-mask,
+html[data-motion="reduce"] body.u-home-page .mask-line,
+html[data-motion="reduce"] body.u-home-page .mask-word {
+  overflow: visible;
+  transform: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 /* Hero curtain separation: scene stacking, curtain clipping, and text movement are independent. */
@@ -7401,6 +7389,39 @@ body.u-home-page .cinematic-hero__curtain-mask {
   overflow: clip;
   background: var(--scene-background, #080b12);
   will-change: clip-path;
+}
+
+body.u-home-page .cinematic-hero__scene--one .cinematic-hero__curtain-mask {
+  background:
+    linear-gradient(rgba(10, 10, 10, 0.08), rgba(10, 10, 10, 0.08)),
+    url("assets/images/homepage/hero/hero-01.webp?v=umusare-hero-2") center / cover,
+    var(--scene-background, #0a0a0a);
+}
+
+body.u-home-page .cinematic-hero__scene--two .cinematic-hero__curtain-mask {
+  background:
+    url("assets/images/homepage/hero/hero-04.webp?v=umusare-hero-2") center / cover,
+    var(--scene-background, #100f0d);
+}
+
+body.u-home-page .cinematic-hero__scene--three .cinematic-hero__curtain-mask {
+  background:
+    url("assets/images/homepage/hero/hero-03.webp?v=umusare-hero-2") center / cover,
+    var(--scene-light-background, #ffffff);
+}
+
+body.u-home-page .cinematic-hero__scene--four .cinematic-hero__curtain-mask {
+  background:
+    url("assets/images/homepage/hero/hero-02.webp?v=umusare-hero-2") center / cover,
+    var(--scene-background, #080b12);
+}
+
+body.u-home-page .cinematic-hero.is-animated .cinematic-hero__scene .cinematic-hero__curtain-mask {
+  clip-path: inset(100% 0% 0% 0% round 1.5rem 1.5rem 0 0);
+}
+
+body.u-home-page .cinematic-hero.is-animated .cinematic-hero__scene:first-child .cinematic-hero__curtain-mask {
+  clip-path: inset(0% 0% 0% 0% round 0rem);
 }
 
 body.u-home-page .cinematic-hero__media {
@@ -7421,6 +7442,14 @@ body.u-home-page .cinematic-hero__curtain-mask .cinematic-hero__image {
 body.u-home-page .cinematic-hero.is-animated .cinematic-hero__scene {
   opacity: 1;
   visibility: visible;
+  background: transparent;
+}
+
+body.u-home-page .cinematic-hero.is-animated .cinematic-hero__scene--one {
+  background:
+    linear-gradient(rgba(10, 10, 10, 0.18), rgba(10, 10, 10, 0.18)),
+    url("assets/images/homepage/hero/hero-01.webp?v=umusare-hero-2") center / cover,
+    var(--scene-background, #0a0a0a);
 }
 
 @media (max-width: 768px) {
