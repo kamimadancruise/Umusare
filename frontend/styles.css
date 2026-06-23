@@ -4449,6 +4449,54 @@ body.u-home-page .cinematic-hero__continue {
   }
 }
 
+/* Restrained opt-in parallax and LARP accents. Kept away from SplitText masks and controls. */
+body.u-home-page [data-parallax] {
+  transform-origin: center;
+}
+
+body.u-home-page .cinematic-hero__image[data-parallax] {
+  will-change: transform;
+}
+
+body.u-home-page .cinematic-hero__depth-mark {
+  position: absolute;
+  right: clamp(5.2rem, 8vw, 8.5rem);
+  bottom: clamp(8rem, 16vh, 12rem);
+  z-index: 3;
+  width: clamp(2.8rem, 5vw, 4.8rem);
+  height: 1px;
+  pointer-events: none;
+  opacity: 0.58;
+  background: linear-gradient(90deg, transparent, rgba(255, 232, 138, 0.72), rgba(47, 107, 255, 0.55), transparent);
+  transform-origin: center;
+}
+
+body.u-home-page .cinematic-hero__depth-mark::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 18%;
+  width: 0.36rem;
+  height: 0.36rem;
+  border-radius: 999px;
+  background: rgba(255, 253, 244, 0.82);
+  transform: translateY(-50%);
+  box-shadow: 0 0 20px rgba(255, 232, 138, 0.26);
+}
+
+@media (max-width: 768px), (hover: none), (pointer: coarse) {
+  body.u-home-page .cinematic-hero__depth-mark {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.u-home-page:not(.u-motion-full) [data-parallax],
+  body.u-home-page:not(.u-motion-full) [data-larp] {
+    transform: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   body.u-home-page .u-home-progress {
     transition-duration: 1ms;

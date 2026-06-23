@@ -6,7 +6,7 @@
   <title>Umusare Rwanda</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=umusare-progress-2">
+  <link rel="stylesheet" href="styles.css?v=umusare-motion-full-1">
   <link rel="icon" type="image/png" href="assets/images/logo.png">
   <link rel="preload" as="image" href="assets/images/homepage/hero/hero-01.webp?v=umusare-hero-2">
   <link rel="preload" as="image" href="assets/images/homepage/hero/hero-04.webp?v=umusare-hero-2">
@@ -66,6 +66,9 @@
         >
           <img
             class="cinematic-hero__image"
+            data-parallax
+            data-parallax-y="-3"
+            data-parallax-scale="1.035"
             src="assets/images/homepage/hero/hero-01.webp?v=umusare-hero-2"
             alt="A client handing car keys to a designated driver beside a car."
             width="1680"
@@ -93,6 +96,9 @@
         >
           <img
             class="cinematic-hero__image"
+            data-parallax
+            data-parallax-y="-4"
+            data-parallax-scale="1.045"
             src="assets/images/homepage/hero/hero-04.webp?v=umusare-hero-2"
             alt="A nightlife guest handing car keys to a designated driver outside a club."
             width="1792"
@@ -118,6 +124,9 @@
         >
           <img
             class="cinematic-hero__image"
+            data-parallax
+            data-parallax-y="-2"
+            data-parallax-scale="1.025"
             src="assets/images/homepage/hero/hero-03.webp?v=umusare-hero-2"
             alt="Illustration warning against drinking and driving without a designated driver."
             width="1920"
@@ -142,6 +151,9 @@
         >
           <img
             class="cinematic-hero__image"
+            data-parallax
+            data-parallax-y="-4"
+            data-parallax-scale="1.04"
             src="assets/images/homepage/hero/hero-02.webp?v=umusare-hero-2"
             alt="Busy Kigali nightlife parking area filled with vehicles and visitors."
             width="1792"
@@ -167,6 +179,15 @@
         </div>
 
         <p class="cinematic-hero__continue" data-hero-continue>Continue to explore</p>
+        <span
+          class="cinematic-hero__depth-mark"
+          data-larp
+          data-larp-x="10"
+          data-larp-y="8"
+          data-larp-rotate="1"
+          data-larp-factor="0.08"
+          aria-hidden="true"
+        ></span>
       </div>
     </section>
   </main>
@@ -249,10 +270,10 @@
     <span class="u-home-progress__label" data-progress-active-label>HERO · 1 / 4</span>
   </div>
 
-  <script src="site.js?v=umusare-progress-2"></script>
-  <script type="module" src="/home-hero.js?v=umusare-progress-2"></script>
+  <script src="site.js?v=umusare-motion-full-1"></script>
+  <script type="module" src="/home-hero.js?v=umusare-motion-full-1"></script>
   <script type="module">
-    import { initUmusareHomepageAnimations } from "/home-hero.js?v=umusare-progress-2";
+    import { initUmusareHomepageAnimations } from "/home-hero.js?v=umusare-motion-full-1";
     initUmusareHomepageAnimations();
   </script>
 </body>

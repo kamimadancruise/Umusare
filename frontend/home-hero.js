@@ -16,11 +16,10 @@ function getMotionPreference() {
     return { reduceMotion: true, forced: true, mode: "reduce" };
   }
 
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   return {
-    reduceMotion,
+    reduceMotion: false,
     forced: false,
-    mode: reduceMotion ? "reduce" : "full"
+    mode: "full"
   };
 }
 
@@ -80,13 +79,18 @@ function addPreparedAnimation(timeline, animation, position) {
   animation.paused(false);
 }
 
+function numberFromData(element, name, fallback) {
+  const value = Number(element?.dataset?.[name]);
+  return Number.isFinite(value) ? value : fallback;
+}
+
 export function initUmusareHomepageAnimations() {
 const hero = document.querySelector("[data-cinematic-hero]");
 const motionPreference = getMotionPreference();
 const motionDebug = createMotionDebug(motionPreference);
 
-document.body.classList.toggle("u-motion-full", motionPreference.mode === "full" && motionPreference.forced);
-document.body.classList.toggle("u-motion-reduce", motionPreference.mode === "reduce" && motionPreference.forced);
+document.body.classList.toggle("u-motion-full", motionPreference.mode === "full");
+document.body.classList.toggle("u-motion-reduce", motionPreference.mode === "reduce");
 
 if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
   window.__UMUSARE_CINEMATIC_HERO__ = true;
@@ -204,10 +208,17 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
 
   function revealScene(timeline, scene, prepared, at) {
     const { image } = getSceneParts(scene);
+    const parallaxY = numberFromData(image, "parallaxY", -3);
+    const parallaxScale = numberFromData(image, "parallaxScale", 1.04);
 
     timeline.to(scene, { autoAlpha: 1, clipPath: "inset(0% 0% 0% 0%)", duration: 0.62, ease: "none" }, at);
     if (image) {
-      timeline.fromTo(image, { scale: 1.06 }, { scale: 1, duration: 0.9, ease: "none" }, at);
+      timeline.fromTo(
+        image,
+        { scale: Math.max(1.04, parallaxScale + 0.02), yPercent: Math.abs(parallaxY) * 0.35 },
+        { scale: Math.max(1.01, parallaxScale - 0.02), yPercent: 0, duration: 0.9, ease: "none" },
+        at
+      );
     }
     revealHeroHeadline(timeline, prepared, at + 0.12);
     if (prepared.bodyItems.length) {
@@ -223,12 +234,14 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
 
   function exitScene(timeline, scene, at) {
     const { content, image } = getSceneParts(scene);
+    const parallaxY = numberFromData(image, "parallaxY", -3);
+    const parallaxScale = numberFromData(image, "parallaxScale", 1.04);
 
     if (content) {
       timeline.to(content, { y: -20, autoAlpha: 0, duration: 0.36, ease: "none" }, at);
     }
     if (image) {
-      timeline.to(image, { scale: 1.035, duration: 0.62, ease: "none" }, at);
+      timeline.to(image, { scale: parallaxScale, yPercent: parallaxY, duration: 0.62, ease: "none" }, at);
     }
     timeline.to(scene, { autoAlpha: 0, clipPath: "inset(0% 0% 100% 0%)", duration: 0.58, ease: "none" }, at + 0.2);
   }
@@ -252,9 +265,15 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
 
       gsap.set(scenes, { autoAlpha: 0, clipPath: "inset(100% 0% 0% 0%)" });
       gsap.set(scenes[0], { autoAlpha: 1, clipPath: "inset(0% 0% 0% 0%)" });
-      gsap.set(sceneImages.filter(Boolean), { scale: 1.06 });
+      gsap.set(sceneImages.filter(Boolean), (index, image) => ({
+        scale: Math.max(1.04, numberFromData(image, "parallaxScale", 1.04) + 0.02),
+        yPercent: Math.abs(numberFromData(image, "parallaxY", -3)) * 0.35
+      }));
       if (sceneImages[0]) {
-        gsap.set(sceneImages[0], { scale: 1 });
+        gsap.set(sceneImages[0], {
+          scale: Math.max(1.01, numberFromData(sceneImages[0], "parallaxScale", 1.035) - 0.02),
+          yPercent: 0
+        });
       }
       if (continuePrompt) {
         gsap.set(continuePrompt, { autoAlpha: 0, y: 12 });
@@ -580,6 +599,13 @@ if (progressIndicator && progressSections.length && !window.__UMUSARE_HOME_PROGR
   }
 
   function currentHeroSceneLabel() {
+    const activeScene = Array.from(hero.querySelectorAll("[data-cinematic-scene]"))
+      .find((scene) => scene.classList.contains("is-active"));
+    if (activeScene) {
+      const sceneNumber = Number(activeScene.dataset.sceneIndex || 0) + 1;
+      return `Hero · ${sceneNumber} / 4`;
+    }
+
     const current = document.querySelector("[data-hero-current]")?.textContent?.trim() || "01";
     return `Hero · ${Number(current) || 1} / 4`;
   }
@@ -631,6 +657,11 @@ if (progressIndicator && progressSections.length && !window.__UMUSARE_HOME_PROGR
   }
 
   function setActiveProgressSection(index, immediate = false) {
+    const heroTrigger = ScrollTrigger.getAll().find((trigger) => trigger.trigger === hero);
+    if (heroTrigger && window.scrollY >= heroTrigger.start && window.scrollY <= heroTrigger.end) {
+      index = 0;
+    }
+
     const nextIndex = Math.max(0, Math.min(index, progressSections.length - 1));
     const section = progressSections[nextIndex];
     const label = labelForSection(section);
@@ -641,7 +672,12 @@ if (progressIndicator && progressSections.length && !window.__UMUSARE_HOME_PROGR
   }
 
   function refreshHeroProgressLabel() {
-    if (activeProgressIndex !== 0) return;
+    const heroTrigger = ScrollTrigger.getAll().find((trigger) => trigger.trigger === hero);
+    const heroIsActive = heroTrigger && window.scrollY >= heroTrigger.start && window.scrollY <= heroTrigger.end;
+    if (activeProgressIndex !== 0 && !heroIsActive) return;
+    if (heroIsActive) {
+      activeProgressIndex = 0;
+    }
     writeProgressText(0, currentHeroSceneLabel(), true);
   }
 
@@ -651,6 +687,12 @@ if (progressIndicator && progressSections.length && !window.__UMUSARE_HOME_PROGR
   }
 
   function detectCurrentProgressSection() {
+    const heroTrigger = ScrollTrigger.getAll().find((trigger) => trigger.trigger === hero);
+    if (heroTrigger && window.scrollY >= heroTrigger.start && window.scrollY <= heroTrigger.end) {
+      setActiveProgressSection(0, true);
+      return;
+    }
+
     const viewportMiddle = window.innerHeight * 0.5;
     let closestIndex = 0;
     let closestDistance = Number.POSITIVE_INFINITY;
@@ -701,6 +743,193 @@ if (progressIndicator && progressSections.length && !window.__UMUSARE_HOME_PROGR
   setActiveProgressSection(0, true);
   updateMotionDebug(motionDebug, motionPreference);
   window.addEventListener("resize", detectCurrentProgressSection, { passive: true });
+}
+
+const parallaxTargets = Array.from(document.querySelectorAll("body.u-home-page [data-parallax]"));
+const larpTargets = Array.from(document.querySelectorAll("body.u-home-page [data-larp]"));
+
+if ((parallaxTargets.length || larpTargets.length) && !window.__UMUSARE_PARALLAX_LARP__) {
+  window.__UMUSARE_PARALLAX_LARP__ = true;
+
+  const pointerFineQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+  const nonHeroParallaxTargets = parallaxTargets.filter((target) => !target.closest("[data-cinematic-hero]"));
+  const parallaxTriggers = [];
+  const larpRecords = [];
+  let pointerTargetX = 0;
+  let pointerTargetY = 0;
+  let larpTickerActive = false;
+
+  const shouldExposeDebug = import.meta.env.DEV || new URLSearchParams(window.location.search).has("motion");
+  if (shouldExposeDebug) {
+    window.__UMUSARE_PARALLAX_DEBUG__ = {
+      parallaxTargets: parallaxTargets.length,
+      nonHeroParallaxTargets: nonHeroParallaxTargets.length,
+      larpTargets: larpTargets.length,
+      larpTickerActive: false,
+      scrollTriggers: ScrollTrigger.getAll().length
+    };
+  }
+
+  function updateParallaxDebug() {
+    if (!window.__UMUSARE_PARALLAX_DEBUG__) return;
+    window.__UMUSARE_PARALLAX_DEBUG__.larpTickerActive = larpTickerActive;
+    window.__UMUSARE_PARALLAX_DEBUG__.scrollTriggers = ScrollTrigger.getAll().length;
+    document.documentElement.dataset.umusareParallaxDebug = JSON.stringify(window.__UMUSARE_PARALLAX_DEBUG__);
+  }
+
+  function resetLarpTargets() {
+    pointerTargetX = 0;
+    pointerTargetY = 0;
+    larpRecords.forEach((record) => {
+      record.targetX = 0;
+      record.targetY = 0;
+      record.targetRotation = 0;
+      if (motionPreference.reduceMotion) {
+      record.currentX = 0;
+      record.currentY = 0;
+      record.currentRotation = 0;
+      record.setter({ x: 0, y: 0, rotation: 0 });
+      }
+    });
+  }
+
+  function onPointerMove(event) {
+    pointerTargetX = (event.clientX / window.innerWidth) * 2 - 1;
+    pointerTargetY = (event.clientY / window.innerHeight) * 2 - 1;
+    if (window.__UMUSARE_PARALLAX_DEBUG__) {
+      window.__UMUSARE_PARALLAX_DEBUG__.pointerX = Number(pointerTargetX.toFixed(3));
+      window.__UMUSARE_PARALLAX_DEBUG__.pointerY = Number(pointerTargetY.toFixed(3));
+      document.documentElement.dataset.umusareParallaxDebug = JSON.stringify(window.__UMUSARE_PARALLAX_DEBUG__);
+    }
+  }
+
+  function tickLarp() {
+    larpRecords.forEach((record) => {
+      if (record.isVisible) {
+        record.targetX = pointerTargetX * record.maxX;
+        record.targetY = pointerTargetY * record.maxY;
+        record.targetRotation = pointerTargetX * record.maxRotation;
+      }
+
+      const isSettled =
+        Math.abs(record.currentX) < 0.02 &&
+        Math.abs(record.currentY) < 0.02 &&
+        Math.abs(record.currentRotation) < 0.02;
+
+      if (!record.isVisible && isSettled) return;
+
+      record.currentX += (record.targetX - record.currentX) * record.factor;
+      record.currentY += (record.targetY - record.currentY) * record.factor;
+      record.currentRotation += (record.targetRotation - record.currentRotation) * record.factor;
+
+      record.setter({
+        x: record.currentX,
+        y: record.currentY,
+        rotation: record.currentRotation
+      });
+    });
+
+    if (window.__UMUSARE_PARALLAX_DEBUG__ && larpRecords[0]) {
+      window.__UMUSARE_PARALLAX_DEBUG__.firstLarpX = Number(larpRecords[0].currentX.toFixed(2));
+      window.__UMUSARE_PARALLAX_DEBUG__.firstLarpY = Number(larpRecords[0].currentY.toFixed(2));
+      window.__UMUSARE_PARALLAX_DEBUG__.firstLarpRotation = Number(larpRecords[0].currentRotation.toFixed(2));
+      document.documentElement.dataset.umusareParallaxDebug = JSON.stringify(window.__UMUSARE_PARALLAX_DEBUG__);
+    }
+  }
+
+  function initNonHeroParallax() {
+    nonHeroParallaxTargets.forEach((target) => {
+      const y = numberFromData(target, "parallaxY", -5);
+      const scale = numberFromData(target, "parallaxScale", 1.04);
+      const trigger = target.closest("[data-progress-section], section, footer, main") || target;
+      const timeline = gsap.timeline({
+        scrollTrigger: {
+          trigger,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 0.6,
+          invalidateOnRefresh: true
+        }
+      });
+
+      timeline.fromTo(
+        target,
+        { yPercent: y * -1, scale },
+        { yPercent: y, scale: Math.max(1, scale - 0.02), ease: "none" }
+      );
+
+      parallaxTriggers.push(timeline);
+    });
+  }
+
+  function initLarp() {
+    if (!pointerFineQuery.matches || motionPreference.reduceMotion || !larpTargets.length) {
+      gsap.set(larpTargets, motionPreference.reduceMotion ? { clearProps: "transform" } : { x: 0, y: 0, rotation: 0 });
+      return;
+    }
+
+    larpTargets.forEach((target) => {
+      const trigger = target.closest("[data-progress-section], [data-cinematic-hero], section, footer") || target;
+      const record = {
+        element: target,
+        factor: numberFromData(target, "larpFactor", 0.08),
+        maxX: numberFromData(target, "larpX", 10),
+        maxY: numberFromData(target, "larpY", 8),
+        maxRotation: numberFromData(target, "larpRotate", 1),
+        currentX: 0,
+        currentY: 0,
+        currentRotation: 0,
+        targetX: 0,
+        targetY: 0,
+        targetRotation: 0,
+        isVisible: false,
+        setter: gsap.quickSetter(target, "css")
+      };
+
+      const triggerRect = trigger.getBoundingClientRect();
+      record.isVisible = triggerRect.bottom >= 0 && triggerRect.top <= window.innerHeight;
+
+      larpRecords.push(record);
+      parallaxTriggers.push(ScrollTrigger.create({
+        trigger,
+        start: "top bottom",
+        end: "bottom top",
+        invalidateOnRefresh: true,
+        onEnter: () => { record.isVisible = true; },
+        onEnterBack: () => { record.isVisible = true; },
+        onLeave: () => {
+          record.isVisible = false;
+          record.targetX = 0;
+          record.targetY = 0;
+          record.targetRotation = 0;
+        },
+        onLeaveBack: () => {
+          record.isVisible = false;
+          record.targetX = 0;
+          record.targetY = 0;
+          record.targetRotation = 0;
+        }
+      }));
+    });
+
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    window.addEventListener("mousemove", onPointerMove, { passive: true });
+    window.addEventListener("pointerleave", resetLarpTargets, { passive: true });
+    window.addEventListener("mouseleave", resetLarpTargets, { passive: true });
+    gsap.ticker.add(tickLarp);
+    larpTickerActive = true;
+  }
+
+  if (motionPreference.reduceMotion) {
+    gsap.set([...parallaxTargets, ...larpTargets], { clearProps: "transform" });
+  } else {
+    initNonHeroParallax();
+    initLarp();
+    ScrollTrigger.refresh(true);
+  }
+
+  updateParallaxDebug();
+  updateMotionDebug(motionDebug, motionPreference);
 }
 
 }
