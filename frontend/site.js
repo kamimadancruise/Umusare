@@ -106,6 +106,8 @@ function initPublicNavigation() {
   const homePanel = document.querySelector("[data-home-nav]");
   const featureToggle = document.querySelector("[data-feature-menu-button]");
   const featurePanel = document.querySelector("[data-feature-menu]");
+  const featureBackdrop = document.querySelector("[data-feature-backdrop]");
+  const featureIcon = featureToggle ? featureToggle.querySelector("[data-feature-menu-icon]") : null;
   const menuToggle = homeToggle || standardToggle;
   const menuPanel = homePanel || standardPanel;
   const reduceMotion = getUmusareMotionMode() === "reduce";
@@ -157,10 +159,22 @@ function initPublicNavigation() {
     window.scrollTo(0, lockedScrollY);
   }
 
-  function closeFeatureMenu() {
+  function setFeatureMenuOpen(nextOpen) {
     if (!featurePanel || !featureToggle) return;
-    featurePanel.classList.remove("is-open");
-    featureToggle.setAttribute("aria-expanded", "false");
+    featurePanel.hidden = !nextOpen;
+    featurePanel.classList.toggle("is-open", nextOpen);
+    featureToggle.setAttribute("aria-expanded", String(nextOpen));
+    if (featureIcon) featureIcon.textContent = nextOpen ? "−" : "+";
+    if (featureBackdrop) {
+      featureBackdrop.hidden = !nextOpen;
+      featureBackdrop.classList.toggle("is-open", nextOpen);
+    }
+    document.body.classList.toggle("is-feature-panel-open", nextOpen);
+    navRoot.classList.remove("is-nav-hidden");
+  }
+
+  function closeFeatureMenu() {
+    setFeatureMenuOpen(false);
   }
 
   function setMenuOpen(nextOpen) {
@@ -228,11 +242,22 @@ function initPublicNavigation() {
   }
 
   if (featureToggle && featurePanel) {
-    featureToggle.addEventListener("click", function () {
-      const isOpen = featurePanel.classList.toggle("is-open");
-      featureToggle.setAttribute("aria-expanded", String(isOpen));
-      navRoot.classList.remove("is-nav-hidden");
+    setFeatureMenuOpen(false);
+
+    featureToggle.addEventListener("click", function (event) {
+      event.preventDefault();
+      setFeatureMenuOpen(!featurePanel.classList.contains("is-open"));
     });
+
+    featurePanel.addEventListener("click", function (event) {
+      if (event.target.closest("a")) {
+        closeFeatureMenu();
+      }
+    });
+  }
+
+  if (featureBackdrop) {
+    featureBackdrop.addEventListener("click", closeFeatureMenu);
   }
 
   navRoot.addEventListener("focusin", function () {
