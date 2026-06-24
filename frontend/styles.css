@@ -7454,7 +7454,55 @@ body.u-home-page .cinematic-hero.is-animated .cinematic-hero__scene--one {
 
 @media (max-width: 768px) {
   body.u-home-page .cinematic-hero__curtain-mask {
-    clip-path: none !important;
+    position: relative;
+    inset: auto;
+    display: block;
+    height: clamp(300px, 58svh, 560px);
+    max-height: clamp(300px, 58svh, 560px);
+    transition: max-height 760ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: max-height;
+  }
+
+  body.u-home-page .cinematic-hero__scene--three .cinematic-hero__curtain-mask {
+    height: clamp(310px, 56svh, 520px);
+    max-height: clamp(310px, 56svh, 520px);
+  }
+
+  body.u-home-page .cinematic-hero__media {
+    position: absolute;
+    inset: 0;
+  }
+
+  body.u-home-page .cinematic-hero__curtain-mask .cinematic-hero__image,
+  body.u-home-page .cinematic-hero__curtain-mask .cinematic-hero__overlay {
+    position: absolute;
+    inset: 0;
+  }
+
+  body.u-home-page .cinematic-hero__curtain-mask .cinematic-hero__image {
+    width: 100%;
+    height: 100%;
+  }
+
+  body.u-home-page .cinematic-hero.is-mobile-animated .cinematic-hero__scene:not(.is-mobile-revealed) .cinematic-hero__curtain-mask {
+    max-height: 0 !important;
+  }
+
+  body.u-home-page .cinematic-hero.is-mobile-animated .cinematic-hero__scene.is-mobile-revealed .cinematic-hero__curtain-mask {
+    max-height: clamp(300px, 58svh, 560px) !important;
+  }
+
+  body.u-home-page .cinematic-hero.is-mobile-animated .cinematic-hero__scene--three.is-mobile-revealed .cinematic-hero__curtain-mask {
+    max-height: clamp(310px, 56svh, 520px) !important;
+  }
+
+  body.u-home-page .cinematic-hero.is-mobile-animated .cinematic-hero__scene .cinematic-hero__media {
+    transform: scale(1.025);
+    transition: transform 840ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  body.u-home-page .cinematic-hero.is-mobile-animated .cinematic-hero__scene.is-mobile-revealed .cinematic-hero__media {
+    transform: scale(1);
   }
 }
 

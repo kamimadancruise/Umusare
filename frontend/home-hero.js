@@ -394,25 +394,108 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
 
     media.add(motionPreference.reduceMotion ? "all" : "(max-width: 768px)", () => {
       hero.classList.remove("is-animated");
+      hero.classList.toggle("is-mobile-animated", !motionPreference.reduceMotion);
       setActiveScene(0);
+
       const sceneCurtains = scenes.map((scene) => scene.querySelector("[data-curtain-mask]")).filter(Boolean);
       const sceneMedia = scenes.map((scene) => scene.querySelector("[data-scene-media]")).filter(Boolean);
       const sceneImages = scenes.map((scene) => scene.querySelector(".cinematic-hero__image")).filter(Boolean);
       gsap.set([...scenes, ...sceneCurtains, ...sceneMedia, ...sceneImages], { clearProps: "all" });
-      updateMotionDebug(motionDebug, motionPreference);
 
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = Number(entry.target.dataset.sceneIndex || 0);
-            setActiveScene(index);
+      if (motionPreference.reduceMotion) {
+        updateMotionDebug(motionDebug, motionPreference);
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const index = Number(entry.target.dataset.sceneIndex || 0);
+              setActiveScene(index);
+            }
+          });
+        }, { threshold: 0.5 });
+
+        scenes.forEach((scene) => observer.observe(scene));
+
+        return () => {
+          observer.disconnect();
+          hero.classList.remove("is-mobile-animated");
+        };
+      }
+
+      if (motionDebug) {
+        motionDebug.debug.heroInitialized = true;
+        updateMotionDebug(motionDebug, motionPreference);
+      }
+
+      scenes.forEach((scene, index) => {
+        gsap.set(scene, {
+          autoAlpha: 1,
+          clipPath: "none",
+          zIndex: 1,
+          clearProps: "transform"
+        });
+
+        scene.classList.toggle("is-mobile-revealed", index === 0);
+      });
+
+      let mobileCheckFrame = 0;
+      function checkMobileScenes() {
+        mobileCheckFrame = 0;
+        const enterLine = window.innerHeight * 0.84;
+        const exitLine = window.innerHeight * 0.14;
+        let activeIndex = 0;
+
+        scenes.forEach((scene, sceneIndex) => {
+          const rect = scene.getBoundingClientRect();
+          const isInRange = rect.top <= enterLine && rect.bottom >= exitLine;
+
+          if (isInRange) {
+            activeIndex = sceneIndex;
+            scene.classList.add("is-mobile-revealed");
+          } else if (sceneIndex > 0 && rect.top > enterLine) {
+            scene.classList.remove("is-mobile-revealed");
           }
         });
-      }, { threshold: 0.5 });
 
-      scenes.forEach((scene) => observer.observe(scene));
+        setActiveScene(activeIndex);
+      }
 
-      return () => observer.disconnect();
+      function scheduleMobileSceneCheck() {
+        if (mobileCheckFrame) return;
+        mobileCheckFrame = window.setTimeout(checkMobileScenes, 16);
+      }
+
+      window.addEventListener("scroll", scheduleMobileSceneCheck, { passive: true });
+      window.addEventListener("resize", scheduleMobileSceneCheck, { passive: true });
+      const mobileSceneInterval = window.setInterval(scheduleMobileSceneCheck, 180);
+      scheduleMobileSceneCheck();
+
+      sceneImages.forEach((image) => {
+        if (image.complete) return;
+        image.addEventListener("load", () => ScrollTrigger.refresh(), { once: true });
+      });
+
+      ScrollTrigger.refresh(true);
+      updateMotionDebug(motionDebug, motionPreference);
+
+      return () => {
+        window.removeEventListener("scroll", scheduleMobileSceneCheck);
+        window.removeEventListener("resize", scheduleMobileSceneCheck);
+        window.clearInterval(mobileSceneInterval);
+        if (mobileCheckFrame) {
+          window.clearTimeout(mobileCheckFrame);
+        }
+        clearSplits();
+        hero.classList.remove("is-mobile-animated");
+        scenes.forEach((scene) => scene.classList.remove("is-mobile-revealed"));
+        gsap.set([
+          ...scenes,
+          ...sceneCurtains,
+          ...sceneMedia,
+          ...sceneImages,
+          continuePrompt
+        ].filter(Boolean), { clearProps: "all" });
+      };
     });
   }
 
