@@ -4648,7 +4648,7 @@ body.u-home-page .u-home-contact {
 body.u-home-page .u-home-feature-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 2100;
+  z-index: 9000;
   background: rgba(0, 0, 0, 0.68);
 }
 
@@ -4661,7 +4661,7 @@ body.u-home-page .u-home-feature-menu {
   top: clamp(4.75rem, 8vh, 6.5rem);
   left: 50%;
   right: auto;
-  z-index: 2300;
+  z-index: 9010;
   display: grid;
   width: min(92vw, 1500px);
   min-height: clamp(420px, 62vh, 680px);
@@ -4680,6 +4680,12 @@ body.u-home-page .u-home-feature-menu {
   transition: none;
   pointer-events: auto;
   backdrop-filter: none;
+}
+
+body.u-home-page .u-home-feature-menu.is-open {
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
 }
 
 body.u-home-page .u-home-feature-menu[hidden] {

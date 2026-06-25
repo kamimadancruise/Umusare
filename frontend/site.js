@@ -104,10 +104,10 @@ function initPublicNavigation() {
   const standardPanel = document.querySelector("[data-nav-panel]");
   const homeToggle = document.querySelector("[data-home-menu]");
   const homePanel = document.querySelector("[data-home-nav]");
-  const featureToggle = document.querySelector("[data-feature-menu-button]");
-  const featurePanel = document.querySelector("[data-feature-menu]");
-  const featureBackdrop = document.querySelector("[data-feature-backdrop]");
-  const featureIcon = featureToggle ? featureToggle.querySelector("[data-feature-menu-icon]") : null;
+  const featureToggle = null;
+  const featurePanel = null;
+  const featureBackdrop = null;
+  const featureIcon = null;
   const menuToggle = homeToggle || standardToggle;
   const menuPanel = homePanel || standardPanel;
   const reduceMotion = getUmusareMotionMode() === "reduce";
@@ -287,6 +287,12 @@ function initHomepageFeaturePanelController() {
   if (!featureToggle || !featurePanel || featureToggle.dataset.featurePanelBound === "true") return;
 
   featureToggle.dataset.featurePanelBound = "true";
+  if (featureBackdrop && featureBackdrop.parentElement !== document.body) {
+    document.body.appendChild(featureBackdrop);
+  }
+  if (featurePanel.parentElement !== document.body) {
+    document.body.appendChild(featurePanel);
+  }
 
   function setOpen(nextOpen) {
     featurePanel.hidden = !nextOpen;
