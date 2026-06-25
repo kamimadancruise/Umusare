@@ -7105,8 +7105,8 @@ body.public-nav-enhanced:not(.admin-body) .public-nav:not(.is-nav-entered) :wher
   .nav-login,
   .nav-cta
 ) {
-  opacity: 0;
-  transform: translateY(-14px);
+  opacity: 1;
+  transform: none;
 }
 
 body.public-nav-enhanced:not(.admin-body) .public-nav.is-nav-entered :where(
