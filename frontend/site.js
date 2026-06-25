@@ -244,11 +244,6 @@ function initPublicNavigation() {
   if (featureToggle && featurePanel) {
     setFeatureMenuOpen(false);
 
-    featureToggle.addEventListener("click", function (event) {
-      event.preventDefault();
-      setFeatureMenuOpen(!featurePanel.classList.contains("is-open"));
-    });
-
     featurePanel.addEventListener("click", function (event) {
       if (event.target.closest("a")) {
         closeFeatureMenu();
@@ -279,6 +274,64 @@ function initPublicNavigation() {
 }
 
 initPublicNavigation();
+
+function initHomepageFeaturePanelController() {
+  if (document.body.classList.contains("admin-body")) return;
+
+  const featureToggle = document.querySelector("[data-feature-menu-button]");
+  const featurePanel = document.querySelector("[data-feature-menu]");
+  const featureBackdrop = document.querySelector("[data-feature-backdrop]");
+  const featureIcon = featureToggle ? featureToggle.querySelector("[data-feature-menu-icon]") : null;
+  const navRoot = document.querySelector(".u-home-topbar") || document.querySelector(".site-header");
+
+  if (!featureToggle || !featurePanel || featureToggle.dataset.featurePanelBound === "true") return;
+
+  featureToggle.dataset.featurePanelBound = "true";
+
+  function setOpen(nextOpen) {
+    featurePanel.hidden = !nextOpen;
+    featurePanel.classList.toggle("is-open", nextOpen);
+    featureToggle.setAttribute("aria-expanded", String(nextOpen));
+    if (featureIcon) featureIcon.textContent = nextOpen ? "−" : "+";
+    if (featureBackdrop) {
+      featureBackdrop.hidden = !nextOpen;
+      featureBackdrop.classList.toggle("is-open", nextOpen);
+    }
+    document.body.classList.toggle("is-feature-panel-open", nextOpen);
+    navRoot?.classList.remove("is-nav-hidden");
+  }
+
+  setOpen(false);
+
+  featureToggle.addEventListener("click", function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    setOpen(!featurePanel.classList.contains("is-open"));
+  });
+
+  featurePanel.addEventListener("click", function (event) {
+    if (event.target.closest("a")) {
+      setOpen(false);
+    }
+  });
+
+  featureBackdrop?.addEventListener("click", function () {
+    setOpen(false);
+  });
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && featurePanel.classList.contains("is-open")) {
+      setOpen(false);
+      featureToggle.focus({ preventScroll: true });
+    }
+  });
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initHomepageFeaturePanelController, { once: true });
+} else {
+  initHomepageFeaturePanelController();
+}
 
 if ("IntersectionObserver" in window) {
   const revealObserver = new IntersectionObserver(
