@@ -7665,6 +7665,28 @@ body.u-home-page .u-home-followup a {
   font-family: var(--font-interface);
 }
 
+html body.u-home-page .u-home-topbar.public-nav,
+html body.u-home-page .u-home-topbar {
+  position: fixed !important;
+  z-index: 2147483000 !important;
+  pointer-events: auto !important;
+}
+
+html body.u-home-page .u-home-topbar *,
+html body.u-home-page .u-home-feature-menu,
+html body.u-home-page .u-home-feature-menu *,
+html body.u-home-page .u-home-feature-backdrop {
+  pointer-events: auto !important;
+}
+
+html body.u-home-page .u-home-feature-backdrop {
+  z-index: 2147483001 !important;
+}
+
+html body.u-home-page .u-home-feature-menu {
+  z-index: 2147483002 !important;
+}
+
 body.u-home-page .u-home-brand,
 body.u-home-page .u-home-nav-link,
 body.u-home-page .u-home-contact,

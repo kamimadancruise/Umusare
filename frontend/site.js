@@ -287,6 +287,7 @@ function initHomepageFeaturePanelController() {
   const featureBackdrop = document.querySelector("[data-feature-backdrop]");
   const featureIcon = featureToggle ? featureToggle.querySelector("[data-feature-menu-icon]") : null;
   const navRoot = document.querySelector(".u-home-topbar") || document.querySelector(".site-header");
+  let suppressNextFeatureClick = false;
 
   if (!featureToggle || !featurePanel || featureToggle.dataset.featurePanelBound === "true") return;
 
@@ -326,6 +327,15 @@ function initHomepageFeaturePanelController() {
 
   function handleFeatureToggle(event) {
     if (!isFeatureToggleHit(event)) return;
+    if (suppressNextFeatureClick && event.type === "click") {
+      suppressNextFeatureClick = false;
+      event.preventDefault();
+      event.stopPropagation();
+      if (typeof event.stopImmediatePropagation === "function") {
+        event.stopImmediatePropagation();
+      }
+      return;
+    }
     event.preventDefault();
     event.stopPropagation();
     if (typeof event.stopImmediatePropagation === "function") {
@@ -334,14 +344,28 @@ function initHomepageFeaturePanelController() {
     setOpen(!featurePanel.classList.contains("is-open"));
   }
 
+  function handleFeaturePointerDown(event) {
+    if (!isFeatureToggleHit(event)) return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (typeof event.stopImmediatePropagation === "function") {
+      event.stopImmediatePropagation();
+    }
+    suppressNextFeatureClick = true;
+    setOpen(true);
+  }
+
   setOpen(false);
 
+  window.addEventListener("pointerdown", handleFeaturePointerDown, true);
+  window.addEventListener("mousedown", handleFeaturePointerDown, true);
+  window.addEventListener("touchstart", handleFeaturePointerDown, true);
   document.addEventListener("click", handleFeatureToggle, true);
 
   window.__UMUSARE_FEATURE_MENU_DEBUG__ = {
     bound: true,
     panelParent: featurePanel.parentElement ? featurePanel.parentElement.tagName : "",
-    cache: "features8",
+    cache: "features9",
     getToggleRect: function () {
       const rect = featureToggle.getBoundingClientRect();
       return {
