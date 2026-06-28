@@ -1065,6 +1065,243 @@ if ((parallaxTargets.length || larpTargets.length) && !window.__UMUSARE_PARALLAX
   updateMotionDebug(motionDebug, motionPreference);
 }
 
+const customCursor = document.querySelector("body.u-home-page [data-custom-cursor]");
+
+if (customCursor && !window.__UMUSARE_CUSTOM_CURSOR__) {
+  window.__UMUSARE_CUSTOM_CURSOR__ = true;
+
+  const pointerFineQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+  const cursorRing = customCursor.querySelector("[data-cursor-ring]");
+  const cursorDot = customCursor.querySelector("[data-cursor-dot]");
+  const cursorLabel = customCursor.querySelector("[data-cursor-label]");
+  const featureToggle = document.querySelector("[data-feature-menu-button]");
+  const featurePanel = document.querySelector("[data-feature-menu]");
+  const magneticTargets = Array.from(new Set([
+    ...document.querySelectorAll("body.u-home-page [data-magnetic]"),
+    ...(featurePanel ? featurePanel.querySelectorAll("a") : [])
+  ]));
+  const cursorTargets = Array.from(document.querySelectorAll("body.u-home-page [data-cursor]"));
+  const magneticRecords = [];
+  const cursorMotionAllowed = motionPreference.mode !== "reduce" && pointerFineQuery.matches;
+  let pointerX = 0;
+  let pointerY = 0;
+  let dotX = 0;
+  let dotY = 0;
+  let ringX = 0;
+  let ringY = 0;
+  let cursorVisible = false;
+  let activeCursorElement = null;
+  let cursorTickerActive = false;
+
+  const setCursorTransform = gsap.quickSetter(customCursor, "css");
+  const setDotTransform = cursorDot ? gsap.quickSetter(cursorDot, "css") : null;
+  const setRingTransform = cursorRing ? gsap.quickSetter(cursorRing, "css") : null;
+
+  function canUseCustomCursor() {
+    return cursorMotionAllowed && document.body.classList.contains("u-home-page");
+  }
+
+  function cursorStateFor(element) {
+    const state = element?.dataset?.cursor || "default";
+    if (state === "features") {
+      return featurePanel?.classList.contains("is-open") ? "close" : "features";
+    }
+    return state;
+  }
+
+  function labelForCursorState(state) {
+    if (state === "book") return "BOOK";
+    if (state === "features") return "OPEN";
+    if (state === "close") return "CLOSE";
+    if (state === "view") return "VIEW";
+    return "";
+  }
+
+  function applyCursorState(element) {
+    const state = cursorStateFor(element);
+    const label = labelForCursorState(state);
+
+    customCursor.dataset.cursorState = state;
+    customCursor.classList.toggle("is-labeled", Boolean(label));
+    customCursor.classList.toggle("is-link", state === "link");
+    if (cursorLabel) cursorLabel.textContent = label;
+  }
+
+  function applyCursorTheme(event) {
+    const element = document.elementFromPoint(event.clientX, event.clientY);
+    const darkSurface = element?.closest(".u-home-feature-menu, .u-home-followup, .site-footer, [data-cursor-theme='dark']");
+    const lightSurface = element?.closest("[data-cursor-theme='light']");
+    customCursor.classList.toggle("is-dark-theme", Boolean(darkSurface) && !lightSurface);
+  }
+
+  function clearCursorState() {
+    activeCursorElement = null;
+    customCursor.dataset.cursorState = "default";
+    customCursor.classList.remove("is-labeled", "is-link");
+    if (cursorLabel) cursorLabel.textContent = "";
+  }
+
+  function showCursor() {
+    if (cursorVisible) return;
+    cursorVisible = true;
+    document.documentElement.classList.add("u-custom-cursor-active");
+    customCursor.classList.add("is-visible");
+  }
+
+  function hideCursor() {
+    cursorVisible = false;
+    customCursor.classList.remove("is-visible");
+    clearCursorState();
+    magneticRecords.forEach((record) => {
+      record.toX(0);
+      record.toY(0);
+    });
+  }
+
+  function onCursorPointerMove(event) {
+    if (!canUseCustomCursor()) return;
+    pointerX = event.clientX;
+    pointerY = event.clientY;
+    applyCursorTheme(event);
+    if (!cursorVisible) {
+      dotX = pointerX;
+      dotY = pointerY;
+      ringX = pointerX;
+      ringY = pointerY;
+      showCursor();
+    }
+  }
+
+  function tickCursor() {
+    if (!cursorVisible) return;
+
+    dotX += (pointerX - dotX) * 0.48;
+    dotY += (pointerY - dotY) * 0.48;
+    ringX += (pointerX - ringX) * 0.16;
+    ringY += (pointerY - ringY) * 0.16;
+
+    setCursorTransform({ x: ringX, y: ringY });
+    if (setDotTransform) {
+      setDotTransform({ x: dotX - ringX, y: dotY - ringY });
+    }
+    if (setRingTransform) {
+      setRingTransform({ x: 0, y: 0 });
+    }
+
+    if (activeCursorElement) {
+      applyCursorState(activeCursorElement);
+    }
+  }
+
+  function bindCursorTargets() {
+    cursorTargets.forEach((target) => {
+      target.addEventListener("pointerenter", () => {
+        activeCursorElement = target;
+        applyCursorState(target);
+      });
+
+      target.addEventListener("pointerleave", () => {
+        if (activeCursorElement === target) {
+          clearCursorState();
+        }
+      });
+    });
+
+    if (featureToggle) {
+      featureToggle.addEventListener("click", () => {
+        window.requestAnimationFrame(() => {
+          if (activeCursorElement === featureToggle) {
+            applyCursorState(featureToggle);
+          }
+        });
+      });
+    }
+
+    featurePanel?.querySelectorAll("a").forEach((link) => {
+      link.dataset.cursor = link.dataset.cursor || "view";
+      cursorTargets.push(link);
+      link.addEventListener("pointerenter", () => {
+        activeCursorElement = link;
+        applyCursorState(link);
+      });
+      link.addEventListener("pointerleave", () => {
+        if (activeCursorElement === link) {
+          clearCursorState();
+        }
+      });
+    });
+  }
+
+  function bindMagneticTargets() {
+    magneticTargets.forEach((target) => {
+      const maxX = numberFromData(target, "magneticX", 7);
+      const maxY = numberFromData(target, "magneticY", 5);
+      const toX = gsap.quickTo(target, "x", { duration: 0.34, ease: "power3.out" });
+      const toY = gsap.quickTo(target, "y", { duration: 0.34, ease: "power3.out" });
+      const record = { element: target, toX, toY };
+
+      magneticRecords.push(record);
+
+      target.addEventListener("pointermove", (event) => {
+        if (!canUseCustomCursor()) return;
+        const rect = target.getBoundingClientRect();
+        const relativeX = ((event.clientX - rect.left) / rect.width) - 0.5;
+        const relativeY = ((event.clientY - rect.top) / rect.height) - 0.5;
+        toX(relativeX * maxX * 2);
+        toY(relativeY * maxY * 2);
+      });
+
+      target.addEventListener("pointerleave", () => {
+        toX(0);
+        toY(0);
+      });
+    });
+  }
+
+  function cleanupCustomCursor() {
+    window.removeEventListener("pointermove", onCursorPointerMove);
+    window.removeEventListener("pointerleave", hideCursor);
+    window.removeEventListener("blur", hideCursor);
+    gsap.ticker.remove(tickCursor);
+    cursorTickerActive = false;
+    document.documentElement.classList.remove("u-custom-cursor-active");
+    customCursor.classList.remove("is-visible");
+    magneticRecords.forEach((record) => {
+      record.toX(0);
+      record.toY(0);
+      gsap.set(record.element, { clearProps: "transform" });
+    });
+  }
+
+  if (canUseCustomCursor()) {
+    bindCursorTargets();
+    bindMagneticTargets();
+    window.addEventListener("pointermove", onCursorPointerMove, { passive: true });
+    window.addEventListener("pointerleave", hideCursor, { passive: true });
+    window.addEventListener("blur", hideCursor, { passive: true });
+    gsap.ticker.add(tickCursor);
+    cursorTickerActive = true;
+    window.__UMUSARE_CUSTOM_CURSOR_DEBUG__ = {
+      enabled: true,
+      cursorTargets: cursorTargets.length,
+      magneticTargets: magneticTargets.length,
+      tickerActive: cursorTickerActive,
+      dotFactor: 0.48,
+      ringFactor: 0.16,
+      magneticMaxX: 7,
+      magneticMaxY: 5
+    };
+  } else {
+    customCursor.hidden = true;
+    window.__UMUSARE_CUSTOM_CURSOR_DEBUG__ = {
+      enabled: false,
+      reason: motionPreference.mode === "reduce" ? "motion-reduce" : "coarse-pointer-or-no-hover"
+    };
+  }
+
+  window.addEventListener("pagehide", cleanupCustomCursor, { once: true });
+}
+
 }
 
 if (document.readyState === "loading") {

@@ -4447,6 +4447,128 @@ body.u-home-page .cinematic-hero__continue {
   }
 }
 
+/* Homepage custom cursor. Desktop-only enhancement; native cursor stays everywhere else. */
+body.u-home-page .u-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2147483003;
+  width: 0;
+  height: 0;
+  color: #ffffff;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate3d(-50vw, -50vh, 0);
+  transition: opacity 180ms ease;
+}
+
+body.u-home-page .u-cursor.is-visible {
+  opacity: 1;
+}
+
+body.u-home-page .u-cursor__ring,
+body.u-home-page .u-cursor__dot,
+body.u-home-page .u-cursor__label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+body.u-home-page .u-cursor__ring {
+  width: 38px;
+  height: 38px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  opacity: 0.66;
+  transition:
+    width 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    height 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease;
+}
+
+body.u-home-page .u-cursor__dot {
+  width: 6px;
+  height: 6px;
+  background: currentColor;
+  border-radius: 999px;
+  transition:
+    opacity 160ms ease,
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body.u-home-page .u-cursor__label {
+  min-width: 64px;
+  min-height: 64px;
+  color: currentColor;
+  font-family: var(--font-interface, "Inter", "Helvetica Neue", Arial, sans-serif);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  opacity: 0;
+  text-transform: uppercase;
+  transition: opacity 160ms ease;
+}
+
+body.u-home-page .u-cursor.is-link .u-cursor__ring {
+  width: 48px;
+  height: 48px;
+  opacity: 0.86;
+}
+
+body.u-home-page .u-cursor.is-link .u-cursor__dot {
+  transform: translate(-50%, -50%) scale(0.72);
+}
+
+body.u-home-page .u-cursor.is-labeled .u-cursor__ring {
+  width: 72px;
+  height: 72px;
+  background: rgba(255, 255, 255, 0.08);
+  opacity: 0.9;
+}
+
+body.u-home-page .u-cursor.is-labeled .u-cursor__dot {
+  opacity: 0;
+}
+
+body.u-home-page .u-cursor.is-labeled .u-cursor__label {
+  opacity: 1;
+}
+
+body.u-home-page .u-cursor[data-cursor-state="book"] {
+  color: #ffffff;
+}
+
+body.u-home-page .u-cursor[data-cursor-state="view"],
+body.u-home-page .u-cursor[data-cursor-state="features"],
+body.u-home-page .u-cursor[data-cursor-state="close"] {
+  color: #ffffff;
+}
+
+body.u-home-page .u-cursor.is-dark-theme {
+  color: #05070b;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html.u-custom-cursor-active body.u-home-page,
+  html.u-custom-cursor-active body.u-home-page :where(a, button, [data-cursor], [data-magnetic]) {
+    cursor: none;
+  }
+
+  html.u-custom-cursor-active body.u-home-page :where(input, textarea, select, option, label, [contenteditable="true"]) {
+    cursor: auto;
+  }
+}
+
+html[data-motion="reduce"] body.u-home-page .u-cursor {
+  display: none;
+}
+
 /* Monochrome public visual refresh. Scoped to public pages; admin styles live outside this scope. */
 :root {
   --ui-black: #000000;

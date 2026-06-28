@@ -44,14 +44,14 @@
 
         <nav class="u-home-nav" id="uHomeNav" aria-label="Homepage navigation" data-home-nav>
           <div class="u-home-dropdown">
-            <button class="u-home-nav-link" type="button" aria-expanded="false" aria-controls="uFeatureMenu" data-feature-menu-button>
+            <button class="u-home-nav-link" type="button" aria-expanded="false" aria-controls="uFeatureMenu" data-feature-menu-button data-cursor="features" data-magnetic>
               Features <span aria-hidden="true" data-feature-menu-icon>+</span>
             </button>
           </div>
-          <a class="u-home-nav-link" href="quick-book.html">Quick Book</a>
-          <a class="u-home-nav-link" href="plan-ahead.html">Plan Ahead</a>
-          <a class="u-home-nav-link" href="find-driver.html">Find a Driver</a>
-          <a class="u-home-contact" href="support.html">Contact</a>
+          <a class="u-home-nav-link" href="quick-book.html" data-cursor="book">Quick Book</a>
+          <a class="u-home-nav-link" href="plan-ahead.html" data-cursor="link">Plan Ahead</a>
+          <a class="u-home-nav-link" href="find-driver.html" data-cursor="link">Find a Driver</a>
+          <a class="u-home-contact" href="support.html" data-cursor="link" data-magnetic>Contact</a>
         </nav>
       </header>
 
@@ -85,8 +85,8 @@
             <p class="cinematic-hero__copy">A verified driver comes to you and safely drives your own car.</p>
           </div>
           <div class="cinematic-hero__actions cinematic-hero__actions--scene-one" data-scene-actions>
-            <a class="u-home-pill primary cinematic-hero__button" href="quick-book.html">Quick Book</a>
-            <a class="u-home-pill secondary cinematic-hero__button" href="plan-ahead.html">Plan Ahead</a>
+            <a class="u-home-pill primary cinematic-hero__button" href="quick-book.html" data-cursor="book" data-magnetic>Quick Book</a>
+            <a class="u-home-pill secondary cinematic-hero__button" href="plan-ahead.html" data-cursor="link" data-magnetic>Plan Ahead</a>
           </div>
         </article>
 
@@ -117,7 +117,7 @@
             <h2 class="cinematic-hero__title" data-hero-headline data-mask-reveal="lines" data-mask-trigger="timeline">Enjoy the night.<br><span>Leave the drive to us.</span></h2>
             <p class="cinematic-hero__copy">Book a verified Umusare driver to get you and your car home safely.</p>
             <div class="cinematic-hero__actions">
-              <a class="u-home-pill primary cinematic-hero__button" href="quick-book.html">Quick Book</a>
+              <a class="u-home-pill primary cinematic-hero__button" href="quick-book.html" data-cursor="book" data-magnetic>Quick Book</a>
             </div>
           </div>
         </article>
@@ -148,7 +148,7 @@
             <p class="cinematic-hero__eyebrow">ONE SMART DECISION</p>
             <p class="cinematic-hero__copy">Book before you drink&mdash;or the moment you know you should not drive.</p>
             <div class="cinematic-hero__actions">
-              <a class="u-home-pill primary cinematic-hero__button" href="plan-ahead.html">Plan Ahead</a>
+              <a class="u-home-pill primary cinematic-hero__button" href="plan-ahead.html" data-cursor="link" data-magnetic>Plan Ahead</a>
             </div>
           </div>
         </article>
@@ -180,8 +180,8 @@
             <h2 class="cinematic-hero__title" data-hero-headline data-mask-reveal="lines" data-mask-trigger="timeline">When the city is moving,<br><span>Umusare is ready.</span></h2>
             <p class="cinematic-hero__copy">Quick Book for now. Plan Ahead for later.</p>
             <div class="cinematic-hero__actions">
-              <a class="u-home-pill primary cinematic-hero__button" href="quick-book.html">Quick Book</a>
-              <a class="cinematic-hero__text-link" href="plan-ahead.html">Plan Ahead</a>
+              <a class="u-home-pill primary cinematic-hero__button" href="quick-book.html" data-cursor="book" data-magnetic>Quick Book</a>
+              <a class="cinematic-hero__text-link" href="plan-ahead.html" data-cursor="link" data-magnetic>Plan Ahead</a>
             </div>
           </div>
         </article>
@@ -217,10 +217,10 @@
     <p data-reveal="eyebrow">Umusare platform</p>
     <h2 data-mask-reveal="lines" data-mask-trigger="scroll">A calm front door into every trip, driver, and safety tool.</h2>
     <div data-reveal="cta">
-      <a href="quick-book.html" data-mask-reveal="words" data-mask-trigger="scroll">Quick Book</a>
-      <a href="plan-ahead.html" data-mask-reveal="words" data-mask-trigger="scroll">Plan Ahead</a>
-      <a href="find-driver.html" data-mask-reveal="words" data-mask-trigger="scroll" data-mask-direction="left">Find a Driver</a>
-      <a href="become-driver.html" data-mask-reveal="words" data-mask-trigger="scroll" data-mask-direction="right">Become a Driver</a>
+      <a href="quick-book.html" data-mask-reveal="words" data-mask-trigger="scroll" data-cursor="book" data-magnetic>Quick Book</a>
+      <a href="plan-ahead.html" data-mask-reveal="words" data-mask-trigger="scroll" data-cursor="link" data-magnetic>Plan Ahead</a>
+      <a href="find-driver.html" data-mask-reveal="words" data-mask-trigger="scroll" data-mask-direction="left" data-cursor="view">Find a Driver</a>
+      <a href="become-driver.html" data-mask-reveal="words" data-mask-trigger="scroll" data-mask-direction="right" data-cursor="view">Become a Driver</a>
       <a href="client-dashboard.html">Client Dashboard</a>
       <a href="driver-dashboard.html">Driver Dashboard</a>
       <!-- Admin portal access is separated and will be protected by admin authentication later. -->
@@ -316,6 +316,12 @@
   </div>
 
   <div class="u-home-feature-backdrop" data-feature-backdrop hidden></div>
+
+  <div class="u-cursor" aria-hidden="true" data-custom-cursor>
+    <span class="u-cursor__ring" data-cursor-ring></span>
+    <span class="u-cursor__dot" data-cursor-dot></span>
+    <span class="u-cursor__label" data-cursor-label></span>
+  </div>
 
   <script src="/site.js"></script>
   <script type="module" src="/home-hero.js?v=umusare-features-9"></script>
