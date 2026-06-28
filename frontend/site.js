@@ -311,21 +311,49 @@ function initHomepageFeaturePanelController() {
     navRoot?.classList.remove("is-nav-hidden");
   }
 
+  function isFeatureToggleHit(event) {
+    if (event.target.closest("[data-feature-menu-button]")) return true;
+    if (typeof event.clientX !== "number" || typeof event.clientY !== "number") return false;
+
+    const rect = featureToggle.getBoundingClientRect();
+    return (
+      event.clientX >= rect.left &&
+      event.clientX <= rect.right &&
+      event.clientY >= rect.top &&
+      event.clientY <= rect.bottom
+    );
+  }
+
+  function handleFeatureToggle(event) {
+    if (!isFeatureToggleHit(event)) return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (typeof event.stopImmediatePropagation === "function") {
+      event.stopImmediatePropagation();
+    }
+    setOpen(!featurePanel.classList.contains("is-open"));
+  }
+
   setOpen(false);
 
-  featureToggle.addEventListener("click", function (event) {
-    event.preventDefault();
-    event.stopPropagation();
-    setOpen(!featurePanel.classList.contains("is-open"));
-  }, true);
+  document.addEventListener("click", handleFeatureToggle, true);
 
-  document.addEventListener("click", function (event) {
-    const toggle = event.target.closest("[data-feature-menu-button]");
-    if (!toggle) return;
-    event.preventDefault();
-    event.stopPropagation();
-    setOpen(!featurePanel.classList.contains("is-open"));
-  }, true);
+  window.__UMUSARE_FEATURE_MENU_DEBUG__ = {
+    bound: true,
+    panelParent: featurePanel.parentElement ? featurePanel.parentElement.tagName : "",
+    cache: "features8",
+    getToggleRect: function () {
+      const rect = featureToggle.getBoundingClientRect();
+      return {
+        top: Math.round(rect.top),
+        right: Math.round(rect.right),
+        bottom: Math.round(rect.bottom),
+        left: Math.round(rect.left),
+        width: Math.round(rect.width),
+        height: Math.round(rect.height)
+      };
+    }
+  };
 
   featurePanel.addEventListener("click", function (event) {
     if (event.target.closest("a")) {
