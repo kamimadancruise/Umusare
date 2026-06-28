@@ -118,6 +118,10 @@ function initPublicNavigation() {
 
   if (!navRoot) return;
 
+  if (homeHeader && homeHeader.parentElement !== document.body) {
+    document.body.appendChild(homeHeader);
+  }
+
   navRoot.classList.add("public-nav");
   document.body.classList.add("public-nav-enhanced");
 
@@ -313,7 +317,15 @@ function initHomepageFeaturePanelController() {
     event.preventDefault();
     event.stopPropagation();
     setOpen(!featurePanel.classList.contains("is-open"));
-  });
+  }, true);
+
+  document.addEventListener("click", function (event) {
+    const toggle = event.target.closest("[data-feature-menu-button]");
+    if (!toggle) return;
+    event.preventDefault();
+    event.stopPropagation();
+    setOpen(!featurePanel.classList.contains("is-open"));
+  }, true);
 
   featurePanel.addEventListener("click", function (event) {
     if (event.target.closest("a")) {
