@@ -4447,6 +4447,73 @@ body.u-home-page .cinematic-hero__continue {
   }
 }
 
+body.u-home-page .site-footer {
+  color: var(--color-brand-navy);
+  background: var(--color-warm-white);
+  border-top: 1px solid var(--color-border);
+}
+
+body.u-home-page .site-footer .brand-name,
+body.u-home-page .site-footer h2,
+body.u-home-page .site-footer a,
+body.u-home-page .site-footer .footer-meta {
+  color: var(--color-brand-navy);
+}
+
+body.u-home-page .site-footer .footer-brand p {
+  color: var(--color-text-secondary);
+}
+
+body.u-home-page .site-footer a:hover,
+body.u-home-page .site-footer a:focus-visible {
+  color: var(--color-brand-blue);
+}
+
+body.u-home-page .u-home-topbar.public-nav.is-nav-hidden {
+  transform: none !important;
+}
+
+body.u-home-page[data-hero-nav-mode="logo"] .u-home-topbar.public-nav,
+body.u-home-page.u-hero-nav-logo-only .u-home-topbar.public-nav {
+  right: auto !important;
+  width: auto;
+  min-width: 0;
+  padding: 0 !important;
+  color: #ffffff !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+body.u-home-page[data-hero-nav-mode="logo"] .u-home-topbar.public-nav .u-home-brand,
+body.u-home-page.u-hero-nav-logo-only .u-home-topbar.public-nav .u-home-brand {
+  color: #ffffff !important;
+  text-shadow: 0 14px 30px rgba(0, 0, 0, 0.32);
+}
+
+body.u-home-page[data-hero-nav-mode="logo"] .u-home-topbar.public-nav .umusare-brand-mark,
+body.u-home-page.u-hero-nav-logo-only .u-home-topbar.public-nav .umusare-brand-mark {
+  background-color: #ffffff !important;
+}
+
+body.u-home-page[data-hero-nav-mode="logo"] .u-home-topbar.public-nav .u-home-nav,
+body.u-home-page.u-hero-nav-logo-only .u-home-topbar.public-nav .u-home-nav {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: translateY(-8px);
+}
+
+body.u-home-page[data-hero-nav-mode="full"] .u-home-topbar.public-nav .u-home-nav,
+body.u-home-page:not(.u-hero-nav-logo-only) .u-home-topbar.public-nav .u-home-nav {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
 /* Homepage custom cursor. Desktop-only enhancement; native cursor stays everywhere else. */
 body.u-home-page .u-cursor {
   position: fixed;
@@ -8038,6 +8105,280 @@ body.u-home-page .cinematic-hero.is-animated .cinematic-hero__scene--one {
     var(--scene-background, #0a0a0a);
 }
 
+/* Fifth hero feature stage. Its outer curtain, text masks, and card image curtains are separate layers. */
+body.u-home-page .u-feature-hero {
+  position: relative;
+  display: block;
+  min-height: 100vh;
+  min-height: 100svh;
+  color: #ffffff;
+  background: #050505;
+  overflow: hidden;
+}
+
+body.u-home-page .cinematic-hero.is-animated .u-feature-hero {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  background: transparent;
+  overflow: visible;
+  pointer-events: none;
+}
+
+body.u-home-page .cinematic-hero.is-animated .u-feature-hero.is-feature-active {
+  pointer-events: auto;
+}
+
+body.u-home-page .u-feature-hero__curtain {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  overflow: clip;
+  isolation: isolate;
+  background: #050505;
+}
+
+body.u-home-page .cinematic-hero.is-animated .u-feature-hero__curtain {
+  clip-path: inset(0% 0% 0% 100% round 2rem 0 0 2rem);
+  will-change: clip-path;
+}
+
+body.u-home-page .u-feature-hero__atmosphere {
+  position: absolute;
+  inset: -8%;
+  z-index: 0;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.82)),
+    url("assets/images/homepage/hero/hero-01.webp?v=umusare-hero-2") center / cover;
+  filter: grayscale(1) blur(24px);
+  opacity: 0.2;
+  transform: scale(1.1);
+  pointer-events: none;
+}
+
+body.u-home-page .u-feature-hero__curtain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(circle at 24% 18%, rgba(255, 255, 255, 0.09), transparent 28%),
+    radial-gradient(circle at 80% 78%, rgba(255, 255, 255, 0.05), transparent 30%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent 45%);
+  pointer-events: none;
+}
+
+body.u-home-page .u-feature-hero__inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-rows: auto minmax(0, auto) auto;
+  align-content: center;
+  gap: clamp(1rem, 2vh, 1.6rem);
+  width: min(92vw, 1500px);
+  min-height: 100vh;
+  min-height: 100svh;
+  margin-inline: auto;
+  padding: clamp(6.5rem, 12vh, 8.5rem) 0 clamp(1rem, 3vh, 2rem);
+}
+
+body.u-home-page .u-feature-hero__header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 28rem);
+  gap: clamp(1rem, 3vw, 4rem);
+  align-items: end;
+}
+
+body.u-home-page .u-feature-hero__eyebrow {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.58);
+  font-family: var(--font-interface);
+  font-size: clamp(0.7rem, 0.8vw, 0.84rem);
+  font-weight: var(--weight-interface-medium);
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+body.u-home-page .u-feature-hero__title {
+  max-width: 11ch;
+  margin: 0;
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 5vw, 5.6rem);
+  font-weight: var(--weight-display-regular, 400);
+  letter-spacing: -0.035em;
+  line-height: 0.86;
+  text-wrap: balance;
+}
+
+body.u-home-page .u-feature-hero__title span {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+body.u-home-page .u-feature-hero__copy {
+  max-width: 28rem;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.64);
+  font-family: var(--font-interface);
+  font-size: clamp(1rem, 1.15vw, 1.16rem);
+  font-weight: var(--weight-interface-regular);
+  letter-spacing: -0.012em;
+  line-height: 1.5;
+}
+
+body.u-home-page .u-feature-hero__cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.9rem, 1.5vw, 1.75rem);
+  align-items: stretch;
+}
+
+body.u-home-page .u-feature-hero-card {
+  position: relative;
+  display: block;
+  height: clamp(320px, 43svh, 500px);
+  min-width: 0;
+  overflow: hidden;
+  overflow: clip;
+  color: #ffffff;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: clamp(18px, 1.6vw, 28px);
+  background: rgba(255, 255, 255, 0.055);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.34);
+  transform: translateZ(0);
+}
+
+body.u-home-page .u-feature-hero-card:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.82);
+  outline-offset: 4px;
+}
+
+body.u-home-page .u-feature-hero-card__base,
+body.u-home-page .u-feature-hero-card__image-curtain,
+body.u-home-page .u-feature-hero-card__overlay {
+  position: absolute;
+  inset: 0;
+}
+
+body.u-home-page .u-feature-hero-card__base {
+  z-index: 0;
+  background:
+    radial-gradient(circle at 32% 24%, rgba(255, 255, 255, 0.08), transparent 34%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.035));
+}
+
+body.u-home-page .u-feature-hero-card__image-curtain {
+  z-index: 1;
+  overflow: hidden;
+  overflow: clip;
+  border-radius: inherit;
+  clip-path: inset(0% 0% 0% 0% round clamp(18px, 1.6vw, 28px));
+  will-change: clip-path;
+}
+
+body.u-home-page .cinematic-hero.is-animated .u-feature-hero-card__image-curtain {
+  clip-path: inset(0% 0% 0% 100% round clamp(18px, 1.6vw, 28px));
+}
+
+body.u-home-page .u-feature-hero-card__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: center;
+}
+
+body.u-home-page .u-feature-hero-card__overlay {
+  z-index: 2;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.1), transparent 42%, rgba(0, 0, 0, 0.82)),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.22), transparent 54%);
+  pointer-events: none;
+}
+
+body.u-home-page .u-feature-hero-card__content {
+  position: absolute;
+  inset: auto clamp(1rem, 1.5vw, 1.35rem) clamp(1rem, 1.5vw, 1.35rem);
+  z-index: 3;
+  display: grid;
+  gap: 0.45rem;
+  pointer-events: none;
+}
+
+body.u-home-page .u-feature-hero-card__number {
+  color: rgba(255, 255, 255, 0.52);
+  font-family: var(--font-interface);
+  font-size: 0.72rem;
+  font-weight: var(--weight-interface-medium);
+  letter-spacing: 0.12em;
+}
+
+body.u-home-page .u-feature-hero-card__title {
+  color: #ffffff;
+  font-family: var(--font-interface);
+  font-size: clamp(1.35rem, 2vw, 2.1rem);
+  font-weight: var(--weight-interface-semibold);
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+}
+
+body.u-home-page .u-feature-hero-card__action {
+  color: rgba(255, 255, 255, 0.68);
+  font-family: var(--font-interface);
+  font-size: 0.8rem;
+  font-weight: var(--weight-interface-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+body.u-home-page .u-feature-hero__counter {
+  justify-self: end;
+  margin: -0.5rem 0 0;
+  color: rgba(255, 255, 255, 0.54);
+  font-family: var(--font-interface);
+  font-size: 0.74rem;
+  font-weight: var(--weight-interface-medium);
+  letter-spacing: 0.12em;
+}
+
+@media (min-width: 769px) and (max-width: 1120px) {
+  body.u-home-page .u-feature-hero__inner {
+    width: min(90vw, 900px);
+    align-content: start;
+    gap: 0.85rem;
+    padding-top: clamp(4.8rem, 8vh, 5.8rem);
+    padding-bottom: 1rem;
+  }
+
+  body.u-home-page .u-feature-hero__header {
+    grid-template-columns: 1fr;
+    gap: 0.7rem;
+  }
+
+  body.u-home-page .u-feature-hero__title {
+    font-size: clamp(2.7rem, 7vw, 4rem);
+  }
+
+  body.u-home-page .u-feature-hero__cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+  }
+
+  body.u-home-page .u-feature-hero-card {
+    height: clamp(170px, 28svh, 240px);
+  }
+}
+
+html[data-motion="reduce"] body.u-home-page .u-feature-hero,
+html[data-motion="reduce"] body.u-home-page .u-feature-hero__curtain,
+html[data-motion="reduce"] body.u-home-page .u-feature-hero-card__image-curtain {
+  clip-path: none !important;
+}
+
 @media (max-width: 768px) {
   body.u-home-page .cinematic-hero__curtain-mask {
     position: relative;
@@ -8089,6 +8430,59 @@ body.u-home-page .cinematic-hero.is-animated .cinematic-hero__scene--one {
 
   body.u-home-page .cinematic-hero.is-mobile-animated .cinematic-hero__scene.is-mobile-revealed .cinematic-hero__media {
     transform: scale(1);
+  }
+
+  body.u-home-page .u-feature-hero,
+  body.u-home-page .cinematic-hero.is-animated .u-feature-hero {
+    position: relative;
+    inset: auto;
+    z-index: auto;
+    min-height: auto;
+    clip-path: none !important;
+    pointer-events: auto;
+  }
+
+  body.u-home-page .cinematic-hero.is-animated .u-feature-hero__curtain {
+    clip-path: none !important;
+  }
+
+  body.u-home-page .u-feature-hero__curtain,
+  body.u-home-page .u-feature-hero__inner {
+    min-height: auto;
+  }
+
+  body.u-home-page .u-feature-hero__inner {
+    width: min(100% - 28px, 680px);
+    padding: 5.5rem 0 3rem;
+  }
+
+  body.u-home-page .u-feature-hero__header {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  body.u-home-page .u-feature-hero__title {
+    font-size: clamp(3rem, 15vw, 5rem);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+  }
+
+  body.u-home-page .u-feature-hero__cards {
+    grid-template-columns: 1fr;
+  }
+
+  body.u-home-page .u-feature-hero-card {
+    height: clamp(440px, 78svh, 620px);
+  }
+
+  body.u-home-page .cinematic-hero.is-animated .u-feature-hero-card__image-curtain,
+  body.u-home-page .cinematic-hero.is-mobile-animated .u-feature-hero-card__image-curtain {
+    clip-path: inset(0% 0% 0% 0% round clamp(18px, 1.6vw, 28px));
+  }
+
+  body.u-home-page .u-feature-hero__counter {
+    justify-self: start;
   }
 }
 

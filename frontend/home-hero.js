@@ -122,9 +122,51 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
   const continuePrompt = hero.querySelector("[data-hero-continue]");
   const media = gsap.matchMedia();
   const splitInstances = [];
+  const featureHero = hero.querySelector("[data-feature-hero]");
+  const featureHeroCurtain = featureHero?.querySelector("[data-feature-hero-curtain]");
+  const featureHeroHeading = featureHero?.querySelector("[data-feature-hero-heading]");
+  const featureHeroBody = featureHero ? Array.from(featureHero.querySelectorAll("[data-feature-hero-body], [data-feature-hero-cards], [data-feature-hero-counter]")) : [];
+  const featureHeroCards = featureHero ? Array.from(featureHero.querySelectorAll("[data-feature-hero-card]")) : [];
+  const featureImageCurtains = featureHero ? Array.from(featureHero.querySelectorAll("[data-feature-image-curtain]")) : [];
+  const featureImages = featureHero ? Array.from(featureHero.querySelectorAll("[data-feature-image]")) : [];
+  const featureHeroCounter = featureHero?.querySelector("[data-feature-hero-counter]");
+  let featureHeroActive = false;
+  let featureHeroIndex = 0;
+  let activeHeroSceneIndex = 0;
+
+  function updateHeroNavigationMode() {
+    const mode = featureHeroActive || activeHeroSceneIndex > 0 ? "logo" : "full";
+    document.body.dataset.heroNavMode = mode;
+    document.body.classList.toggle("u-hero-nav-logo-only", mode === "logo");
+  }
+
+  function setFeatureHeroState(active, index = 0) {
+    const nextIndex = Math.max(0, Math.min(index, Math.max(featureHeroCards.length - 1, 0)));
+    if (active === featureHeroActive && nextIndex === featureHeroIndex) return;
+
+    featureHeroActive = active;
+    featureHeroIndex = nextIndex;
+    if (featureHero) {
+      featureHero.classList.toggle("is-feature-active", active);
+    }
+    if (featureHeroCounter) {
+      featureHeroCounter.textContent = `${String(nextIndex + 1).padStart(2, "0")} / ${String(Math.max(featureHeroCards.length, 1)).padStart(2, "0")}`;
+    }
+
+    window.__UMUSARE_FEATURE_HERO_STATE__ = {
+      active,
+      index: nextIndex,
+      total: featureHeroCards.length
+    };
+    window.dispatchEvent(new CustomEvent("umusare:feature-hero", {
+      detail: window.__UMUSARE_FEATURE_HERO_STATE__
+    }));
+    updateHeroNavigationMode();
+  }
 
   function setActiveScene(index) {
     const nextIndex = Math.max(0, Math.min(index, scenes.length - 1));
+    activeHeroSceneIndex = nextIndex;
 
     scenes.forEach((scene, sceneIndex) => {
       scene.classList.toggle("is-active", sceneIndex === nextIndex);
@@ -141,6 +183,7 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
     window.dispatchEvent(new CustomEvent("umusare:hero-scene", {
       detail: { index: nextIndex, total: scenes.length }
     }));
+    updateHeroNavigationMode();
   }
 
   function createMaskedSplit(element, mode = "lines") {
@@ -205,6 +248,28 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
       gsap.set(bodyItems, { y: 22, autoAlpha: 0 });
     }
     return { headlineTargets: headlineSplit.targets, isWordMode: headlineSplit.isWordMode, bodyItems };
+  }
+
+  function prepareFeatureHero() {
+    const headingSplit = featureHeroHeading
+      ? createMaskedSplit(featureHeroHeading, featureHeroHeading.dataset.maskReveal || "lines")
+      : { targets: [], isWordMode: false };
+
+    if (featureHeroBody.length) {
+      gsap.set(featureHeroBody, { y: 22, autoAlpha: 0 });
+    }
+    if (featureImageCurtains.length) {
+      gsap.set(featureImageCurtains, { clipPath: "inset(0% 0% 0% 100% round 1.5rem)" });
+    }
+    if (featureImages.length) {
+      gsap.set(featureImages, { xPercent: 10, scale: 1.06 });
+    }
+
+    return {
+      headlineTargets: headingSplit.targets,
+      isWordMode: headingSplit.isWordMode,
+      bodyItems: featureHeroBody
+    };
   }
 
   function revealHeroHeadline(timeline, prepared, at) {
@@ -283,12 +348,15 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
       }
 
       const preparedScenes = scenes.map(prepareScene);
+      const preparedFeatureHero = featureHero ? prepareFeatureHero() : null;
       const sceneImages = scenes.map((scene) => scene.querySelector(".cinematic-hero__image"));
       const sceneCurtains = scenes.map((scene) => scene.querySelector("[data-curtain-mask]"));
       const sceneMedia = scenes.map((scene) => scene.querySelector("[data-scene-media]"));
       const closedCurtain = "inset(100% 0% 0% 0% round 1.5rem 1.5rem 0 0)";
       const openCurtain = "inset(0% 0% 0% 0% round 0rem)";
       const sceneActivationTimes = [0];
+      let featureHeroActivationTime = Number.POSITIVE_INFINITY;
+      let featureImageActivationTimes = [];
 
       scenes.forEach((scene, index) => {
         gsap.set(scene, {
@@ -320,6 +388,18 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
       if (continuePrompt) {
         gsap.set(continuePrompt, { autoAlpha: 0, y: 12 });
       }
+      if (featureHero) {
+        gsap.set(featureHero, {
+          autoAlpha: 1,
+          clearProps: "transform"
+        });
+        if (featureHeroCurtain) {
+          gsap.set(featureHeroCurtain, {
+            clipPath: "inset(0% 0% 0% 100% round 2rem 0 0 2rem)"
+          });
+        }
+        setFeatureHeroState(false, 0);
+      }
 
       const intro = gsap.timeline({ defaults: { ease: "power4.out" } });
       revealHeroHeadline(intro, preparedScenes[0], 0.15);
@@ -336,20 +416,27 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
         scrollTrigger: {
           trigger: hero,
           start: "top top",
-          end: "+=540%",
+          end: featureHero ? "+=860%" : "+=540%",
           pin: true,
           scrub: 1.05,
           invalidateOnRefresh: true,
           onUpdate: () => {
             const currentTime = timeline.time();
-            const currentScene = sceneActivationTimes.reduce((activeIndex, activationTime, index) => (
+            const featureIsActive = featureHero && currentTime >= featureHeroActivationTime;
+            const currentScene = featureIsActive ? scenes.length - 1 : sceneActivationTimes.reduce((activeIndex, activationTime, index) => (
               currentTime >= activationTime ? index : activeIndex
             ), 0);
             setActiveScene(currentScene);
+            if (featureHero) {
+              const activeFeatureIndex = featureImageActivationTimes.reduce((activeIndex, activationTime, index) => (
+                currentTime >= activationTime ? index : activeIndex
+              ), 0);
+              setFeatureHeroState(Boolean(featureIsActive), activeFeatureIndex);
+            }
             if (continuePrompt) {
               gsap.to(continuePrompt, {
-                autoAlpha: timeline.progress() > 0.92 ? 1 : 0,
-                y: timeline.progress() > 0.92 ? 0 : 12,
+                autoAlpha: timeline.progress() > 0.965 ? 1 : 0,
+                y: timeline.progress() > 0.965 ? 0 : 12,
                 duration: 0.18,
                 overwrite: true
               });
@@ -367,7 +454,60 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
         nextSceneStart += 2.42;
       });
 
-      sceneImages.forEach((image) => {
+      if (featureHero && featureHeroCurtain && preparedFeatureHero) {
+        const featureStart = nextSceneStart + 0.08;
+        const featureCurtainDuration = 1.12;
+        const featureHeadingStart = featureStart + featureCurtainDuration + 0.1;
+        const featureCardsStart = featureHeadingStart + 0.82;
+        const firstImageStart = featureCardsStart + 0.42;
+        const imageDuration = 0.72;
+        const imageGap = 0.58;
+
+        featureHeroActivationTime = featureStart + featureCurtainDuration * 0.82;
+        featureImageActivationTimes = featureHeroCards.map((_, index) => firstImageStart + index * imageGap + imageDuration * 0.45);
+
+        timeline.to(featureHeroCurtain, {
+          clipPath: "inset(0% 0% 0% 0% round 0rem)",
+          duration: featureCurtainDuration,
+          ease: "none"
+        }, featureStart);
+
+        revealHeroHeadline(timeline, preparedFeatureHero, featureHeadingStart);
+
+        if (preparedFeatureHero.bodyItems.length) {
+          timeline.to(preparedFeatureHero.bodyItems, {
+            y: 0,
+            autoAlpha: 1,
+            duration: 0.42,
+            stagger: 0.04,
+            ease: "power3.out"
+          }, featureHeadingStart + 0.34);
+        }
+
+        featureImageCurtains.forEach((curtain, index) => {
+          const image = featureImages[index];
+          const position = firstImageStart + index * imageGap;
+
+          timeline.to(curtain, {
+            clipPath: "inset(0% 0% 0% 0% round 1.5rem)",
+            duration: imageDuration,
+            ease: "none"
+          }, position);
+
+          if (image) {
+            timeline.to(image, {
+              xPercent: 0,
+              scale: 1.01,
+              duration: imageDuration,
+              ease: "none"
+            }, position);
+          }
+        });
+
+        timeline.to({}, { duration: 0.01 }, firstImageStart + (featureImageCurtains.length - 1) * imageGap + imageDuration + 0.95);
+      }
+
+      [...sceneImages, ...featureImages].forEach((image) => {
         if (image.complete) return;
         image.addEventListener("load", () => ScrollTrigger.refresh(), { once: true });
       });
@@ -381,13 +521,21 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
         timeline.kill();
         clearSplits();
         hero.classList.remove("is-animated");
+        document.body.removeAttribute("data-hero-nav-mode");
+        document.body.classList.remove("u-hero-nav-logo-only");
         gsap.set([
           ...scenes,
           ...sceneCurtains.filter(Boolean),
           ...sceneMedia.filter(Boolean),
           ...sceneImages.filter(Boolean),
+          featureHero,
+          featureHeroCurtain,
+          ...featureImageCurtains,
+          ...featureImages,
+          ...featureHeroBody,
           continuePrompt
         ].filter(Boolean), { clearProps: "all" });
+        setFeatureHeroState(false, 0);
       };
     });
     }
@@ -732,6 +880,11 @@ if (progressIndicator && progressSections.length && !window.__UMUSARE_HOME_PROGR
   }
 
   function currentHeroSceneLabel() {
+    const featureState = window.__UMUSARE_FEATURE_HERO_STATE__;
+    if (featureState?.active) {
+      return `Features · ${String((featureState.index || 0) + 1).padStart(2, "0")} / ${String(featureState.total || 4).padStart(2, "0")}`;
+    }
+
     const activeScene = Array.from(hero.querySelectorAll("[data-cinematic-scene]"))
       .find((scene) => scene.classList.contains("is-active"));
     if (activeScene) {
@@ -790,6 +943,10 @@ if (progressIndicator && progressSections.length && !window.__UMUSARE_HOME_PROGR
   }
 
   function setActiveProgressSection(index, immediate = false) {
+    if (window.__UMUSARE_FEATURE_HERO_STATE__?.active) {
+      index = 0;
+    }
+
     const heroTrigger = ScrollTrigger.getAll().find((trigger) => trigger.trigger === hero);
     if (heroTrigger && window.scrollY >= heroTrigger.start && window.scrollY <= heroTrigger.end) {
       index = 0;
@@ -805,6 +962,14 @@ if (progressIndicator && progressSections.length && !window.__UMUSARE_HOME_PROGR
   }
 
   function refreshHeroProgressLabel() {
+    const featureState = window.__UMUSARE_FEATURE_HERO_STATE__;
+    if (featureState?.active) {
+      activeProgressIndex = 0;
+      applyProgressTheme("light");
+      writeProgressText(0, currentHeroSceneLabel(), true);
+      return;
+    }
+
     const heroTrigger = ScrollTrigger.getAll().find((trigger) => trigger.trigger === hero);
     const heroIsActive = heroTrigger && window.scrollY >= heroTrigger.start && window.scrollY <= heroTrigger.end;
     if (activeProgressIndex !== 0 && !heroIsActive) return;
@@ -873,6 +1038,7 @@ if (progressIndicator && progressSections.length && !window.__UMUSARE_HOME_PROGR
   });
 
   window.addEventListener("umusare:hero-scene", refreshHeroProgressLabel, { passive: true });
+  window.addEventListener("umusare:feature-hero", refreshHeroProgressLabel, { passive: true });
   setActiveProgressSection(0, true);
   updateMotionDebug(motionDebug, motionPreference);
   window.addEventListener("resize", detectCurrentProgressSection, { passive: true });
