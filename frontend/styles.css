@@ -9663,3 +9663,28 @@ html[data-motion="reduce"] body.u-home-page .u-feature-hero-card__image-curtain 
     z-index: 6 !important;
   }
 }
+
+@media (max-width: 767px) {
+  body.u-home-page .u-home-topbar.public-nav,
+  body.u-home-page .u-home-topbar.public-nav.is-nav-top,
+  body.u-home-page .u-home-topbar.public-nav.is-nav-scrolled {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    padding: 0 !important;
+    min-height: 3.4rem !important;
+  }
+
+  body.u-home-page .u-home-topbar.public-nav .u-home-brand {
+    min-height: 3.35rem !important;
+    padding: 0.45rem 0.8rem !important;
+    border-radius: 999px !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.16) !important;
+  }
+
+  body.u-home-page .u-home-topbar.public-nav .u-home-menu-button {
+    min-height: 3.35rem !important;
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.18) !important;
+  }
+}
