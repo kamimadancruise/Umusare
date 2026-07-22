@@ -9688,3 +9688,212 @@ html[data-motion="reduce"] body.u-home-page .u-feature-hero-card__image-curtain 
     box-shadow: 0 12px 34px rgba(0, 0, 0, 0.18) !important;
   }
 }
+
+/* Mobile-only cleanup for action/mode pages. Desktop and the homepage animation system stay untouched. */
+@media (max-width: 767px) {
+  body:not(.u-home-page):not(.admin-body) {
+    overflow-x: hidden !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body):has(.mobile-quick-book) {
+    padding-bottom: 0 !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) .mobile-quick-book {
+    display: none !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) .site-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 90 !important;
+    background: #ffffff !important;
+    border-bottom: 1px solid rgba(7, 23, 42, 0.1) !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) .navbar {
+    width: 100% !important;
+    min-height: 4.6rem !important;
+    padding: 0.75rem 1.25rem !important;
+    gap: 0.9rem !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) .site-logo {
+    gap: 0.65rem !important;
+    color: #07172a !important;
+    font-family: var(--font-interface, "Inter", "Helvetica Neue", Arial, sans-serif) !important;
+    font-size: clamp(1.25rem, 7vw, 1.7rem) !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.04em !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) .brand-badge {
+    width: 2.35rem !important;
+    height: 2.35rem !important;
+    flex-basis: 2.35rem !important;
+    background: #07172a !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    -webkit-mask-image: url("assets/logo/umusare-logo.svg") !important;
+    mask-image: url("assets/logo/umusare-logo.svg") !important;
+    -webkit-mask-position: center !important;
+    mask-position: center !important;
+    -webkit-mask-repeat: no-repeat !important;
+    mask-repeat: no-repeat !important;
+    -webkit-mask-size: contain !important;
+    mask-size: contain !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) .brand-badge::before,
+  body:not(.u-home-page):not(.admin-body) .brand-badge::after {
+    display: none !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) .brand-badge img {
+    display: none !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) .nav-toggle {
+    min-height: 3rem !important;
+    padding: 0 1.05rem !important;
+    color: #07172a !important;
+    background: #ffffff !important;
+    border: 1.5px solid #07172a !important;
+    border-radius: 0.7rem !important;
+    font-size: 1rem !important;
+    font-weight: 800 !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) .nav-panel {
+    width: 100% !important;
+    margin-top: 0.35rem !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(7, 23, 42, 0.1) !important;
+    border-radius: 1rem !important;
+    box-shadow: 0 18px 50px rgba(7, 23, 42, 0.12) !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) .nav-panel:not(.is-open) {
+    display: none !important;
+    max-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) .nav-panel.is-open {
+    display: flex !important;
+    padding: 0.65rem !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) .nav-links,
+  body:not(.u-home-page):not(.admin-body) .nav-actions {
+    gap: 0.45rem !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) .nav-links a,
+  body:not(.u-home-page):not(.admin-body) .nav-login,
+  body:not(.u-home-page):not(.admin-body) .nav-actions .nav-cta {
+    min-height: 3.1rem !important;
+    padding: 0 1rem !important;
+    color: #07172a !important;
+    background: #f4f6f8 !important;
+    border: 0 !important;
+    border-radius: 0.65rem !important;
+    font-size: 1rem !important;
+    font-weight: 800 !important;
+    opacity: 1 !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) :where(.quick-book-main, .plan-ahead-main, .page-main, .auth-main) {
+    min-height: auto !important;
+    width: 100% !important;
+    padding: 1.15rem 1.25rem 2.5rem !important;
+    display: block !important;
+    place-items: initial !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) :where(.quick-book-shell, .form-shell, .auth-shell) {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) .page-intro {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+    padding: 1rem 0 1.25rem !important;
+    margin: 0 !important;
+    border-bottom: 1px solid rgba(7, 23, 42, 0.1) !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) .quick-book-intro {
+    margin: 0 0 1rem !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) :where(.quick-book-intro h1, .page-intro h1, .auth-panel h1) {
+    max-width: 100% !important;
+    font-size: clamp(2.65rem, 12vw, 4rem) !important;
+    line-height: 0.94 !important;
+    letter-spacing: -0.04em !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) :where(.quick-book-intro p, .page-intro .intro, .page-intro p, .auth-panel p) {
+    max-width: 34rem !important;
+    color: #4b5563 !important;
+    font-size: clamp(1rem, 4.4vw, 1.18rem) !important;
+    line-height: 1.42 !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) :where(.quick-book-form, .form-panel, .auth-panel, .plan-card, .driver-card, .profile-panel) {
+    width: 100% !important;
+    margin-top: 1rem !important;
+    padding: 1.1rem !important;
+    border-radius: 1.35rem !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) .quick-progress {
+    margin-bottom: 1rem !important;
+    font-size: 0.78rem !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) .quick-step-card {
+    gap: 0.9rem !important;
+    padding: 1.1rem !important;
+    border-radius: 1.2rem !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) .quick-step-card h2 {
+    font-size: clamp(2.25rem, 11vw, 3.35rem) !important;
+    line-height: 0.96 !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) .quick-sticker {
+    width: 3rem !important;
+    height: 3rem !important;
+    border-radius: 0.85rem !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) .quick-field-grid,
+  body:not(.u-home-page):not(.admin-body) .quick-choice-group,
+  body:not(.u-home-page):not(.admin-body) .quick-step-actions {
+    grid-template-columns: 1fr !important;
+  }
+
+  body:not(.u-home-page):not(.admin-body) .quick-step-actions {
+    display: grid !important;
+    gap: 0.65rem !important;
+  }
+
+  body:is([data-page="quick"], [data-page="plan"], [data-page="find"], [data-page="driver"]):not(.admin-body) .site-footer,
+  body:has(.auth-main):not(.admin-body) .site-footer {
+    display: none !important;
+  }
+}
