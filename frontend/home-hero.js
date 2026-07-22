@@ -589,23 +589,29 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
       let mobileCheckFrame = 0;
       function checkMobileScenes() {
         mobileCheckFrame = 0;
-        const enterLine = window.innerHeight * 0.84;
-        const exitLine = window.innerHeight * 0.14;
         let activeIndex = 0;
+        let activeDistance = Number.POSITIVE_INFINITY;
 
         scenes.forEach((scene, sceneIndex) => {
           const rect = scene.getBoundingClientRect();
-          const isInRange = rect.top <= enterLine && rect.bottom >= exitLine;
+          const isVisible = rect.top < window.innerHeight * 0.72 && rect.bottom > window.innerHeight * 0.18;
+          const distance = Math.abs(rect.top);
 
-          if (isInRange) {
+          if (isVisible && distance <= activeDistance) {
+            activeDistance = distance;
             activeIndex = sceneIndex;
-            scene.classList.add("is-mobile-revealed");
-          } else if (sceneIndex > 0 && rect.top > enterLine) {
-            scene.classList.remove("is-mobile-revealed");
           }
         });
 
-        setActiveScene(activeIndex);
+        const featureRect = featureHero?.getBoundingClientRect();
+        const featureIsTakingOver = Boolean(featureRect && featureRect.top < window.innerHeight * 0.72);
+        document.body.classList.toggle("u-mobile-feature-active", featureIsTakingOver);
+
+        scenes.forEach((scene, sceneIndex) => {
+          scene.classList.toggle("is-mobile-revealed", !featureIsTakingOver && sceneIndex === activeIndex);
+        });
+
+        setActiveScene(featureIsTakingOver ? scenes.length - 1 : activeIndex);
       }
 
       function scheduleMobileSceneCheck() {
@@ -635,6 +641,7 @@ if (hero && !window.__UMUSARE_CINEMATIC_HERO__) {
         }
         clearSplits();
         hero.classList.remove("is-mobile-animated");
+        document.body.classList.remove("u-mobile-feature-active");
         scenes.forEach((scene) => scene.classList.remove("is-mobile-revealed"));
         gsap.set([
           ...scenes,
